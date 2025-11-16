@@ -1,22 +1,33 @@
 {
   "name": "smart-kids-quiz",
   "version": "1.0.0",
-  "description": "Smart Kids Quiz is an interactive educational React app for children and teens.",
-  "homepage": "https://Bedohh206.github.io/smart-kids-quiz",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "client": "vite",
+    "server": "node server/server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "framer-motion": "^12.23.24",
+    "node-fetch": "^2.7.0",
+    "openai": "^6.8.1",
+    "react": "19.2.0",
+    "react-confetti": "^6.1.0",
+    "react-dom": "19.2.0",
+    "react-router-dom": "^7.0.2",
+    "concurrently": "^9.0.0"
   },
   "devDependencies": {
-    "gh-pages": "^5.0.0"
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "8.57.1",
+    "eslint-plugin-react-hooks": "4.6.2",
+    "vite": "^6.0.5"
   }
 }

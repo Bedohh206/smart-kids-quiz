@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/smart-kids-quiz/static/css/main.4e86a2bc.css",
+    "main.js": "/smart-kids-quiz/static/js/main.99842110.js",
+    "static/js/488.ad2bd33c.chunk.js": "/smart-kids-quiz/static/js/488.ad2bd33c.chunk.js",
+    "static/media/africa.png": "/smart-kids-quiz/static/media/africa.553742438fde76e4a000.png",
+    "static/media/south-america.png": "/smart-kids-quiz/static/media/south-america.89258e04ab8f49a15e97.png",
+    "static/media/world-map.png": "/smart-kids-quiz/static/media/world-map.19988c61b9b585386f0e.png",
+    "static/media/asia.png": "/smart-kids-quiz/static/media/asia.bea2d615b270a9c3805f.png",
+    "static/media/north-america.png": "/smart-kids-quiz/static/media/north-america.1d0a7e723181f7cad9be.png",
+    "static/media/europe.png": "/smart-kids-quiz/static/media/europe.b4c81bcb59950bf876b5.png",
+    "static/media/australia.png": "/smart-kids-quiz/static/media/australia.c38abe5fba0c4c698955.png",
+    "static/media/click.wav": "/smart-kids-quiz/static/media/click.21216341681527903934.wav",
+    "static/media/english.png": "/smart-kids-quiz/static/media/english.b23b7a0799cb6280c98a.png",
+    "static/media/science.png": "/smart-kids-quiz/static/media/science.12812f80a3e162c8707e.png",
+    "static/media/math.png": "/smart-kids-quiz/static/media/math.061556128d21e57b5fdf.png",
+    "index.html": "/smart-kids-quiz/index.html",
+    "static/media/background.mp3": "/smart-kids-quiz/static/media/background.31d6cfe0d16ae931b73c.mp3",
+    "main.4e86a2bc.css.map": "/smart-kids-quiz/static/css/main.4e86a2bc.css.map",
+    "main.99842110.js.map": "/smart-kids-quiz/static/js/main.99842110.js.map",
+    "488.ad2bd33c.chunk.js.map": "/smart-kids-quiz/static/js/488.ad2bd33c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4e86a2bc.css",
+    "static/js/main.99842110.js"
+  ]
+}

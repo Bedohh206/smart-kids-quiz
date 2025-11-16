@@ -1,0 +1,314 @@
+/* ===============================================================
+   🌍 GLOBAL PAGE LAYOUT
+   =============================================================== */
+
+.quiz-page {
+  min-height: 100vh;
+  padding: 20px;
+  background: radial-gradient(circle at top, #dff5ff 0%, #ffffff 60%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Content container */
+.quiz-page-inner {
+  width: 100%;
+  max-width: 750px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+  margin-top: 12px;
+  animation: fadeUp 0.4s ease-out;
+}
+
+/* Smooth fade animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.quiz-page h2 {
+  color: #0b3b64;
+  text-align: center;
+  font-weight: 700;
+}
+
+.quiz-page h3 {
+  color: #08426c;
+  margin-top: 14px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ===============================================================
+   🌍 DROPDOWNS (Language, Age, Level)
+   =============================================================== */
+
+.lang-select,
+.age-select,
+.level-select {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 2px solid #0984e3;
+  margin-bottom: 14px;
+  font-size: 1rem;
+  background: #fff;
+  color: #222;
+  font-weight: 600;
+  width: 100%;
+  max-width: 260px;
+  transition: transform 0.25s, border-color 0.25s;
+}
+
+.lang-select:hover,
+.age-select:hover,
+.level-select:hover {
+  transform: scale(1.03);
+  border-color: #065fb8;
+}
+
+/* ===============================================================
+   🌍 AGE + LEVEL BUTTONS
+   =============================================================== */
+
+.levels {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.levels button {
+  padding: 12px 18px;
+  background: #0984e3;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.levels button:hover {
+  background: #0f6ec7;
+  transform: scale(1.05);
+}
+
+/* ===============================================================
+   🌍 OPTION BUTTONS
+   =============================================================== */
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.options button {
+  padding: 12px 14px;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: none;
+  background: #f0f8ff;
+  color: #083b63;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.25s, transform 0.25s;
+}
+
+.options button:hover {
+  background: #e1f2ff;
+  transform: scale(1.03);
+}
+
+.options button.correct {
+  background: #00c853 !important;
+  color: white;
+}
+
+.options button.wrong {
+  background: #ff5252 !important;
+  color: white;
+}
+
+/* ===============================================================
+   🌍 ACTION BUTTONS (Read, Mic, Explain, AI)
+   =============================================================== */
+
+.voice-btn,
+.mic-btn,
+.ask-btn,
+.ai-btn {
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 10px;
+  border-radius: 12px;
+  border: none;
+  font-size: 1.05rem;
+  cursor: pointer;
+  color: white;
+  font-weight: 700;
+  transition: transform 0.25s, opacity 0.25s;
+}
+
+/* 🔊 Read */
+.voice-btn {
+  background: #0984e3;
+}
+
+/* 🎤 Mic */
+.mic-btn {
+  background: #00b894;
+}
+
+/* 🤖 Explain */
+.ask-btn {
+  background: #6c5ce7;
+}
+
+/* ✨ AI Questions */
+.ai-btn {
+  background: #f39c12;
+}
+
+.voice-btn:hover,
+.mic-btn:hover,
+.ask-btn:hover,
+.ai-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* ===============================================================
+   🌍 MASCOT CHAT BUBBLE
+   =============================================================== */
+
+.mascot {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mascot img {
+  width: 160px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.mascot p {
+  background: #ffffff;
+  padding: 12px 18px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+  text-align: center;
+  color: #062f4f;
+  animation: fadeUp 0.4s ease-out;
+  max-width: 85%;
+  line-height: 1.45;
+}
+
+/* ===============================================================
+   🌍 LESSON MODE
+   =============================================================== */
+
+.lesson-step {
+  font-size: 1.1rem;
+  line-height: 1.55;
+  background: #f8fcff;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  margin-bottom: 12px;
+  color: #083b63;
+  text-align: center;
+}
+
+/* ===============================================================
+   🌍 RESULT BOX
+   =============================================================== */
+
+.result-box {
+  text-align: center;
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  max-width: 720px;
+}
+
+/* ===============================================================
+   🌍 RTL MODE (Arabic, Hebrew, etc.)
+   =============================================================== */
+
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .options button {
+  text-align: right !important;
+}
+
+.rtl .mascot p {
+  text-align: right;
+}
+
+/* ===============================================================
+   🌍 BACK BUTTON
+   =============================================================== */
+
+.back-btn {
+  margin-top: 20px;
+  padding: 10px 18px;
+  background: #0b3b64;
+  color: white;
+  font-weight: 700;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.back-btn:hover {
+  background: #0d518a;
+  transform: scale(1.04);
+}
+
+/* ===============================================================
+   🌍 RESPONSIVE TWEAKS
+   =============================================================== */
+
+@media (max-width: 500px) {
+  .quiz-page-inner {
+    padding: 18px;
+  }
+
+  .mascot img {
+    width: 130px;
+  }
+
+  .options button {
+    font-size: 0.95rem;
+  }
+
+  .voice-btn,
+  .mic-btn,
+  .ask-btn,
+  .ai-btn {
+    font-size: 1rem;
+  }
+}
