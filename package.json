@@ -4,9 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "client": "vite",
-    "server": "node server/server.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
