@@ -4,10 +4,8 @@ import WorldMap from "./components/WorldMap";
 import QuizPage from "./components/QuizPage";
 
 function App() {
-  const basename = "/smart-kids-quiz";  // 🔥 FORCE CORRECT BASE PATH
-
   return (
-    <BrowserRouter basename={basename}>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<WorldMap />} />
         <Route path="/quiz/:continent" element={<QuizPage />} />
