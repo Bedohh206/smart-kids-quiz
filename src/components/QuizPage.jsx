@@ -43,20 +43,17 @@ export default function QuizPage() {
   const { continent } = useParams();
   const navigate = useNavigate();
 
-  /* ---------------------------------------------------------
-     NORMALIZE CATEGORY NAME
-  --------------------------------------------------------- */
+  /* ---------------------- NORMALIZE CATEGORY ---------------------- */
   const normalize = (str) => {
     if (!str) return "";
     return str
       .toLowerCase()
-      .replace(/[^a-z]/g, "") // remove spaces, hyphens, symbols
-      .replace(/s$/, ""); // maths → math, sciences → science
+      .replace(/[^a-z]/g, "")
+      .replace(/s$/, ""); // math → math, sciences → science
   };
 
   const key = normalize(continent);
 
-  // Aliases (handles variants like "mathematics", "mathquestions", etc.)
   const aliasMap = {
     mathematic: "math",
     mathematics: "math",
@@ -67,9 +64,7 @@ export default function QuizPage() {
 
   const finalKey = aliasMap[key] || key;
 
-  /* ---------------------------------------------------------
-     MAP SUBJECT/CONTINENT → QUESTION SET
-  --------------------------------------------------------- */
+  /* ---------------------- MATCH SET ---------------------- */
   const questionSets = {
     africa: africaQuestions,
     antarctica: antarcticaQuestions,
@@ -91,9 +86,7 @@ export default function QuizPage() {
 
   const selectedSet = questionSets[finalKey] || null;
 
-  /* ---------------------------------------------------------
-     STATE
-  --------------------------------------------------------- */
+  /* ---------------------- STATE ---------------------- */
   const [ageGroup, setAgeGroup] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("");
 
@@ -119,9 +112,7 @@ export default function QuizPage() {
   const [translatedQuestion, setTranslatedQuestion] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
 
-  /* ---------------------------------------------------------
-     VOICE RECOGNITION
-  --------------------------------------------------------- */
+  /* ---------------------- VOICE ---------------------- */
   let mic = null;
   if (typeof window !== "undefined") {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -132,9 +123,7 @@ export default function QuizPage() {
     }
   }
 
-  /* ---------------------------------------------------------
-     TEXT-TO-SPEECH
-  --------------------------------------------------------- */
+  /* ---------------------- TEXT-TO-SPEECH ---------------------- */
   const voices = {
     en: "en-US",
     fr: "fr-FR",
@@ -158,12 +147,9 @@ export default function QuizPage() {
     window.speechSynthesis.speak(u);
   };
 
-  /* ---------------------------------------------------------
-     TRANSLATE CURRENT QUESTION
-  --------------------------------------------------------- */
+  /* ---------------------- TRANSLATE ---------------------- */
   useEffect(() => {
     if (!questions.length) return;
-
     if (language === "en") {
       setTranslatedQuestion(null);
       return;
@@ -172,7 +158,7 @@ export default function QuizPage() {
     const translate = async () => {
       setIsTranslating(true);
       try {
-        const response = await fetch("http://localhost:5000/api/translate", {
+        const response = await fetch(`/api/translate`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -194,20 +180,18 @@ export default function QuizPage() {
     translate();
   }, [language, current, questions]);
 
-  /* ---------------------------------------------------------
-     LOAD QUESTIONS BASED ON LEVEL & AGE
-  --------------------------------------------------------- */
+  /* ---------------------- LOAD QUESTIONS ---------------------- */
   useEffect(() => {
     if (!selectedSet || !selectedLevel || !ageGroup) return;
 
     const base = selectedSet[selectedLevel];
-
     if (!Array.isArray(base)) {
       setQuestions([]);
       return;
     }
 
     const filtered = base.filter((q) => !q.age || q.age === ageGroup);
+
     setQuestions(filtered);
     setCurrent(0);
     setSelected("");
@@ -216,9 +200,7 @@ export default function QuizPage() {
     setScore(0);
   }, [selectedLevel, ageGroup, selectedSet]);
 
-  /* ---------------------------------------------------------
-     ADVENTURE PROGRESS (XP, LEVELS, BADGES, UNLOCKS)
-  --------------------------------------------------------- */
+  /* ---------------------- UPDATE XP ---------------------- */
   const updateAdventureProgress = () => {
     if (!questions.length) return;
 
@@ -231,11 +213,8 @@ export default function QuizPage() {
     const id = finalKey;
     const isContinent = CONTINENT_ORDER.includes(id);
 
-    // XP: e.g. 5 XP per question answered
     const earnedXP = questions.length * 5;
     data.xp += earnedXP;
-
-    // Simple level system: every 100 XP = +1 level
     data.level = 1 + Math.floor(data.xp / 100);
 
     if (isContinent) {
@@ -244,42 +223,33 @@ export default function QuizPage() {
       }
       data.continents[id].answered += questions.length;
 
-      // 🎖 Badge when they answer at least 20 questions for that continent
       if (data.continents[id].answered >= 20) {
         data.continents[id].badgeUnlocked = true;
       }
 
-      // 🔓 Unlock next continent in sequence
       const unlockedRaw = localStorage.getItem("unlockedContinents");
-      const unlockedList = unlockedRaw
-        ? JSON.parse(unlockedRaw)
-        : ["africa"];
+      const unlockedList = unlockedRaw ? JSON.parse(unlockedRaw) : ["africa"];
 
-      // Ensure current is unlocked
-      if (!unlockedList.includes(id)) {
-        unlockedList.push(id);
-      }
+      if (!unlockedList.includes(id)) unlockedList.push(id);
 
       const currentIndex = CONTINENT_ORDER.indexOf(id);
       const nextId =
         currentIndex >= 0 ? CONTINENT_ORDER[currentIndex + 1] : null;
 
-      if (nextId && !unlockedList.includes(nextId)) {
+      if (nextId && !unlockedList.includes(nextId))
         unlockedList.push(nextId);
-      }
 
       localStorage.setItem(
         "unlockedContinents",
         JSON.stringify(unlockedList)
       );
     } else {
-      // Subject progress
       if (!data.subjects[id]) {
         data.subjects[id] = { answered: 0, badgeUnlocked: false };
       }
+
       data.subjects[id].answered += questions.length;
 
-      // 🎖 Badge when they answer at least 30 questions for that subject
       if (data.subjects[id].answered >= 30) {
         data.subjects[id].badgeUnlocked = true;
       }
@@ -288,17 +258,11 @@ export default function QuizPage() {
     localStorage.setItem(storageKey, JSON.stringify(data));
   };
 
-  // Run once when results screen is shown
   useEffect(() => {
-    if (showResult) {
-      updateAdventureProgress();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (showResult) updateAdventureProgress();
   }, [showResult]);
 
-  /* ---------------------------------------------------------
-     HANDLE ANSWER CLICK
-  --------------------------------------------------------- */
+  /* ---------------------- ANSWER ---------------------- */
   const handleAnswer = (option) => {
     const q = translatedQuestion || questions[current];
     if (!q) return;
@@ -323,11 +287,9 @@ export default function QuizPage() {
     }, 700);
   };
 
-  /* ---------------------------------------------------------
-     VOICE ANSWER
-  --------------------------------------------------------- */
+  /* ---------------------- VOICE ANSWER ---------------------- */
   const handleVoiceAnswer = () => {
-    if (!mic) return alert("Voice recognition not supported in this browser.");
+    if (!mic) return alert("Voice recognition not supported.");
 
     const correct = questions[current]?.a?.toLowerCase();
     if (!correct) return;
@@ -345,14 +307,12 @@ export default function QuizPage() {
     };
   };
 
-  /* ---------------------------------------------------------
-     AI – EXPLAIN ANSWER
-  --------------------------------------------------------- */
+  /* ---------------------- EXPLAIN ANSWER ---------------------- */
   const handleExplain = async () => {
     const q = questions[current];
     if (!q) return;
 
-    const response = await fetch("http://localhost:5000/api/explain", {
+    const response = await fetch(`/api/explain`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -366,24 +326,20 @@ export default function QuizPage() {
     setMascotMessage(data.explanation || "I can't explain right now 😅");
   };
 
-  /* ---------------------------------------------------------
-     AI – GENERATE QUESTIONS
-  --------------------------------------------------------- */
+  /* ---------------------- GENERATE AI QUESTIONS ---------------------- */
   const fetchAIQuestions = async () => {
-    const response = await fetch(
-      "http://localhost:5000/api/generate-question",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          subject: finalKey,
-          level: selectedLevel,
-          age: ageGroup,
-        }),
-      }
-    );
+    const response = await fetch(`/api/generate-question`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        subject: finalKey,
+        level: selectedLevel,
+        age: ageGroup,
+      }),
+    });
 
     const data = await response.json();
+
     if (data.questions) {
       setQuestions(data.questions);
       setCurrent(0);
@@ -394,32 +350,21 @@ export default function QuizPage() {
     }
   };
 
-  /* ---------------------------------------------------------
-     AI – LESSON MODE
-  --------------------------------------------------------- */
+  /* ---------------------- LESSON MODE ---------------------- */
   const startLessonMode = async () => {
     setLessonMode(true);
 
-    const res = await fetch("http://localhost:5000/api/lesson", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        topic: finalKey,
-        age: ageGroup,
-        language,
-      }),
-    });
-
+    const res = await fetch(`/api/lesson/${finalKey}`);
     const data = await res.json();
+
     setLessonSteps(data.steps || []);
     setLessonIndex(0);
   };
 
-  /* ---------------------------------------------------------
-     HELPERS
-  --------------------------------------------------------- */
+  /* ---------------------- NAVIGATION ---------------------- */
   const goHome = () => navigate("/");
 
+  /* ---------------------- LANG OPTIONS ---------------------- */
   const languageOptions = [
     { code: "en", label: "English" },
     { code: "fr", label: "French" },
@@ -436,9 +381,7 @@ export default function QuizPage() {
     { code: "ko", label: "Korean" },
   ];
 
-  /* ---------------------------------------------------------
-     SCREEN 1 — AGE GROUP
-  --------------------------------------------------------- */
+  /* ---------------------- SCREEN 1 — AGE ---------------------- */
   if (!ageGroup) {
     return (
       <div className="quiz-page">
@@ -461,9 +404,7 @@ export default function QuizPage() {
     );
   }
 
-  /* ---------------------------------------------------------
-     SCREEN 2 — LEVEL SELECT
-  --------------------------------------------------------- */
+  /* ---------------------- SCREEN 2 — LEVEL SELECT ---------------------- */
   if (!selectedLevel && !lessonMode) {
     return (
       <div className="quiz-page">
@@ -507,9 +448,7 @@ export default function QuizPage() {
     );
   }
 
-  /* ---------------------------------------------------------
-     SCREEN 3 — LESSON MODE
-  --------------------------------------------------------- */
+  /* ---------------------- SCREEN 3 — LESSON MODE ---------------------- */
   if (lessonMode) {
     const step = lessonSteps[lessonIndex] || "Loading lesson...";
 
@@ -548,9 +487,7 @@ export default function QuizPage() {
     );
   }
 
-  /* ---------------------------------------------------------
-     SCREEN 4 — NO QUESTIONS
-  --------------------------------------------------------- */
+  /* ---------------------- SCREEN 4 — NO QUESTIONS ---------------------- */
   if (!questions.length) {
     return (
       <div className="quiz-page">
@@ -560,9 +497,7 @@ export default function QuizPage() {
     );
   }
 
-  /* ---------------------------------------------------------
-     SCREEN 5 — RESULTS
-  --------------------------------------------------------- */
+  /* ---------------------- SCREEN 5 — RESULTS ---------------------- */
   if (showResult) {
     return (
       <div className="quiz-page">
@@ -589,9 +524,7 @@ export default function QuizPage() {
     );
   }
 
-  /* ---------------------------------------------------------
-     MAIN QUIZ SCREEN
-  --------------------------------------------------------- */
+  /* ---------------------- SCREEN 6 — MAIN QUIZ ---------------------- */
   const q = translatedQuestion || questions[current];
 
   return (
