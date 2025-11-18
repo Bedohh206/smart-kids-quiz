@@ -28,7 +28,7 @@ import {
 // Mascot
 import mascotImg from "../assets/mascot-hero.png";
 
-// 🌍 Order used for adventure unlocking
+// 🌍 Adventure unlocking order
 const CONTINENT_ORDER = [
   "africa",
   "northamerica",
@@ -43,13 +43,10 @@ export default function QuizPage() {
   const { continent } = useParams();
   const navigate = useNavigate();
 
-  /* ---------------------- NORMALIZE CATEGORY ---------------------- */
+  /* ---------------------- NORMALIZE KEY ---------------------- */
   const normalize = (str) => {
     if (!str) return "";
-    return str
-      .toLowerCase()
-      .replace(/[^a-z]/g, "")
-      .replace(/s$/, ""); // math → math, sciences → science
+    return str.toLowerCase().replace(/[^a-z]/g, "").replace(/s$/, "");
   };
 
   const key = normalize(continent);
@@ -64,7 +61,19 @@ export default function QuizPage() {
 
   const finalKey = aliasMap[key] || key;
 
-  /* ---------------------- MATCH SET ---------------------- */
+  /* ---------------------- REMOVE DUPLICATES ---------------------- */
+  const removeDuplicates = (arr) => {
+    if (!Array.isArray(arr)) return [];
+    return arr.filter(
+      (q, index, self) =>
+        index ===
+        self.findIndex(
+          (x) => x.q.toLowerCase().trim() === q.q.toLowerCase().trim()
+        )
+    );
+  };
+
+  /* ---------------------- MATCH QUESTION SET ---------------------- */
   const questionSets = {
     africa: africaQuestions,
     antarctica: antarcticaQuestions,
@@ -107,7 +116,6 @@ export default function QuizPage() {
 
   const [showConfetti, setShowConfetti] = useState(false);
 
-  // Translation
   const [language, setLanguage] = useState("en");
   const [translatedQuestion, setTranslatedQuestion] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
@@ -191,76 +199,14 @@ export default function QuizPage() {
     }
 
     const filtered = base.filter((q) => !q.age || q.age === ageGroup);
+    setQuestions(removeDuplicates(filtered));
 
-    setQuestions(filtered);
     setCurrent(0);
     setSelected("");
+    setScore(0);
     setShowResult(false);
     setShowConfetti(false);
-    setScore(0);
   }, [selectedLevel, ageGroup, selectedSet]);
-
-  /* ---------------------- UPDATE XP ---------------------- */
-  const updateAdventureProgress = () => {
-    if (!questions.length) return;
-
-    const storageKey = "smartKidsProgress";
-    const raw = localStorage.getItem(storageKey);
-    const data = raw
-      ? JSON.parse(raw)
-      : { xp: 0, level: 1, continents: {}, subjects: {} };
-
-    const id = finalKey;
-    const isContinent = CONTINENT_ORDER.includes(id);
-
-    const earnedXP = questions.length * 5;
-    data.xp += earnedXP;
-    data.level = 1 + Math.floor(data.xp / 100);
-
-    if (isContinent) {
-      if (!data.continents[id]) {
-        data.continents[id] = { answered: 0, badgeUnlocked: false };
-      }
-      data.continents[id].answered += questions.length;
-
-      if (data.continents[id].answered >= 20) {
-        data.continents[id].badgeUnlocked = true;
-      }
-
-      const unlockedRaw = localStorage.getItem("unlockedContinents");
-      const unlockedList = unlockedRaw ? JSON.parse(unlockedRaw) : ["africa"];
-
-      if (!unlockedList.includes(id)) unlockedList.push(id);
-
-      const currentIndex = CONTINENT_ORDER.indexOf(id);
-      const nextId =
-        currentIndex >= 0 ? CONTINENT_ORDER[currentIndex + 1] : null;
-
-      if (nextId && !unlockedList.includes(nextId))
-        unlockedList.push(nextId);
-
-      localStorage.setItem(
-        "unlockedContinents",
-        JSON.stringify(unlockedList)
-      );
-    } else {
-      if (!data.subjects[id]) {
-        data.subjects[id] = { answered: 0, badgeUnlocked: false };
-      }
-
-      data.subjects[id].answered += questions.length;
-
-      if (data.subjects[id].answered >= 30) {
-        data.subjects[id].badgeUnlocked = true;
-      }
-    }
-
-    localStorage.setItem(storageKey, JSON.stringify(data));
-  };
-
-  useEffect(() => {
-    if (showResult) updateAdventureProgress();
-  }, [showResult]);
 
   /* ---------------------- ANSWER ---------------------- */
   const handleAnswer = (option) => {
@@ -326,7 +272,7 @@ export default function QuizPage() {
     setMascotMessage(data.explanation || "I can't explain right now 😅");
   };
 
-  /* ---------------------- GENERATE AI QUESTIONS ---------------------- */
+  /* ---------------------- AI QUESTION GENERATION ---------------------- */
   const fetchAIQuestions = async () => {
     const response = await fetch(`/api/generate-question`, {
       method: "POST",
@@ -341,7 +287,7 @@ export default function QuizPage() {
     const data = await response.json();
 
     if (data.questions) {
-      setQuestions(data.questions);
+      setQuestions(removeDuplicates(data.questions));
       setCurrent(0);
       setSelected("");
       setShowResult(false);
@@ -351,16 +297,30 @@ export default function QuizPage() {
   };
 
   /* ---------------------- LESSON MODE ---------------------- */
-  const startLessonMode = async () => {
-    setLessonMode(true);
+const startLessonMode = async () => {
+  setLessonMode(true);
 
-    const res = await fetch(`/api/lesson/${finalKey}`);
+  const params = new URLSearchParams({
+    age: ageGroup || "",
+    lang: language || "en",
+  });
+
+  try {
+    const res = await fetch(`/api/lesson/${finalKey}?${params.toString()}`);
     const data = await res.json();
 
     setLessonSteps(data.steps || []);
     setLessonIndex(0);
-  };
-
+    setMascotMessage("Lesson loaded! Let's learn together. 📘");
+  } catch (err) {
+    console.error("Lesson mode error:", err);
+    setLessonSteps([
+      "Sorry, the AI tutor could not load a full lesson right now.",
+      "You can still continue with the quiz and try again later.",
+    ]);
+    setLessonIndex(0);
+  }
+};
   /* ---------------------- NAVIGATION ---------------------- */
   const goHome = () => navigate("/");
 
@@ -381,20 +341,19 @@ export default function QuizPage() {
     { code: "ko", label: "Korean" },
   ];
 
-  /* ---------------------- SCREEN 1 — AGE ---------------------- */
+  /* ---------------------- SCREEN: AGE SELECT ---------------------- */
   if (!ageGroup) {
     return (
       <div className="quiz-page">
         <h2>Select Your Age Group</h2>
+
         <div className="levels">
           <button onClick={() => setAgeGroup("5-7")}>Ages 5–7</button>
           <button onClick={() => setAgeGroup("8-10")}>Ages 8–10</button>
           <button onClick={() => setAgeGroup("11-14")}>Ages 11–14</button>
         </div>
 
-        <button className="back-btn" onClick={goHome}>
-          Back
-        </button>
+        <button className="back-btn" onClick={goHome}>Back</button>
 
         <div className="mascot">
           <img src={mascotImg} alt="RoboTutor mascot" />
@@ -404,10 +363,11 @@ export default function QuizPage() {
     );
   }
 
-  /* ---------------------- SCREEN 2 — LEVEL SELECT ---------------------- */
+  /* ---------------------- SCREEN: LEVEL SELECT ---------------------- */
   if (!selectedLevel && !lessonMode) {
     return (
       <div className="quiz-page">
+
         <select
           className="lang-select"
           value={language}
@@ -421,6 +381,7 @@ export default function QuizPage() {
         </select>
 
         <h2>{(continent || "").toUpperCase()}</h2>
+
         <p>Select Level:</p>
 
         <div className="levels">
@@ -436,9 +397,7 @@ export default function QuizPage() {
           📘 AI Lesson Mode
         </button>
 
-        <button className="back-btn" onClick={goHome}>
-          Back
-        </button>
+        <button className="back-btn" onClick={goHome}>Back</button>
 
         <div className="mascot">
           <img src={mascotImg} alt="RoboTutor mascot" />
@@ -448,7 +407,7 @@ export default function QuizPage() {
     );
   }
 
-  /* ---------------------- SCREEN 3 — LESSON MODE ---------------------- */
+  /* ---------------------- SCREEN: LESSON MODE ---------------------- */
   if (lessonMode) {
     const step = lessonSteps[lessonIndex] || "Loading lesson...";
 
@@ -475,9 +434,7 @@ export default function QuizPage() {
           </button>
         )}
 
-        <button className="back-btn" onClick={goHome}>
-          Exit
-        </button>
+        <button className="back-btn" onClick={goHome}>Exit</button>
 
         <div className="mascot">
           <img src={mascotImg} alt="RoboTutor mascot" />
@@ -487,7 +444,7 @@ export default function QuizPage() {
     );
   }
 
-  /* ---------------------- SCREEN 4 — NO QUESTIONS ---------------------- */
+  /* ---------------------- SCREEN: NO QUESTIONS ---------------------- */
   if (!questions.length) {
     return (
       <div className="quiz-page">
@@ -497,7 +454,7 @@ export default function QuizPage() {
     );
   }
 
-  /* ---------------------- SCREEN 5 — RESULTS ---------------------- */
+  /* ---------------------- SCREEN: RESULTS ---------------------- */
   if (showResult) {
     return (
       <div className="quiz-page">
@@ -512,9 +469,7 @@ export default function QuizPage() {
           ✨ Try AI Questions
         </button>
 
-        <button className="back-btn" onClick={goHome}>
-          Back
-        </button>
+        <button className="back-btn" onClick={goHome}>Back</button>
 
         <div className="mascot">
           <img src={mascotImg} alt="RoboTutor mascot" />
@@ -524,7 +479,7 @@ export default function QuizPage() {
     );
   }
 
-  /* ---------------------- SCREEN 6 — MAIN QUIZ ---------------------- */
+  /* ---------------------- SCREEN: MAIN QUIZ ---------------------- */
   const q = translatedQuestion || questions[current];
 
   return (
@@ -545,6 +500,7 @@ export default function QuizPage() {
         {(continent || "").toUpperCase()} — Level{" "}
         {selectedLevel.toUpperCase()}
       </h2>
+
       <p>
         Question {current + 1} / {questions.length}
         {isTranslating && " • Translating…"}
@@ -594,3 +550,5 @@ export default function QuizPage() {
     </div>
   );
 }
+
+
