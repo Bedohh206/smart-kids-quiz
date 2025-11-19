@@ -312,3 +312,30 @@
     font-size: 1rem;
   }
 }
+.mascot-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.mascot-img {
+  width: 120px;       /* Small fixed size */
+  height: auto;
+  border-radius: 12px;
+}
+
+.mascot-text {
+  margin-left: 12px;
+  font-size: 16px;
+}
+.quiz-card img {
+  max-width: 140px;
+  height: auto;
+}
+.mascot-img {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 120px;
+}

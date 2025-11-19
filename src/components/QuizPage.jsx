@@ -25,7 +25,7 @@ import {
 } from "../data/index.js";
 
 // Mascot
-import mascotImg from "../assets/mascot-hero.png";
+import mascotImg from "../assets/kids-mascot.png";
 
 export default function QuizPage() {
   const { continent } = useParams();
