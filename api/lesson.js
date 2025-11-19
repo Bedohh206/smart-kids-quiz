@@ -4,7 +4,7 @@ import OpenAI from "openai";
 
 export default async function handler(req) {
   try {
-    const { question, answer } = await req.json();
+    const { topic } = await req.json();
 
     const client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY
@@ -15,19 +15,19 @@ export default async function handler(req) {
       messages: [
         {
           role: "system",
-          content: "Explain answers to kids in simple, friendly language."
+          content:
+            "You create short kid-friendly lessons. Return steps as a list separated by '||'."
         },
         {
           role: "user",
-          content: `Explain why the answer to this question is "${answer}": ${question}`
+          content: `Build a very short lesson for kids about: ${topic}`
         }
       ]
     });
 
-    return new Response(
-      JSON.stringify({ explanation: completion.choices[0].message.content }),
-      { status: 200 }
-    );
+    const steps = completion.choices[0].message.content.split("||");
+
+    return new Response(JSON.stringify({ steps }), { status: 200 });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
