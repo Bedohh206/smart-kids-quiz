@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Confetti from "react-confetti";
 
-// Styles
 import "./QuizPage.css";
 
 // Question banks
@@ -28,17 +27,6 @@ import {
 // Mascot
 import mascotImg from "../assets/mascot-hero.png";
 
-// 🌍 Adventure unlocking order
-const CONTINENT_ORDER = [
-  "africa",
-  "northamerica",
-  "southamerica",
-  "europe",
-  "asia",
-  "australia",
-  "antarctica",
-];
-
 export default function QuizPage() {
   const { continent } = useParams();
   const navigate = useNavigate();
@@ -49,7 +37,7 @@ export default function QuizPage() {
     return str.toLowerCase().replace(/[^a-z]/g, "").replace(/s$/, "");
   };
 
-  const key = normalize(continent);
+  const rawKey = normalize(continent);
 
   const aliasMap = {
     mathematic: "math",
@@ -59,15 +47,18 @@ export default function QuizPage() {
     mathquestions: "math",
   };
 
-  const finalKey = aliasMap[key] || key;
+  const finalKey = aliasMap[rawKey] || rawKey;
 
   /* ---------------------- REMOVE DUPLICATES ---------------------- */
   const removeDuplicates = (arr) => {
     if (!Array.isArray(arr)) return [];
     return arr.filter(
       (q, index, self) =>
-        index === self.findIndex(
-          (x) => x.q.toLowerCase().trim() === q.q.toLowerCase().trim()
+        index ===
+        self.findIndex(
+          (x) =>
+            String(x.q || "").toLowerCase().trim() ===
+            String(q.q || "").toLowerCase().trim()
         )
     );
   };
@@ -123,43 +114,24 @@ export default function QuizPage() {
   const [translatedQuestion, setTranslatedQuestion] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
 
-  /* ---------------------- PLAYER NAME SCREEN ---------------------- */
-  if (!playerName) {
-    return (
-      <div className="quiz-page">
-        <h2>Welcome! 🎉</h2>
-        <p>Please enter your name to begin:</p>
+  /* ---------------------- LANGUAGE OPTIONS ---------------------- */
+  const languageOptions = [
+    { code: "en", label: "English" },
+    { code: "fr", label: "French" },
+    { code: "es", label: "Spanish" },
+    { code: "ar", label: "Arabic" },
+    { code: "zh", label: "Chinese" },
+    { code: "pt", label: "Portuguese" },
+    { code: "sw", label: "Swahili" },
+    { code: "kr", label: "Krio" },
+    { code: "hi", label: "Hindi" },
+    { code: "de", label: "German" },
+    { code: "it", label: "Italian" },
+    { code: "ja", label: "Japanese" },
+    { code: "ko", label: "Korean" },
+  ];
 
-        <input
-          type="text"
-          className="name-input"
-          placeholder="Enter your name"
-          value={playerName}
-          onChange={(e) => setPlayerName(e.target.value)}
-        />
-
-        <button
-          className="ai-btn"
-          onClick={() => {
-            if (playerName.trim()) {
-              localStorage.setItem("playerName", playerName.trim());
-            } else {
-              alert("Please enter a valid name.");
-            }
-          }}
-        >
-          Continue →
-        </button>
-
-        <div className="mascot">
-          <img src={mascotImg} alt="RoboTutor mascot" />
-          <p>Let's get started! 😄</p>
-        </div>
-      </div>
-    );
-  }
-
-  /* ---------------------- VOICE ---------------------- */
+  /* ---------------------- VOICE RECOGNITION ---------------------- */
   let mic = null;
   if (typeof window !== "undefined") {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -188,13 +160,14 @@ export default function QuizPage() {
   };
 
   const speak = (text) => {
-    if (!text) return;
+    if (!text || typeof window === "undefined") return;
     const u = new SpeechSynthesisUtterance(text);
     u.lang = voices[language] || "en-US";
+    window.speechSynthesis.cancel();
     window.speechSynthesis.speak(u);
   };
 
-  /* ---------------------- TRANSLATE ---------------------- */
+  /* ---------------------- TRANSLATE CURRENT QUESTION ---------------------- */
   useEffect(() => {
     if (!questions.length) return;
     if (language === "en") {
@@ -205,7 +178,7 @@ export default function QuizPage() {
     const translate = async () => {
       setIsTranslating(true);
       try {
-        const response = await fetch(`/api/translate`, {
+        const response = await fetch("/api/translate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -219,7 +192,7 @@ export default function QuizPage() {
           setTranslatedQuestion(JSON.parse(data.translated));
         }
       } catch (err) {
-        console.log("Translation failed");
+        console.log("Translation failed", err);
       }
       setIsTranslating(false);
     };
@@ -227,7 +200,7 @@ export default function QuizPage() {
     translate();
   }, [language, current, questions]);
 
-  /* ---------------------- LOAD QUESTIONS ---------------------- */
+  /* ---------------------- LOAD QUESTIONS FOR LEVEL & AGE ---------------------- */
   useEffect(() => {
     if (!selectedSet || !selectedLevel || !ageGroup) return;
 
@@ -249,25 +222,22 @@ export default function QuizPage() {
 
   /* ---------------------- SAVE SCORE TO LEADERBOARD ---------------------- */
   useEffect(() => {
-    if (showResult) saveScoreToLeaderboard();
-  }, [showResult]);
+    if (!showResult) return;
 
-  const saveScoreToLeaderboard = () => {
     const name = localStorage.getItem("playerName") || "Player";
-    const entry = { name, score };
+    const entry = { name, score, topic: finalKey, level: selectedLevel };
 
     const old =
       JSON.parse(localStorage.getItem("smartKidsLeaderboard")) || [];
 
     old.push(entry);
 
-    localStorage.setItem(
-      "smartKidsLeaderboard",
-      JSON.stringify(old)
-    );
-  };
+    localStorage.setItem("smartKidsLeaderboard", JSON.stringify(old));
+  }, [showResult, score, finalKey, selectedLevel]);
 
-  /* ---------------------- ANSWER ---------------------- */
+  /* ---------------------- HELPERS ---------------------- */
+  const goHome = () => navigate("/");
+
   const handleAnswer = (option) => {
     const q = translatedQuestion || questions[current];
     if (!q) return;
@@ -292,23 +262,216 @@ export default function QuizPage() {
     }, 700);
   };
 
+  const handleVoiceAnswer = () => {
+    if (!mic) {
+      alert("Voice recognition not supported on this device.");
+      return;
+    }
+
+    const q = translatedQuestion || questions[current];
+    if (!q) return;
+
+    const correct = String(q.a || "").toLowerCase();
+
+    mic.start();
+    setMascotMessage("Listening… 🎤");
+
+    mic.onresult = (e) => {
+      const speech = e.results[0][0].transcript.toLowerCase();
+      if (speech.includes(correct)) {
+        handleAnswer(q.a);
+      } else {
+        setMascotMessage(`You said "${speech}". Try again!`);
+      }
+    };
+  };
+
+  const handleExplain = async () => {
+    const q = translatedQuestion || questions[current];
+    if (!q) return;
+
+    try {
+      const res = await fetch("/api/explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: q.q,
+          answer: q.a,
+          language,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.explanation) {
+        setMascotMessage(data.explanation);
+      } else {
+        setMascotMessage("I can't explain right now 😅");
+      }
+    } catch (err) {
+      console.log("Explain failed", err);
+      setMascotMessage("AI helper is not available right now.");
+    }
+  };
+
+  const fetchAIQuestions = async () => {
+    if (!selectedLevel || !ageGroup) {
+      alert("Please select your age and level first.");
+      return;
+    }
+
+    try {
+      setMascotMessage("Generating fresh questions for you… ✨");
+
+      const res = await fetch("/api/generate-question", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subject: finalKey,
+          level: selectedLevel,
+          age: ageGroup,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (Array.isArray(data.questions) && data.questions.length > 0) {
+        setQuestions(removeDuplicates(data.questions));
+        setCurrent(0);
+        setSelected("");
+        setShowResult(false);
+        setShowConfetti(false);
+        setScore(0);
+        setMascotMessage("Here are brand-new AI-powered questions! 🚀");
+      } else {
+        setMascotMessage("AI could not generate new questions right now.");
+      }
+    } catch (err) {
+      console.log("AI question generation failed", err);
+      setMascotMessage("AI question service is not available.");
+    }
+  };
+
+  const startLessonMode = async () => {
+    if (!ageGroup) {
+      alert("Please choose your age group first.");
+      return;
+    }
+
+    setLessonMode(true);
+    setLessonSteps([]);
+    setLessonIndex(0);
+    setMascotMessage("Building a mini-lesson just for you… 📘");
+
+    try {
+      const res = await fetch("/api/lesson", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          topic: finalKey,
+          age: ageGroup,
+          language,
+        }),
+      });
+
+      const data = await res.json();
+      if (Array.isArray(data.steps) && data.steps.length > 0) {
+        setLessonSteps(data.steps);
+      } else {
+        setLessonSteps([
+          "No AI lesson is available right now. Let's try the quiz instead!",
+        ]);
+      }
+    } catch (err) {
+      console.log("Lesson mode failed", err);
+      setLessonSteps([
+        "AI lesson service is not available. You can still enjoy the quiz! 😊",
+      ]);
+    }
+  };
+
+  /* ---------------------- PREMIUM UI HELPERS ---------------------- */
+  const totalQuestions = questions.length || 1;
+  const progressPercent =
+    totalQuestions > 0 ? ((current + 1) / totalQuestions) * 100 : 0;
+
+  /* ---------------------- SCREEN: PLAYER NAME ---------------------- */
+  if (!playerName) {
+    return (
+      <div className="quiz-page premium-layout">
+        <div className="quiz-card fade-in">
+          <h2 className="quiz-title">Welcome to Smart Kids Quiz 🎓</h2>
+          <p className="quiz-subtitle">
+            Tell me your name so I can cheer for you!
+          </p>
+
+          <input
+            type="text"
+            className="name-input"
+            placeholder="Enter your name"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+          />
+
+          <button
+            className="primary-btn"
+            onClick={() => {
+              if (playerName.trim()) {
+                localStorage.setItem("playerName", playerName.trim());
+                setMascotMessage(`Awesome, ${playerName.trim()}! Let's begin!`);
+              } else {
+                alert("Please enter a valid name.");
+              }
+            }}
+          >
+            Continue →
+          </button>
+
+          <div className="mascot-row">
+            <img src={mascotImg} alt="RoboTutor mascot" className="mascot-img" />
+            <p className="mascot-text">I’m RoboTutor. I’ll guide you! 🤖</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   /* ---------------------- SCREEN: AGE SELECT ---------------------- */
   if (!ageGroup) {
     return (
-      <div className="quiz-page">
-        <h2>Select Your Age Group</h2>
+      <div className="quiz-page premium-layout">
+        <div className="quiz-card fade-in">
+          <h2 className="quiz-title">Hi {playerName}! 👋</h2>
+          <p className="quiz-subtitle">Choose your age group to get started:</p>
 
-        <div className="levels">
-          <button onClick={() => setAgeGroup("5-7")}>Ages 5–7</button>
-          <button onClick={() => setAgeGroup("8-10")}>Ages 8–10</button>
-          <button onClick={() => setAgeGroup("11-14")}>Ages 11–14</button>
-        </div>
+          <div className="age-grid">
+            <button
+              className="age-btn"
+              onClick={() => setAgeGroup("5-7")}
+            >
+              Ages 5–7
+            </button>
+            <button
+              className="age-btn"
+              onClick={() => setAgeGroup("8-10")}
+            >
+              Ages 8–10
+            </button>
+            <button
+              className="age-btn"
+              onClick={() => setAgeGroup("11-14")}
+            >
+              Ages 11–14
+            </button>
+          </div>
 
-        <button className="back-btn" onClick={goHome}>Back</button>
+          <button className="secondary-btn" onClick={goHome}>
+            ⟵ Back to Map
+          </button>
 
-        <div className="mascot">
-          <img src={mascotImg} alt="RoboTutor mascot" />
-          <p>{mascotMessage}</p>
+          <div className="mascot-row">
+            <img src={mascotImg} alt="RoboTutor mascot" className="mascot-img" />
+            <p className="mascot-text">{mascotMessage}</p>
+          </div>
         </div>
       </div>
     );
@@ -317,42 +480,56 @@ export default function QuizPage() {
   /* ---------------------- SCREEN: LEVEL SELECT ---------------------- */
   if (!selectedLevel && !lessonMode) {
     return (
-      <div className="quiz-page">
+      <div className="quiz-page premium-layout">
+        <div className="quiz-card fade-in">
+          <div className="quiz-header-row">
+            <h2 className="quiz-title">
+              {(continent || "").toUpperCase()}
+            </h2>
 
-        <select
-          className="lang-select"
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-        >
-          {languageOptions.map((l) => (
-            <option key={l.code} value={l.code}>
-              {l.label}
-            </option>
-          ))}
-        </select>
+            <select
+              className="lang-select"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+            >
+              {languageOptions.map((l) => (
+                <option key={l.code} value={l.code}>
+                  {l.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <h2>{(continent || "").toUpperCase()}</h2>
+          <p className="quiz-subtitle">
+            Great, {playerName}! Choose your level:
+          </p>
 
-        <p>Select Level:</p>
+          <div className="level-grid">
+            {selectedSet &&
+              Object.keys(selectedSet).map((lvl) => (
+                <button
+                  key={lvl}
+                  className="level-btn"
+                  onClick={() => setSelectedLevel(lvl)}
+                >
+                  {lvl.toUpperCase()}
+                </button>
+              ))}
+          </div>
 
-        <div className="levels">
-          {selectedSet &&
-            Object.keys(selectedSet).map((lvl) => (
-              <button key={lvl} onClick={() => setSelectedLevel(lvl)}>
-                {lvl.toUpperCase()}
-              </button>
-            ))}
-        </div>
+          <div className="cta-row">
+            <button className="primary-btn" onClick={startLessonMode}>
+              📘 Start AI Lesson First
+            </button>
+            <button className="secondary-btn" onClick={goHome}>
+              ⟵ Back to Map
+            </button>
+          </div>
 
-        <button className="ai-btn" onClick={startLessonMode}>
-          📘 AI Lesson Mode
-        </button>
-
-        <button className="back-btn" onClick={goHome}>Back</button>
-
-        <div className="mascot">
-          <img src={mascotImg} alt="RoboTutor mascot" />
-          <p>{mascotMessage}</p>
+          <div className="mascot-row">
+            <img src={mascotImg} alt="RoboTutor mascot" className="mascot-img" />
+            <p className="mascot-text">{mascotMessage}</p>
+          </div>
         </div>
       </div>
     );
@@ -363,33 +540,42 @@ export default function QuizPage() {
     const step = lessonSteps[lessonIndex] || "Loading lesson...";
 
     return (
-      <div className="quiz-page">
-        <h2>📘 Lesson Mode</h2>
+      <div className="quiz-page premium-layout">
+        <div className="quiz-card fade-in">
+          <h2 className="quiz-title">📘 AI Lesson Mode</h2>
 
-        <p className="lesson-step">{step}</p>
+          <p className="lesson-step">{step}</p>
 
-        <button className="voice-btn" onClick={() => speak(step)}>
-          🔊 Read Lesson
-        </button>
+          <div className="lesson-controls">
+            <button className="ghost-btn" onClick={() => speak(step)}>
+              🔊 Read Lesson
+            </button>
 
-        {lessonIndex < lessonSteps.length - 1 ? (
-          <button
-            className="ai-btn"
-            onClick={() => setLessonIndex((i) => i + 1)}
-          >
-            Next →
+            {lessonIndex < lessonSteps.length - 1 ? (
+              <button
+                className="primary-btn"
+                onClick={() => setLessonIndex((i) => i + 1)}
+              >
+                Next →
+              </button>
+            ) : (
+              <button
+                className="primary-btn"
+                onClick={() => setLessonMode(false)}
+              >
+                Start Quiz →
+              </button>
+            )}
+          </div>
+
+          <button className="secondary-btn" onClick={goHome}>
+            Exit to Map
           </button>
-        ) : (
-          <button className="ai-btn" onClick={() => setLessonMode(false)}>
-            Start Quiz →
-          </button>
-        )}
 
-        <button className="back-btn" onClick={goHome}>Exit</button>
-
-        <div className="mascot">
-          <img src={mascotImg} alt="RoboTutor mascot" />
-          <p>{mascotMessage}</p>
+          <div className="mascot-row">
+            <img src={mascotImg} alt="RoboTutor mascot" className="mascot-img" />
+            <p className="mascot-text">{mascotMessage}</p>
+          </div>
         </div>
       </div>
     );
@@ -398,9 +584,16 @@ export default function QuizPage() {
   /* ---------------------- SCREEN: NO QUESTIONS ---------------------- */
   if (!questions.length) {
     return (
-      <div className="quiz-page">
-        <h2>No Questions Found 😅</h2>
-        <button onClick={goHome}>Back Home</button>
+      <div className="quiz-page premium-layout">
+        <div className="quiz-card fade-in">
+          <h2 className="quiz-title">No Questions Found 😅</h2>
+          <p className="quiz-subtitle">
+            This level doesn’t have questions yet. Try another level or subject.
+          </p>
+          <button className="secondary-btn" onClick={goHome}>
+            ⟵ Back to Map
+          </button>
+        </div>
       </div>
     );
   }
@@ -408,23 +601,31 @@ export default function QuizPage() {
   /* ---------------------- SCREEN: RESULTS ---------------------- */
   if (showResult) {
     return (
-      <div className="quiz-page">
+      <div className="quiz-page premium-layout">
         {showConfetti && <Confetti />}
 
-        <h2>🎉 Quiz Complete!</h2>
-        <p>
-          Score: <strong>{score}</strong> / {questions.length}
-        </p>
+        <div className="quiz-card fade-in">
+          <h2 className="quiz-title">🎉 Quiz Complete!</h2>
+          <p className="quiz-subtitle">
+            {playerName}, you scored{" "}
+            <strong>
+              {score} / {questions.length}
+            </strong>
+          </p>
 
-        <button className="ai-btn" onClick={fetchAIQuestions}>
-          ✨ Try AI Questions
-        </button>
+          <div className="result-actions">
+            <button className="primary-btn" onClick={fetchAIQuestions}>
+              ✨ Try AI-Generated Questions
+            </button>
+            <button className="secondary-btn" onClick={goHome}>
+              ⟵ Back to Map
+            </button>
+          </div>
 
-        <button className="back-btn" onClick={goHome}>Back</button>
-
-        <div className="mascot">
-          <img src={mascotImg} alt="RoboTutor mascot" />
-          <p>{mascotMessage}</p>
+          <div className="mascot-row">
+            <img src={mascotImg} alt="RoboTutor mascot" className="mascot-img" />
+            <p className="mascot-text">{mascotMessage}</p>
+          </div>
         </div>
       </div>
     );
@@ -434,69 +635,86 @@ export default function QuizPage() {
   const q = translatedQuestion || questions[current];
 
   return (
-    <div className={`quiz-page ${language === "ar" ? "rtl" : ""}`}>
-      <select
-        className="lang-select"
-        value={language}
-        onChange={(e) => setLanguage(e.target.value)}
-      >
-        {languageOptions.map((l) => (
-          <option key={l.code} value={l.code}>
-            {l.label}
-          </option>
-        ))}
-      </select>
+    <div className={`quiz-page premium-layout ${language === "ar" ? "rtl" : ""}`}>
+      <div className="quiz-card slide-up">
+        <div className="quiz-header-row">
+          <h2 className="quiz-title">
+            {(continent || "").toUpperCase()} — Level{" "}
+            {selectedLevel.toUpperCase()}
+          </h2>
 
-      <h2>
-        {(continent || "").toUpperCase()} — Level{" "}
-        {selectedLevel.toUpperCase()}
-      </h2>
-
-      <p>
-        Question {current + 1} / {questions.length}
-        {isTranslating && " • Translating…"}
-      </p>
-
-      <div className="quiz-page-inner">
-        <h3>{q.q}</h3>
-
-        <button className="voice-btn" onClick={() => speak(q.q)}>
-          🔊 Read Question
-        </button>
-
-        <button className="mic-btn" onClick={handleVoiceAnswer}>
-          🎤 Voice Answer
-        </button>
-
-        <button className="ask-btn" onClick={handleExplain}>
-          🤖 Explain
-        </button>
-
-        <div className="options">
-          {q.options.map((opt, i) => (
-            <button
-              key={i}
-              onClick={() => handleAnswer(opt)}
-              disabled={!!selected}
-              className={
-                selected
-                  ? opt === q.a
-                    ? "correct"
-                    : opt === selected
-                    ? "wrong"
-                    : ""
-                  : ""
-              }
-            >
-              {opt}
-            </button>
-          ))}
+          <select
+            className="lang-select"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+          >
+            {languageOptions.map((l) => (
+              <option key={l.code} value={l.code}>
+                {l.label}
+              </option>
+            ))}
+          </select>
         </div>
-      </div>
 
-      <div className="mascot">
-        <img src={mascotImg} alt="RoboTutor mascot" />
-        <p>{mascotMessage}</p>
+        {/* Progress bar */}
+        <div className="progress-bar">
+          <div
+            className="progress-fill"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+        <p className="progress-text">
+          Question {current + 1} of {questions.length}
+          {isTranslating && " • Translating…"}
+        </p>
+
+        <div className="question-card">
+          <h3 className="question-text">{q.q}</h3>
+
+          <div className="question-actions">
+            <button className="ghost-btn" onClick={() => speak(q.q)}>
+              🔊 Read Question
+            </button>
+            <button className="ghost-btn" onClick={handleVoiceAnswer}>
+              🎤 Voice Answer
+            </button>
+            <button className="ghost-btn" onClick={handleExplain}>
+              🤖 Explain
+            </button>
+          </div>
+
+          <div className="options-grid">
+            {q.options.map((opt, i) => (
+              <button
+                key={i}
+                onClick={() => handleAnswer(opt)}
+                disabled={!!selected}
+                className={
+                  selected
+                    ? opt === q.a
+                      ? "option-btn correct"
+                      : opt === selected
+                      ? "option-btn wrong"
+                      : "option-btn"
+                    : "option-btn"
+                }
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="bottom-row">
+          <button className="secondary-btn" onClick={goHome}>
+            ⟵ Back to Map
+          </button>
+
+          <div className="mascot-row">
+            <img src={mascotImg} alt="RoboTutor mascot" className="mascot-img" />
+            <p className="mascot-text">{mascotMessage}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
