@@ -66,8 +66,7 @@ export default function QuizPage() {
     if (!Array.isArray(arr)) return [];
     return arr.filter(
       (q, index, self) =>
-        index ===
-        self.findIndex(
+        index === self.findIndex(
           (x) => x.q.toLowerCase().trim() === q.q.toLowerCase().trim()
         )
     );
@@ -96,6 +95,10 @@ export default function QuizPage() {
   const selectedSet = questionSets[finalKey] || null;
 
   /* ---------------------- STATE ---------------------- */
+  const [playerName, setPlayerName] = useState(
+    localStorage.getItem("playerName") || ""
+  );
+
   const [ageGroup, setAgeGroup] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("");
 
@@ -119,6 +122,42 @@ export default function QuizPage() {
   const [language, setLanguage] = useState("en");
   const [translatedQuestion, setTranslatedQuestion] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
+
+  /* ---------------------- PLAYER NAME SCREEN ---------------------- */
+  if (!playerName) {
+    return (
+      <div className="quiz-page">
+        <h2>Welcome! 🎉</h2>
+        <p>Please enter your name to begin:</p>
+
+        <input
+          type="text"
+          className="name-input"
+          placeholder="Enter your name"
+          value={playerName}
+          onChange={(e) => setPlayerName(e.target.value)}
+        />
+
+        <button
+          className="ai-btn"
+          onClick={() => {
+            if (playerName.trim()) {
+              localStorage.setItem("playerName", playerName.trim());
+            } else {
+              alert("Please enter a valid name.");
+            }
+          }}
+        >
+          Continue →
+        </button>
+
+        <div className="mascot">
+          <img src={mascotImg} alt="RoboTutor mascot" />
+          <p>Let's get started! 😄</p>
+        </div>
+      </div>
+    );
+  }
 
   /* ---------------------- VOICE ---------------------- */
   let mic = null;
@@ -208,6 +247,26 @@ export default function QuizPage() {
     setShowConfetti(false);
   }, [selectedLevel, ageGroup, selectedSet]);
 
+  /* ---------------------- SAVE SCORE TO LEADERBOARD ---------------------- */
+  useEffect(() => {
+    if (showResult) saveScoreToLeaderboard();
+  }, [showResult]);
+
+  const saveScoreToLeaderboard = () => {
+    const name = localStorage.getItem("playerName") || "Player";
+    const entry = { name, score };
+
+    const old =
+      JSON.parse(localStorage.getItem("smartKidsLeaderboard")) || [];
+
+    old.push(entry);
+
+    localStorage.setItem(
+      "smartKidsLeaderboard",
+      JSON.stringify(old)
+    );
+  };
+
   /* ---------------------- ANSWER ---------------------- */
   const handleAnswer = (option) => {
     const q = translatedQuestion || questions[current];
@@ -232,114 +291,6 @@ export default function QuizPage() {
       }
     }, 700);
   };
-
-  /* ---------------------- VOICE ANSWER ---------------------- */
-  const handleVoiceAnswer = () => {
-    if (!mic) return alert("Voice recognition not supported.");
-
-    const correct = questions[current]?.a?.toLowerCase();
-    if (!correct) return;
-
-    mic.start();
-    setMascotMessage("Listening… 🎤");
-
-    mic.onresult = (e) => {
-      const spoken = e.results[0][0].transcript.toLowerCase();
-      if (spoken.includes(correct)) {
-        handleAnswer(questions[current].a);
-      } else {
-        setMascotMessage(`You said "${spoken}". Try again!`);
-      }
-    };
-  };
-
-  /* ---------------------- EXPLAIN ANSWER ---------------------- */
-  const handleExplain = async () => {
-    const q = questions[current];
-    if (!q) return;
-
-    const response = await fetch(`/api/explain`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        question: q.q,
-        answer: q.a,
-        language,
-      }),
-    });
-
-    const data = await response.json();
-    setMascotMessage(data.explanation || "I can't explain right now 😅");
-  };
-
-  /* ---------------------- AI QUESTION GENERATION ---------------------- */
-  const fetchAIQuestions = async () => {
-    const response = await fetch(`/api/generate-question`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        subject: finalKey,
-        level: selectedLevel,
-        age: ageGroup,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.questions) {
-      setQuestions(removeDuplicates(data.questions));
-      setCurrent(0);
-      setSelected("");
-      setShowResult(false);
-      setShowConfetti(false);
-      setScore(0);
-    }
-  };
-
-  /* ---------------------- LESSON MODE ---------------------- */
-const startLessonMode = async () => {
-  setLessonMode(true);
-
-  const params = new URLSearchParams({
-    age: ageGroup || "",
-    lang: language || "en",
-  });
-
-  try {
-    const res = await fetch(`/api/lesson/${finalKey}?${params.toString()}`);
-    const data = await res.json();
-
-    setLessonSteps(data.steps || []);
-    setLessonIndex(0);
-    setMascotMessage("Lesson loaded! Let's learn together. 📘");
-  } catch (err) {
-    console.error("Lesson mode error:", err);
-    setLessonSteps([
-      "Sorry, the AI tutor could not load a full lesson right now.",
-      "You can still continue with the quiz and try again later.",
-    ]);
-    setLessonIndex(0);
-  }
-};
-  /* ---------------------- NAVIGATION ---------------------- */
-  const goHome = () => navigate("/");
-
-  /* ---------------------- LANG OPTIONS ---------------------- */
-  const languageOptions = [
-    { code: "en", label: "English" },
-    { code: "fr", label: "French" },
-    { code: "es", label: "Spanish" },
-    { code: "ar", label: "Arabic" },
-    { code: "zh", label: "Chinese" },
-    { code: "pt", label: "Portuguese" },
-    { code: "sw", label: "Swahili" },
-    { code: "kr", label: "Krio" },
-    { code: "hi", label: "Hindi" },
-    { code: "de", label: "German" },
-    { code: "it", label: "Italian" },
-    { code: "ja", label: "Japanese" },
-    { code: "ko", label: "Korean" },
-  ];
 
   /* ---------------------- SCREEN: AGE SELECT ---------------------- */
   if (!ageGroup) {
@@ -479,7 +430,7 @@ const startLessonMode = async () => {
     );
   }
 
-  /* ---------------------- SCREEN: MAIN QUIZ ---------------------- */
+  /* ---------------------- MAIN QUIZ SCREEN ---------------------- */
   const q = translatedQuestion || questions[current];
 
   return (
@@ -550,5 +501,3 @@ const startLessonMode = async () => {
     </div>
   );
 }
-
-

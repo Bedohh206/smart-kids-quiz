@@ -1,0 +1,49 @@
+.leaderboard-page {
+  padding: 2rem;
+  text-align: center;
+  color: #222;
+  font-family: "Poppins", sans-serif;
+}
+
+.leaderboard-table {
+  width: 90%;
+  max-width: 600px;
+  margin: 1.5rem auto;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.leaderboard-table th {
+  background: #4a90e2;
+  color: white;
+  padding: 12px;
+  font-size: 1.1rem;
+}
+
+.leaderboard-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.leaderboard-table tr:nth-child(even) {
+  background: #f7f7f7;
+}
+
+.back-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #4a90e2;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  background: #3575c0;
+}
