@@ -6,8 +6,15 @@ export default async function handler(req) {
   try {
     const { question, answer } = await req.json();
 
+    if (!question || !answer) {
+      return new Response(
+        JSON.stringify({ error: "Missing question or answer" }),
+        { status: 400 }
+      );
+    }
+
     const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY
+      apiKey: process.env.OPENAI_API_KEY,
     });
 
     const completion = await client.chat.completions.create({
@@ -15,20 +22,27 @@ export default async function handler(req) {
       messages: [
         {
           role: "system",
-          content: "Explain answers to kids in simple, friendly language."
+          content:
+            "You are a fun AI tutor. Explain things to children in a friendly, simple way.",
         },
         {
           role: "user",
-          content: `Explain why the answer to this question is "${answer}": ${question}`
-        }
-      ]
+          content: `Explain why "${answer}" is the correct answer to the question:\n\n"${question}"`,
+        },
+      ],
     });
 
-    return new Response(
-      JSON.stringify({ explanation: completion.choices[0].message.content }),
-      { status: 200 }
-    );
+    const text =
+      completion.choices?.[0]?.message?.content ||
+      "I’m not sure, but try your best!";
+
+    return new Response(JSON.stringify({ explanation: text }), {
+      status: 200,
+    });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    return new Response(
+      JSON.stringify({ error: err.message || "Server error" }),
+      { status: 500 }
+    );
   }
 }
