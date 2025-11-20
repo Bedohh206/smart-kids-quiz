@@ -11,12 +11,14 @@ export default async function handler(req) {
       age = body.age;
       language = body.language;
     } catch (err) {
+      console.error("Invalid JSON body:", err);
       return new Response(
         JSON.stringify({ error: "Invalid JSON body" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
 
+    // Validate required fields
     if (!topic || !age) {
       return new Response(
         JSON.stringify({ error: "Missing lesson parameters" }),
@@ -51,6 +53,11 @@ export default async function handler(req) {
     raw = raw.replace(/```/g, "").trim();
 
     let steps = raw.split("||").map((s) => s.trim()).filter((s) => s.length > 0);
+
+    // Final fallback if parsing fails
+    if (steps.length === 0) {
+      steps = ["Step 1", "Step 2", "Step 3"];
+    }
 
     return new Response(
       JSON.stringify({ steps }),
