@@ -373,3 +373,27 @@
   align-items: flex-start;
   padding: 1.5rem;
 }
+.lesson-container {
+  padding: 1rem;
+  background: #f9f9ff;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.lesson-steps p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.lesson-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}

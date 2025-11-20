@@ -20,6 +20,7 @@ export default async function handler(req) {
 
     // Validate required fields
     if (!topic || !age) {
+      console.error("Missing lesson parameters:", { topic, age });
       return new Response(
         JSON.stringify({ error: "Missing lesson parameters" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
@@ -49,6 +50,7 @@ export default async function handler(req) {
     }
 
     if (!raw || typeof raw !== "string") {
+      console.warn("AI returned invalid response:", raw);
       raw = "Step 1 || Step 2 || Step 3";
     }
 
@@ -60,6 +62,7 @@ export default async function handler(req) {
       .filter((s) => s.length > 0);
 
     if (!Array.isArray(steps) || steps.length === 0) {
+      console.warn("Lesson parsing failed, using fallback steps.");
       steps = ["Step 1", "Step 2", "Step 3"];
     }
 

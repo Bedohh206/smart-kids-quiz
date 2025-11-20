@@ -3,7 +3,36 @@ import { useParams, useNavigate } from "react-router-dom";
 import Confetti from "react-confetti";
 
 import "./QuizPage.css";
+import React, { useEffect } from "react";
+import { useLesson } from "../hooks/useLesson";
 
+export default function QuizPage() {
+  const { steps, loading, error, loadLesson } = useLesson();
+
+  useEffect(() => {
+    loadLesson({ topic: "gravity", age: 10, language: "en" }); // customize as needed
+  }, []);
+
+  return (
+    <div className="quiz-page">
+      <h2>AI Lesson Mode</h2>
+
+      {loading && <p>Loading lesson…</p>}
+      {error && <p className="error">{error}</p>}
+      {steps && steps.map((s, i) => (
+        <p key={i}><strong>Step {i + 1}:</strong> {s}</p>
+      ))}
+
+      <div className="lesson-actions">
+        <button onClick={() => loadLesson({ topic: "gravity", age: 10, language: "en" })}>
+          🔄 Regenerate Lesson
+        </button>
+        <button onClick={() => {/* start quiz logic */}}>Start Quiz</button>
+        <a href="/map">Exit to Map</a>
+      </div>
+    </div>
+  );
+}
 // Question banks
 import {
   africaQuestions,

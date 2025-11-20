@@ -1,6 +1,9 @@
-// 🌍 CONTINENT ICONS
-import smartQuizLogo from "../assets/smartquiz/smartquiz.png";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useLesson } from "../hooks/useLesson";
 
+import smartQuizLogo from "../assets/smartquiz/smartquiz.png";
 import africaIcon from "../assets/africa/africa.png";
 import asiaIcon from "../assets/asia/asia.png";
 import europeIcon from "../assets/europe/europe.png";
@@ -10,7 +13,6 @@ import australiaIcon from "../assets/australia/australia.png";
 import antarcticaIcon from "../assets/antarctica/antarctica.png";
 import worldMapImg from "../assets/worldmap/worldmap.png";
 
-// 📘 SUBJECT ICONS
 import englishIcon from "../assets/english/english.png";
 import mathIcon from "../assets/math/math.png";
 import scienceIcon from "../assets/science/science.png";
@@ -20,11 +22,6 @@ import geographyIcon from "../assets/geography/geography.png";
 import healthIcon from "../assets/health/health.png";
 import historyIcon from "../assets/history/history.png";
 import computerIcon from "../assets/computer/computer.png";
-
-// React + Framer Motion
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 
 import "./WorldMap.css";
 
@@ -36,7 +33,12 @@ export default function WorldMap() {
   const [muted, setMuted] = useState(false);
   const musicRef = useRef(null);
 
-  /* 🎵 MUSIC INIT */
+  const { steps, loading, error, loadLesson } = useLesson();
+
+  useEffect(() => {
+    loadLesson({ topic: "geography", age: 10, language: "en" });
+  }, []);
+
   useEffect(() => {
     const music = new Audio(backgroundMusic);
     music.loop = true;
@@ -68,15 +70,12 @@ export default function WorldMap() {
     navigate(`/quiz/${id}`);
   };
 
-  /* 🎮 GAME MODE: UNLOCKED CONTINENTS */
   const [unlocked, setUnlocked] = useState(() => {
     return JSON.parse(localStorage.getItem("unlockedContinents")) || ["africa"];
   });
 
-  // Refresh unlocked list whenever user returns to this page
   useEffect(() => {
-    const saved =
-      JSON.parse(localStorage.getItem("unlockedContinents")) || ["africa"];
+    const saved = JSON.parse(localStorage.getItem("unlockedContinents")) || ["africa"];
     setUnlocked(saved);
   }, []);
 
@@ -88,60 +87,16 @@ export default function WorldMap() {
     goToQuiz(id);
   };
 
-  /* 🌍 CONTINENTS WITH X/Y POSITIONS */
   const continents = [
-    {
-      id: "northamerica",
-      name: "North America",
-      icon: northAmericaIcon,
-      x: "22%",
-      y: "32%",
-    },
-    {
-      id: "southamerica",
-      name: "South America",
-      icon: southAmericaIcon,
-      x: "28%",
-      y: "62%",
-    },
-    {
-      id: "europe",
-      name: "Europe",
-      icon: europeIcon,
-      x: "55%",
-      y: "28%",
-    },
-    {
-      id: "africa",
-      name: "Africa",
-      icon: africaIcon,
-      x: "52%",
-      y: "52%",
-    },
-    {
-      id: "asia",
-      name: "Asia",
-      icon: asiaIcon,
-      x: "72%",
-      y: "40%",
-    },
-    {
-      id: "australia",
-      name: "Australia",
-      icon: australiaIcon,
-      x: "82%",
-      y: "72%",
-    },
-    {
-      id: "antarctica",
-      name: "Antarctica",
-      icon: antarcticaIcon,
-      x: "50%",
-      y: "90%",
-    },
+    { id: "northamerica", name: "North America", icon: northAmericaIcon, x: "22%", y: "32%" },
+    { id: "southamerica", name: "South America", icon: southAmericaIcon, x: "28%", y: "62%" },
+    { id: "europe", name: "Europe", icon: europeIcon, x: "55%", y: "28%" },
+    { id: "africa", name: "Africa", icon: africaIcon, x: "52%", y: "52%" },
+    { id: "asia", name: "Asia", icon: asiaIcon, x: "72%", y: "40%" },
+    { id: "australia", name: "Australia", icon: australiaIcon, x: "82%", y: "72%" },
+    { id: "antarctica", name: "Antarctica", icon: antarcticaIcon, x: "50%", y: "90%" },
   ];
 
-  /* 📘 SUBJECTS PANEL */
   const subjects = [
     { id: "english", name: "English Language", icon: englishIcon },
     { id: "math", name: "Mathematics", icon: mathIcon },
@@ -154,12 +109,8 @@ export default function WorldMap() {
     { id: "computer", name: "Computer Science", icon: computerIcon },
   ];
 
-  /* ======================================================
-     FINAL JSX RETURN
-  ====================================================== */
   return (
     <div className="worldmap-container">
-      {/* HEADER */}
       <header className="hero-section">
         <h1 className="hero-title">Smart Kids Quiz</h1>
         <button className="music-btn" onClick={toggleMusic}>
@@ -167,31 +118,16 @@ export default function WorldMap() {
         </button>
       </header>
 
-      {/* TWO-COLUMN LAYOUT */}
       <div className="two-column-layout">
-        {/* LEFT — WORLD MAP */}
-        <section
-          className="worldmap-area"
-          style={{ backgroundImage: `url(${worldMapImg})` }}
-        >
-          {/* Floating logo */}
-          <img
-            src={smartQuizLogo}
-            alt="Smart Quiz Logo"
-            className="smartquiz-logo"
-          />
+        <section className="worldmap-area" style={{ backgroundImage: `url(${worldMapImg})` }}>
+          <img src={smartQuizLogo} alt="Smart Quiz Logo" className="smartquiz-logo" />
 
-          {/* Floating continent buttons */}
           {continents.map((c) => (
             <motion.button
               key={c.id}
-              className={`continent-button ${
-                unlocked.includes(c.id) ? "" : "locked"
-              }`}
+              className={`continent-button ${unlocked.includes(c.id) ? "" : "locked"}`}
               onClick={() => handleContinentClick(c.id)}
-              whileHover={
-                unlocked.includes(c.id) ? { scale: 1.15, rotate: 3 } : {}
-              }
+              whileHover={unlocked.includes(c.id) ? { scale: 1.15, rotate: 3 } : {}}
               whileTap={unlocked.includes(c.id) ? { scale: 0.9 } : {}}
               style={{ left: c.x, top: c.y }}
             >
@@ -200,11 +136,13 @@ export default function WorldMap() {
             </motion.button>
           ))}
 
-          {/* Antarctica water effect */}
+          <button className="leaderboard-btn" onClick={() => navigate("/leaderboard")}>
+            🏆 Leaderboard
+          </button>
+
           <div className="antarctica-waves" />
         </section>
 
-        {/* RIGHT — SUBJECTS + AI */}
         <section className="right-pane">
           <div className="subjects-box">
             <h2>📘 Subjects</h2>
@@ -217,7 +155,7 @@ export default function WorldMap() {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => goToQuiz(s.id)}
                 >
-                  <img src={s.icon} className="item-icon" alt="" />
+                  <img src={s.icon} className="item-icon" alt={s.name} />
                   <span className="item-label">{s.name}</span>
                 </motion.button>
               ))}
@@ -233,9 +171,7 @@ export default function WorldMap() {
               <li>🌍 Multi-language support</li>
               <li>⭐ Leaderboard (coming soon)</li>
             </ul>
-          </div>
-        </section>
-      </div>
-    </div>
-  );
-}
+
+            <div className="ai-lesson-preview">
+              {loading && <p>Loading AI lesson…</p>}
+             
