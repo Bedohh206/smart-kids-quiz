@@ -26,6 +26,8 @@ export default async function handler(req) {
       );
     }
 
+    console.log("Lesson request received:", { topic, age, language });
+
     const systemPrompt = `
       Create a kid-friendly mini-lesson (ages ${age}).
       Format EXACTLY like this: Step 1 || Step 2 || Step 3 || Step 4
@@ -52,10 +54,12 @@ export default async function handler(req) {
 
     raw = raw.replace(/```/g, "").trim();
 
-    let steps = raw.split("||").map((s) => s.trim()).filter((s) => s.length > 0);
+    let steps = raw
+      .split("||")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
 
-    // Final fallback if parsing fails
-    if (steps.length === 0) {
+    if (!Array.isArray(steps) || steps.length === 0) {
       steps = ["Step 1", "Step 2", "Step 3"];
     }
 
