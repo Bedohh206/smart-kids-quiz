@@ -1,58 +1,90 @@
 export const config = { runtime: "edge" };
-
-import OpenAI from "openai";
+import { runAI } from "./chatgptService";
 
 export default async function handler(req) {
   try {
-    const { subject } = await req.json();
-
-    if (!subject) {
-      return new Response(JSON.stringify({ error: "Missing subject" }), {
-        status: 400,
-      });
+    // Safely parse JSON body
+    let subject, level, age;
+    try {
+      const body = await req.json();
+      subject = body.subject;
+      level = body.level;
+      age = body.age;
+    } catch (err) {
+      return new Response(
+        JSON.stringify({ error: "Invalid JSON body" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
     }
 
-    const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+    if (!subject) {
+      return new Response(
+        JSON.stringify({ error: "Missing subject" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
 
-    const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "Generate 5 multiple-choice questions for kids. Format output strictly as a JSON array: [{q:'', a:'', options:[]}, ...]. No extra text.",
-        },
-        {
-          role: "user",
-          content: `Create 5 questions for: ${subject}`,
-        },
-      ],
-    });
+    const systemPrompt = `
+      Generate 5 multiple-choice questions for kids ages ${age || "6–14"}.
+      Difficulty level: ${level || "basic"}.
+      Format EXACTLY as VALID JSON:
+      [
+        {"q": "...", "a": "...", "options": ["...","...","...","..."]},
+        ...
+      ]
+      Rules:
+      - Options MUST be 4 items.
+      - Correct answer ("a") must appear in ANY option index (randomized).
+      - Keep language simple.
+    `;
 
-    let raw = completion.choices?.[0]?.message?.content || "[]";
+    const userPrompt = `Generate questions for subject: ${subject}`;
 
-    // 🔥 FIX: Remove backticks or accidental text around JSON
+    let raw;
+    try {
+      raw = await runAI(systemPrompt, userPrompt);
+    } catch (err) {
+      console.error("runAI failed:", err);
+      return new Response(
+        JSON.stringify({ error: "AI generation failed" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!raw || typeof raw !== "string") {
+      raw = "[]";
+    }
+
     raw = raw.replace(/```json|```/g, "").trim();
 
     let questions;
-
     try {
       questions = JSON.parse(raw);
-    } catch (e) {
-      // 🔥 FALLBACK: If GPT returns messy output
-      questions = [];
+    } catch (err) {
+      const match = raw.match(/\[[\s\S]*\]/);
+      if (match) {
+        try {
+          questions = JSON.parse(match[0]);
+        } catch {
+          questions = [];
+        }
+      } else {
+        questions = [];
+      }
     }
 
-    // Final safety: ensure array
     if (!Array.isArray(questions)) questions = [];
 
-    return new Response(JSON.stringify({ questions }), { status: 200 });
-  } catch (err) {
     return new Response(
-      JSON.stringify({ error: err.message || "Server error" }),
-      { status: 500 }
+      JSON.stringify({ questions }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+
+  } catch (err) {
+    console.error("Question API error:", err);
+    return new Response(
+      JSON.stringify({ error: err.message || "Question generation error" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }

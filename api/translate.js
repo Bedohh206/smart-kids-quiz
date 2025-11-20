@@ -1,67 +1,93 @@
 export const config = { runtime: "edge" };
-
-import OpenAI from "openai";
+import { runAI } from "./chatgptService";
 
 export default async function handler(req) {
   try {
-    const { text, targetLang } = await req.json();
-
-    if (!text || !targetLang) {
-      return new Response(JSON.stringify({ error: "Missing fields" }), {
-        status: 400,
-      });
+    // Safely parse JSON body
+    let text, targetLang;
+    try {
+      const body = await req.json();
+      text = body.text;
+      targetLang = body.targetLang;
+    } catch (err) {
+      return new Response(
+        JSON.stringify({ error: "Invalid JSON body" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
     }
 
-    const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY
-    });
+    if (!text || !targetLang) {
+      return new Response(
+        JSON.stringify({ error: "Missing fields" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
 
-    const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            `Translate the JSON object values ONLY into ${targetLang}. 
-             Do NOT change keys. 
-             Do NOT add explanations. 
-             Return ONLY valid JSON.`
-        },
-        {
-          role: "user",
-          content: text
-        }
-      ]
-    });
+    const systemPrompt = `
+      You translate JSON object *values only*.
+      - Do NOT translate the keys.
+      - Do NOT change the JSON structure.
+      - Do NOT add explanations.
+      - Return ONLY valid JSON.
+      - If a value is already translated, leave it as is.
+    `;
 
-    let output = completion?.choices?.[0]?.message?.content || "";
+    const userPrompt = `
+      Translate this JSON object into: ${targetLang}
+      JSON: ${text}
+    `;
 
-    // 🔥 Remove Markdown blocks like ```json or ```
-    output = output.replace(/```json|```/g, "").trim();
-
-    // 🔥 Ensure it is valid JSON
-    let translatedJSON;
+    let raw;
     try {
-      translatedJSON = JSON.parse(output);
-    } catch (error) {
-      // fallback: attempt to extract JSON substring
-      const match = output.match(/\{[\s\S]*\}/);
-      if (match) {
-        translatedJSON = JSON.parse(match[0]);
-      } else {
-        throw new Error("Invalid JSON returned by AI");
+      raw = await runAI(systemPrompt, userPrompt);
+    } catch (err) {
+      console.error("runAI failed:", err);
+      return new Response(
+        JSON.stringify({ error: "AI translation failed" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!raw || typeof raw !== "string") {
+      return new Response(
+        JSON.stringify({ error: "AI returned invalid response." }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    raw = raw.replace(/```json|```/g, "").trim();
+
+    let translatedObj;
+    try {
+      translatedObj = JSON.parse(raw);
+    } catch (err) {
+      const match = raw.match(/\{[\s\S]*\}/);
+      if (!match) {
+        return new Response(
+          JSON.stringify({ error: "AI returned invalid JSON format." }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
+      try {
+        translatedObj = JSON.parse(match[0]);
+      } catch (err) {
+        return new Response(
+          JSON.stringify({ error: "Failed to parse fallback JSON." }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
       }
     }
 
     return new Response(
-      JSON.stringify({ translated: JSON.stringify(translatedJSON) }),
-      { status: 200 }
+      JSON.stringify({ translated: JSON.stringify(translatedObj) }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
     );
 
   } catch (err) {
+    console.error("Translate API error:", err);
     return new Response(
       JSON.stringify({ error: err.message || "Translate error" }),
-      { status: 500 }
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }

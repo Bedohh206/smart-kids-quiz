@@ -1,48 +1,67 @@
 export const config = { runtime: "edge" };
-
-import OpenAI from "openai";
+import { runAI } from "./chatgptService";
 
 export default async function handler(req) {
   try {
-    const { question, answer } = await req.json();
-
-    if (!question || !answer) {
+    // Safely parse JSON body
+    let topic, age, language;
+    try {
+      const body = await req.json();
+      topic = body.topic;
+      age = body.age;
+      language = body.language;
+    } catch (err) {
       return new Response(
-        JSON.stringify({ error: "Missing question or answer" }),
-        { status: 400 }
+        JSON.stringify({ error: "Invalid JSON body" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
 
-    const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+    if (!topic || !age) {
+      return new Response(
+        JSON.stringify({ error: "Missing lesson parameters" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
 
-    const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a fun AI tutor. Explain things to children in a friendly, simple way.",
-        },
-        {
-          role: "user",
-          content: `Explain why "${answer}" is the correct answer to the question:\n\n"${question}"`,
-        },
-      ],
-    });
+    const systemPrompt = `
+      Create a kid-friendly mini-lesson (ages ${age}).
+      Format EXACTLY like this: Step 1 || Step 2 || Step 3 || Step 4
+      Use simple language. No markdown. No lists. No extra sentences.
+      Respond in language: ${language || "en"}.
+    `;
 
-    const text =
-      completion.choices?.[0]?.message?.content ||
-      "I’m not sure, but try your best!";
+    const userPrompt = `Create a mini-lesson about: ${topic}`;
 
-    return new Response(JSON.stringify({ explanation: text }), {
-      status: 200,
-    });
-  } catch (err) {
+    let raw;
+    try {
+      raw = await runAI(systemPrompt, userPrompt);
+    } catch (err) {
+      console.error("runAI failed:", err);
+      return new Response(
+        JSON.stringify({ error: "AI generation failed" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!raw || typeof raw !== "string") {
+      raw = "Step 1 || Step 2 || Step 3";
+    }
+
+    raw = raw.replace(/```/g, "").trim();
+
+    let steps = raw.split("||").map((s) => s.trim()).filter((s) => s.length > 0);
+
     return new Response(
-      JSON.stringify({ error: err.message || "Server error" }),
-      { status: 500 }
+      JSON.stringify({ steps }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+
+  } catch (err) {
+    console.error("Lesson API error:", err);
+    return new Response(
+      JSON.stringify({ error: err.message || "Lesson error" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }

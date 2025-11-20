@@ -24,7 +24,7 @@ import {
   computerQuestions,
 } from "../data/index.js";
 
-// Mascot
+// Mascot (kids image)
 import mascotImg from "../assets/kids-mascot.png";
 
 export default function QuizPage() {
@@ -61,6 +61,29 @@ export default function QuizPage() {
             String(q.q || "").toLowerCase().trim()
         )
     );
+  };
+
+  /* ---------------------- SHUFFLE OPTIONS ---------------------- */
+  const shuffleArray = (arr) => {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  };
+
+  // Prepare questions: dedupe + randomize options order
+  const prepareQuestions = (arr) => {
+    const unique = removeDuplicates(arr);
+    return unique.map((q) => {
+      const opts = Array.isArray(q.options) ? q.options : [];
+      const shuffledOptions = shuffleArray(opts);
+      return {
+        ...q,
+        options: shuffledOptions, // keep q.a as the correct text
+      };
+    });
   };
 
   /* ---------------------- MATCH QUESTION SET ---------------------- */
@@ -211,8 +234,9 @@ export default function QuizPage() {
     }
 
     const filtered = base.filter((q) => !q.age || q.age === ageGroup);
-    setQuestions(removeDuplicates(filtered));
+    const prepared = prepareQuestions(filtered);
 
+    setQuestions(prepared);
     setCurrent(0);
     setSelected("");
     setScore(0);
@@ -335,7 +359,8 @@ export default function QuizPage() {
       const data = await res.json();
 
       if (Array.isArray(data.questions) && data.questions.length > 0) {
-        setQuestions(removeDuplicates(data.questions));
+        const prepared = prepareQuestions(data.questions);
+        setQuestions(prepared);
         setCurrent(0);
         setSelected("");
         setShowResult(false);
@@ -444,22 +469,13 @@ export default function QuizPage() {
           <p className="quiz-subtitle">Choose your age group to get started:</p>
 
           <div className="age-grid">
-            <button
-              className="age-btn"
-              onClick={() => setAgeGroup("5-7")}
-            >
+            <button className="age-btn" onClick={() => setAgeGroup("5-7")}>
               Ages 5–7
             </button>
-            <button
-              className="age-btn"
-              onClick={() => setAgeGroup("8-10")}
-            >
+            <button className="age-btn" onClick={() => setAgeGroup("8-10")}>
               Ages 8–10
             </button>
-            <button
-              className="age-btn"
-              onClick={() => setAgeGroup("11-14")}
-            >
+            <button className="age-btn" onClick={() => setAgeGroup("11-14")}>
               Ages 11–14
             </button>
           </div>
@@ -635,7 +651,11 @@ export default function QuizPage() {
   const q = translatedQuestion || questions[current];
 
   return (
-    <div className={`quiz-page premium-layout ${language === "ar" ? "rtl" : ""}`}>
+    <div
+      className={`quiz-page premium-layout ${
+        language === "ar" ? "rtl" : ""
+      }`}
+    >
       <div className="quiz-card slide-up">
         <div className="quiz-header-row">
           <h2 className="quiz-title">
