@@ -1,14 +1,13 @@
 export const config = { runtime: "edge" };
 
-import { runAI } from "../../src/utils/chatgptService.js";
+import { runAI } from "../chatgptService.js";
 
 export default async function handler(req) {
   try {
-    // Parse request body safely
     let body = {};
     try {
       body = await req.json();
-    } catch (err) {
+    } catch {
       return new Response(
         JSON.stringify({ error: "Invalid JSON body" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
@@ -16,7 +15,6 @@ export default async function handler(req) {
     }
 
     const { topic, age, language } = body;
-
     if (!topic || !age) {
       return new Response(
         JSON.stringify({ error: "Missing lesson parameters" }),
@@ -28,23 +26,21 @@ export default async function handler(req) {
       Create a kid-friendly mini-lesson for ages ${age}.
       Write exactly 4 steps.
       Format MUST be: Step 1 || Step 2 || Step 3 || Step 4
-      Use simple language.
-      No markdown, no lists, no decoration.
-      Respond in language: ${language || "en"}.
+      No markdown, no bullets, no extra lines.
+      Respond in: ${language || "en"}.
     `;
 
     const userPrompt = `Create a mini-lesson about: ${topic}`;
 
     let raw = await runAI(systemPrompt, userPrompt);
-
     if (!raw) raw = "Step 1 || Step 2 || Step 3 || Step 4";
 
     raw = raw.replace(/```/g, "").trim();
 
-    let steps = raw
+    const steps = raw
       .split("||")
       .map((s) => s.trim())
-      .filter((s) => s.length > 0);
+      .filter(Boolean);
 
     return new Response(
       JSON.stringify({ steps }),
