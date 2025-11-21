@@ -1,10 +1,14 @@
 export const config = { runtime: "edge" };
+
 import { runAI } from "./chatgptService";
 
-export default async function handler(req) {
+export default async function handler(req: Request): Promise<Response> {
   try {
     // Safely parse JSON body
-    let topic, age, language;
+    let topic: string | undefined;
+    let age: string | number | undefined;
+    let language: string | undefined;
+
     try {
       const body = await req.json();
       topic = body.topic;
@@ -38,7 +42,7 @@ export default async function handler(req) {
 
     const userPrompt = `Create a mini-lesson about: ${topic}`;
 
-    let raw;
+    let raw: string | undefined;
     try {
       raw = await runAI(systemPrompt, userPrompt);
     } catch (err) {
@@ -71,7 +75,7 @@ export default async function handler(req) {
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
 
-  } catch (err) {
+  } catch (err: any) {
     console.error("Lesson API error:", err);
     return new Response(
       JSON.stringify({ error: err.message || "Lesson error" }),
