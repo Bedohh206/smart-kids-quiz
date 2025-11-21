@@ -30,15 +30,19 @@ const clickSound = "/sounds/click.wav";
 
 export default function WorldMap() {
   const navigate = useNavigate();
+
   const [muted, setMuted] = useState(false);
   const musicRef = useRef(null);
 
+  // ✅ FIXED — These variables MUST be included properly
   const { steps, loading, error, loadLesson } = useLesson();
 
+  // Load the default AI lesson
   useEffect(() => {
     loadLesson({ topic: "geography", age: 10, language: "en" });
   }, []);
 
+  // Background music setup
   useEffect(() => {
     const music = new Audio(backgroundMusic);
     music.loop = true;
@@ -174,4 +178,16 @@ export default function WorldMap() {
 
             <div className="ai-lesson-preview">
               {loading && <p>Loading AI lesson…</p>}
-             
+              {steps && (
+                <div className="lesson-box">
+                  <h3>AI Lesson</h3>
+                  <p>{steps}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
