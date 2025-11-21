@@ -2,12 +2,12 @@ export const config = { runtime: "edge" };
 
 import { runAI } from "./chatgptService";
 
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler(req) {
   try {
-    // Safely parse JSON body
-    let topic: string | undefined;
-    let age: string | number | undefined;
-    let language: string | undefined;
+    // Parse JSON body safely
+    let topic;
+    let age;
+    let language;
 
     try {
       const body = await req.json();
@@ -24,7 +24,7 @@ export default async function handler(req: Request): Promise<Response> {
 
     // Validate required fields
     if (!topic || !age) {
-      console.error("Missing lesson parameters:", { topic, age });
+      console.error("Missing parameters:", { topic, age });
       return new Response(
         JSON.stringify({ error: "Missing lesson parameters" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
@@ -42,7 +42,7 @@ export default async function handler(req: Request): Promise<Response> {
 
     const userPrompt = `Create a mini-lesson about: ${topic}`;
 
-    let raw: string | undefined;
+    let raw;
     try {
       raw = await runAI(systemPrompt, userPrompt);
     } catch (err) {
@@ -54,19 +54,18 @@ export default async function handler(req: Request): Promise<Response> {
     }
 
     if (!raw || typeof raw !== "string") {
-      console.warn("AI returned invalid response:", raw);
       raw = "Step 1 || Step 2 || Step 3";
     }
 
     raw = raw.replace(/```/g, "").trim();
 
+    // Parse steps
     let steps = raw
       .split("||")
       .map((s) => s.trim())
       .filter((s) => s.length > 0);
 
-    if (!Array.isArray(steps) || steps.length === 0) {
-      console.warn("Lesson parsing failed, using fallback steps.");
+    if (!steps.length) {
       steps = ["Step 1", "Step 2", "Step 3"];
     }
 
@@ -75,10 +74,10 @@ export default async function handler(req: Request): Promise<Response> {
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
 
-  } catch (err: any) {
+  } catch (err) {
     console.error("Lesson API error:", err);
     return new Response(
-      JSON.stringify({ error: err.message || "Lesson error" }),
+      JSON.stringify({ error: "Lesson API error" }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
