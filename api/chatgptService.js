@@ -15,7 +15,7 @@ export async function runAI(system, user) {
 
     const client = new OpenAI({ apiKey });
 
-    // ✅ New OpenAI API (responses)
+    // ✅ New OpenAI API (responses.create)
     const response = await client.responses.create({
       model: "gpt-4o-mini",
       input: [
@@ -26,10 +26,8 @@ export async function runAI(system, user) {
       temperature: 0.7,
     });
 
-    let text =
-      response.output_text ||
-      response?.output[0]?.content[0]?.text ||
-      "";
+    // Handle the new response format
+    let text = response.output_text;
 
     if (!text || typeof text !== "string") {
       console.warn("⚠️ AI returned empty output");
@@ -45,6 +43,7 @@ export async function runAI(system, user) {
       .trim();
 
     return text;
+
   } catch (err) {
     console.error("🔥 AI Error:", err);
     return null;
