@@ -3,43 +3,44 @@ import OpenAI from "openai";
 
 /**
  * 🔥 UNIVERSAL AI HELPER FUNCTION
- * All AI features (explain, lessons, generate questions, translation)
- * call THIS function. Guarantees clean text and removes markdown.
+ * Supports: lessons, questions, explanations, translations
  */
 export async function runAI(system, user) {
   try {
-    // Ensure API key is present
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
-      console.error("Missing OPENAI_API_KEY");
+      console.error("❌ Missing OPENAI_API_KEY");
       return null;
     }
 
     const client = new OpenAI({ apiKey });
 
-    const completion = await client.chat.completions.create({
+    // ✅ New OpenAI API (responses)
+    const response = await client.responses.create({
       model: "gpt-4o-mini",
-      messages: [
+      input: [
         { role: "system", content: system },
-        { role: "user", content: user },
+        { role: "user", content: user }
       ],
+      max_output_tokens: 300,
       temperature: 0.7,
     });
 
-    let text = completion.choices?.[0]?.message?.content;
+    let text =
+      response.output_text ||
+      response?.output[0]?.content[0]?.text ||
+      "";
 
     if (!text || typeof text !== "string") {
-      console.warn("AI returned empty or invalid response");
+      console.warn("⚠️ AI returned empty output");
       return null;
     }
 
-    // Clean markdown, backticks, bullets, extra whitespace
+    // Clean formatting
     text = text
-      .replace(/```json|```/g, "")
       .replace(/```/g, "")
       .replace(/\*\*/g, "")
       .replace(/\*/g, "")
-      .replace(/•/g, "")
       .replace(/\s{2,}/g, " ")
       .trim();
 
@@ -50,9 +51,7 @@ export async function runAI(system, user) {
   }
 }
 
-/**
- * Default export: You may ping this route for testing
- */
+// TEST ROUTE
 export default async function handler() {
   return new Response(
     JSON.stringify({ status: "AI service running" }),
