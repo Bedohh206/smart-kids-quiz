@@ -34,15 +34,16 @@ export default function WorldMap() {
   const [muted, setMuted] = useState(false);
   const musicRef = useRef(null);
 
-  // ✅ FIXED — These variables MUST be included properly
+  // 🔹 AI Lesson hook
   const { steps, loading, error, loadLesson } = useLesson();
 
-  // Load the default AI lesson
+  /* ---------------------- INITIAL AI LESSON ---------------------- */
   useEffect(() => {
+    // Simple default mini-lesson for the homepage
     loadLesson({ topic: "geography", age: 10, language: "en" });
-  }, []);
+  }, [loadLesson]);
 
-  // Background music setup
+  /* ---------------------- BACKGROUND MUSIC ---------------------- */
   useEffect(() => {
     const music = new Audio(backgroundMusic);
     music.loop = true;
@@ -50,17 +51,32 @@ export default function WorldMap() {
     musicRef.current = music;
 
     const start = () => {
-      music.play().catch(() => {});
+      music
+        .play()
+        .then(() => {
+          // started
+        })
+        .catch(() => {
+          // user blocked autoplay – ignore
+        });
       document.removeEventListener("click", start);
     };
 
     document.addEventListener("click", start);
-    return () => document.removeEventListener("click", start);
+
+    return () => {
+      document.removeEventListener("click", start);
+      music.pause();
+    };
   }, []);
 
   const toggleMusic = () => {
     if (!musicRef.current) return;
-    muted ? musicRef.current.play() : musicRef.current.pause();
+    if (muted) {
+      musicRef.current.play().catch(() => {});
+    } else {
+      musicRef.current.pause();
+    }
     setMuted(!muted);
   };
 
@@ -74,31 +90,60 @@ export default function WorldMap() {
     navigate(`/quiz/${id}`);
   };
 
+  /* ---------------------- CONTINENT PROGRESSION ---------------------- */
   const [unlocked, setUnlocked] = useState(() => {
     return JSON.parse(localStorage.getItem("unlockedContinents")) || ["africa"];
   });
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("unlockedContinents")) || ["africa"];
+    const saved =
+      JSON.parse(localStorage.getItem("unlockedContinents")) || ["africa"];
     setUnlocked(saved);
   }, []);
 
   const handleContinentClick = (id) => {
     if (!unlocked.includes(id)) {
-      alert("❌ This continent is locked. Complete the earlier continent to unlock it!");
+      alert(
+        "❌ This continent is locked. Complete earlier continents to unlock it!"
+      );
       return;
     }
     goToQuiz(id);
   };
 
+  /* ---------------------- DATA ---------------------- */
   const continents = [
-    { id: "northamerica", name: "North America", icon: northAmericaIcon, x: "22%", y: "32%" },
-    { id: "southamerica", name: "South America", icon: southAmericaIcon, x: "28%", y: "62%" },
+    {
+      id: "northamerica",
+      name: "North America",
+      icon: northAmericaIcon,
+      x: "22%",
+      y: "32%",
+    },
+    {
+      id: "southamerica",
+      name: "South America",
+      icon: southAmericaIcon,
+      x: "28%",
+      y: "62%",
+    },
     { id: "europe", name: "Europe", icon: europeIcon, x: "55%", y: "28%" },
     { id: "africa", name: "Africa", icon: africaIcon, x: "52%", y: "52%" },
     { id: "asia", name: "Asia", icon: asiaIcon, x: "72%", y: "40%" },
-    { id: "australia", name: "Australia", icon: australiaIcon, x: "82%", y: "72%" },
-    { id: "antarctica", name: "Antarctica", icon: antarcticaIcon, x: "50%", y: "90%" },
+    {
+      id: "australia",
+      name: "Australia",
+      icon: australiaIcon,
+      x: "82%",
+      y: "72%",
+    },
+    {
+      id: "antarctica",
+      name: "Antarctica",
+      icon: antarcticaIcon,
+      x: "50%",
+      y: "90%",
+    },
   ];
 
   const subjects = [
@@ -113,49 +158,81 @@ export default function WorldMap() {
     { id: "computer", name: "Computer Science", icon: computerIcon },
   ];
 
+  /* ---------------------- RENDER ---------------------- */
   return (
     <div className="worldmap-container">
       <header className="hero-section">
-        <h1 className="hero-title">Smart Kids Quiz</h1>
+        <div className="hero-left">
+          <h1 className="hero-title">Smart Kids Quiz</h1>
+          <p className="hero-tagline">
+            Explore the world, unlock continents, and master fun subjects!
+          </p>
+        </div>
+
         <button className="music-btn" onClick={toggleMusic}>
           {muted ? "🔇 Music Off" : "🎵 Music On"}
         </button>
       </header>
 
       <div className="two-column-layout">
-        <section className="worldmap-area" style={{ backgroundImage: `url(${worldMapImg})` }}>
-          <img src={smartQuizLogo} alt="Smart Quiz Logo" className="smartquiz-logo" />
+        {/* LEFT: WORLD MAP */}
+        <section
+          className="worldmap-area"
+          style={{ backgroundImage: `url(${worldMapImg})` }}
+        >
+          <img
+            src={smartQuizLogo}
+            alt="Smart Quiz Logo"
+            className="smartquiz-logo"
+          />
 
-          {continents.map((c) => (
-            <motion.button
-              key={c.id}
-              className={`continent-button ${unlocked.includes(c.id) ? "" : "locked"}`}
-              onClick={() => handleContinentClick(c.id)}
-              whileHover={unlocked.includes(c.id) ? { scale: 1.15, rotate: 3 } : {}}
-              whileTap={unlocked.includes(c.id) ? { scale: 0.9 } : {}}
-              style={{ left: c.x, top: c.y }}
-            >
-              <img src={c.icon} className="continent-icon" alt={c.name} />
-              <span className="continent-label">{c.name}</span>
-            </motion.button>
-          ))}
+          {continents.map((c) => {
+            const isUnlocked = unlocked.includes(c.id);
+            return (
+              <motion.button
+                key={c.id}
+                className={`continent-button ${
+                  isUnlocked ? "unlocked" : "locked"
+                }`}
+                onClick={() => handleContinentClick(c.id)}
+                whileHover={
+                  isUnlocked ? { scale: 1.15, rotate: 3, y: -4 } : {}
+                }
+                whileTap={isUnlocked ? { scale: 0.9 } : {}}
+                style={{ left: c.x, top: c.y }}
+              >
+                <img src={c.icon} className="continent-icon" alt={c.name} />
+                <span className="continent-label">
+                  {c.name}
+                  {!isUnlocked && <span className="lock-badge">🔒</span>}
+                </span>
+              </motion.button>
+            );
+          })}
 
-          <button className="leaderboard-btn" onClick={() => navigate("/leaderboard")}>
+          <button
+            className="leaderboard-btn"
+            onClick={() => navigate("/leaderboard")}
+          >
             🏆 Leaderboard
           </button>
 
           <div className="antarctica-waves" />
         </section>
 
+        {/* RIGHT: SUBJECTS + AI BOX */}
         <section className="right-pane">
           <div className="subjects-box">
             <h2>📘 Subjects</h2>
+            <p className="subjects-subtitle">
+              Tap a subject to start a quiz right away.
+            </p>
             <div className="items-grid">
               {subjects.map((s) => (
                 <motion.button
                   key={s.id}
                   className="item-card"
-                  whileHover={{ scale: 1.08 }}
+                  whileHover={{ scale: 1.08, y: -3 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => goToQuiz(s.id)}
                 >
@@ -173,15 +250,26 @@ export default function WorldMap() {
               <li>🎤 Voice answering</li>
               <li>✨ AI Lesson Mode</li>
               <li>🌍 Multi-language support</li>
-              <li>⭐ Leaderboard (coming soon)</li>
+              <li>⭐ Leaderboard progress</li>
             </ul>
 
             <div className="ai-lesson-preview">
               {loading && <p>Loading AI lesson…</p>}
-              {steps && (
+              {error && (
+                <p className="ai-error">
+                  AI lesson is not available right now. You can still enjoy the
+                  quizzes!
+                </p>
+              )}
+
+              {Array.isArray(steps) && steps.length > 0 && !loading && !error && (
                 <div className="lesson-box">
-                  <h3>AI Lesson</h3>
-                  <p>{steps}</p>
+                  <h3>Today&apos;s mini-lesson</h3>
+                  <ol className="lesson-steps-list">
+                    {steps.slice(0, 3).map((step, i) => (
+                      <li key={i}>{step}</li>
+                    ))}
+                  </ol>
                 </div>
               )}
             </div>
