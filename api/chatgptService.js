@@ -1,3 +1,7 @@
+export const config = {
+  runtime: "nodejs",
+};
+
 export const config = { runtime: "edge" };
 import OpenAI from "openai";
 
