@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useLesson } from "../hooks/uselesson.js";
+import { useLesson } from "../hooks/useLesson.js";
 
 import smartQuizLogo from "../assets/smartquiz/smartquiz.png";
 import africaIcon from "../assets/africa/africa.png";

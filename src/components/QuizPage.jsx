@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Confetti from "react-confetti";
 
 import "./QuizPage.css";
-import { useLesson } from "../hooks/uselesson.js";
+import { useLesson } from "../hooks/useLesson.js";
 import AnimatedIcon from "./AnimatedIcon";
 import africaIcon from "../assets/africa/africa.png";
 

@@ -2,7 +2,6 @@ export const config = {
   runtime: "nodejs",
 };
 
-export const config = { runtime: "edge" };
 import OpenAI from "openai";
 
 /**
@@ -19,7 +18,6 @@ export async function runAI(system, user) {
 
     const client = new OpenAI({ apiKey });
 
-    // ✅ New OpenAI API (responses.create)
     const response = await client.responses.create({
       model: "gpt-4o-mini",
       input: [
@@ -30,7 +28,6 @@ export async function runAI(system, user) {
       temperature: 0.7,
     });
 
-    // Handle the new response format
     let text = response.output_text;
 
     if (!text || typeof text !== "string") {
@@ -38,7 +35,6 @@ export async function runAI(system, user) {
       return null;
     }
 
-    // Clean formatting
     text = text
       .replace(/```/g, "")
       .replace(/\*\*/g, "")
@@ -54,7 +50,7 @@ export async function runAI(system, user) {
   }
 }
 
-// TEST ROUTE
+// Test Route
 export default async function handler() {
   return new Response(
     JSON.stringify({ status: "AI service running" }),

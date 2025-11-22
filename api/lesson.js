@@ -2,10 +2,7 @@ export const config = {
   runtime: "nodejs",
 };
 
-export const config = { runtime: "edge" };
-
 import { runAI } from "../chatgptService.js";
-
 
 export default async function handler(req) {
   try {
