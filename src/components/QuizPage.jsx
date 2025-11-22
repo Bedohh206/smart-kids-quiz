@@ -4,6 +4,10 @@ import Confetti from "react-confetti";
 
 import "./QuizPage.css";
 import { useLesson } from "../hooks/uselesson.js";
+import AnimatedIcon from "./AnimatedIcon";
+import africaIcon from "../assets/africa/africa.png";
+
+<AnimatedIcon src={africaIcon} size={80} delay={0.2} />
 
 import {
   africaQuestions,
@@ -481,3 +485,4 @@ return (
     </div>
   </div>
 );
+}   //  <-- ADD THIS FINAL CLOSING BRACE
