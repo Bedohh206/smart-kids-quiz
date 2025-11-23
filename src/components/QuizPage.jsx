@@ -79,12 +79,22 @@ export default function QuizPage() {
   };
 
   const prepareQuestions = (arr) => {
-    const unique = removeDuplicates(arr);
-    return unique.map((q) => {
-      const opts = Array.isArray(q.options) ? q.options : [];
-      return { ...q, options: shuffleArray(opts) };
-    });
-  };
+  // 1️⃣ Remove duplicates by question text
+  const unique = removeDuplicates(arr);
+
+  // 2️⃣ Shuffle the question order
+  const shuffledQuestions = shuffleArray(unique);
+
+  // 3️⃣ Limit the number of questions per quiz run
+  const limited = shuffledQuestions.slice(0, 25); // ← change 25 if you want fewer/more
+
+  // 4️⃣ Shuffle the options inside each question
+  return limited.map((q) => {
+    const opts = Array.isArray(q.options) ? q.options : [];
+    return { ...q, options: shuffleArray(opts) };
+  });
+};
+
 
   /* ---------------------- QUESTION SETS ---------------------- */
   const questionSets = {
