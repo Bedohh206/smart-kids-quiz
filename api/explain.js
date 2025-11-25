@@ -1,4 +1,4 @@
-export const config = { runtime: "nodejs18.x" };
+export const config = { runtime: "nodejs" };
 import { runAI } from "./chatgptService";
 
 export default async function handler(req) {
