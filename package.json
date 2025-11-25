@@ -12,17 +12,17 @@
   },
   "dependencies": {
     "body-parser": "^2.2.0",
+    "concurrently": "^9.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "framer-motion": "^12.23.24",
     "node-fetch": "^2.7.0",
-    "openai": "^6.8.1",
+    "openai": "^6.9.1",
     "react": "19.2.0",
     "react-confetti": "^6.1.0",
     "react-dom": "19.2.0",
-    "react-router-dom": "^7.0.2",
-    "concurrently": "^9.0.0"
+    "react-router-dom": "^7.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.3",

@@ -1,6 +1,5 @@
-export const config = {
-  runtime: "nodejs",
-};
+export const config = { runtime: "nodejs18.x" };
+
 
 import OpenAI from "openai";
 

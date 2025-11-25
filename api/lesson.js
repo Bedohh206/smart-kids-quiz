@@ -1,16 +1,12 @@
-export const config = {
-  runtime: "nodejs",
-};
+export const config = { runtime: "nodejs18.x" };
 
-import { runAI } from "../chatgptService.js";
+import { runAI } from "./chatgptService.js";   // ✅ FIXED PATH
 
 export default async function handler(req) {
   try {
-    // Parse request body safely
-    let body = {};
-    try {
-      body = await req.json();
-    } catch (err) {
+    const body = await req.json().catch(() => null);
+
+    if (!body) {
       return new Response(
         JSON.stringify({ error: "Invalid JSON body" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
@@ -55,7 +51,7 @@ export default async function handler(req) {
 
   } catch (err) {
     return new Response(
-      JSON.stringify({ error: "Server error" }),
+      JSON.stringify({ error: err.message || "Server error" }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
