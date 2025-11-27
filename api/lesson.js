@@ -1,6 +1,9 @@
-export const config = { runtime: "nodejs" };
+import { runAI } from "./chatgptService.js";   // 🚀 Correct path
 
-import { runAI } from "./chatgptService.js";   // ✅ FIXED PATH
+export const config = {
+  runtime: "nodejs",     // MUST be "nodejs" — NOT nodejs18.x
+  maxDuration: 60        // Allows long AI responses
+};
 
 export default async function handler(req) {
   try {
@@ -24,25 +27,23 @@ export default async function handler(req) {
 
     const systemPrompt = `
       Create a kid-friendly mini-lesson for ages ${age}.
-      Write exactly 4 steps.
-      Format MUST be: Step 1 || Step 2 || Step 3 || Step 4
+      Write exactly 4 steps separated by ||
       Use simple language.
-      No markdown, no lists, no decoration.
+      No markdown, no emojis, no bullet points.
       Respond in language: ${language || "en"}.
     `;
 
     const userPrompt = `Create a mini-lesson about: ${topic}`;
 
     let raw = await runAI(systemPrompt, userPrompt);
-
     if (!raw) raw = "Step 1 || Step 2 || Step 3 || Step 4";
 
-    raw = raw.replace(/```/g, "").trim();
-
-    let steps = raw
+    const steps = raw
+      .replace(/```/g, "")
+      .trim()
       .split("||")
       .map((s) => s.trim())
-      .filter((s) => s.length > 0);
+      .filter(Boolean);
 
     return new Response(
       JSON.stringify({ steps }),
