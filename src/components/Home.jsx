@@ -8,14 +8,15 @@ export default function Home() {
 
   return (
     <div className="home-container">
-      <img src={logo} alt="Smart Kids Quiz Logo" className="home-logo" />
+      <img src={logo} alt="Smart Kids Academy Logo" className="home-logo" />
       
-      <h1 className="home-title">Smart Kids Quiz</h1>
-      <p className="home-subtitle">Explore • Learn • Play • Grow</p>
+      {/* 🔥 Updated Branding */}
+      <h1 className="home-title">Smart Kids Academy</h1>
+      <p className="home-tagline">Knowledge Without Borders</p>
 
       <div className="home-buttons">
         <button className="home-btn" onClick={() => navigate("/world")}>
-          🌍 Start World Exploration
+          🌍 World Exploration
         </button>
 
         <button className="home-btn" onClick={() => navigate("/alphabet")}>
@@ -28,7 +29,7 @@ export default function Home() {
       </div>
 
       <footer className="home-footer">
-        ⭐ Earn stars • 🎖️ Unlock badges • 🚀 Become a global learner!
+        ⭐ Earn stars • 🎖 Unlock badges • 🚀 Become a global learner!
       </footer>
     </div>
   );

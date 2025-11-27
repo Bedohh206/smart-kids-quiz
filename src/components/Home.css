@@ -74,3 +74,10 @@
   50% { transform: translateY(-10px); }
   100% { transform: translateY(0); }
 }
+.home-tagline {
+  margin-top: -10px;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #00b4d8;
+  letter-spacing: 0.5px;
+}
