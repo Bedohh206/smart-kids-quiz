@@ -1,0 +1,43 @@
+.alphabet-container {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(to bottom, #ffafcc, #ffc8dd);
+  min-height: 100vh;
+}
+
+.alphabet-title {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #590d22;
+}
+
+.alphabet-subtitle {
+  font-size: 1.2rem;
+  color: #800f2f;
+  margin-bottom: 2rem;
+}
+
+.alphabet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 1rem;
+  max-width: 550px;
+  margin: auto;
+}
+
+.alphabet-card {
+  background: #ff5d8f;
+  border: none;
+  border-radius: 15px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  padding: 1.2rem 0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.alphabet-card:hover {
+  background: #ff85b3;
+  transform: scale(1.1);
+}
