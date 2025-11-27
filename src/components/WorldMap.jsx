@@ -22,6 +22,7 @@ import geographyIcon from "../assets/geography/geography.png";
 import healthIcon from "../assets/health/health.png";
 import historyIcon from "../assets/history/history.png";
 import computerIcon from "../assets/computer/computer.png";
+import worldMap from "../assets/worldmap/worldmap.png";
 
 import "./WorldMap.css";
 
