@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 export default function LessonPage() {
   const { subject } = useParams();
-  const [steps, setSteps] = useState(["Loading..."]);
+  const [lesson, setLesson] = useState("Loading lesson...");
 
   useEffect(() => {
     async function loadLesson() {
@@ -13,21 +13,21 @@ export default function LessonPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             topic: subject,
-            age: 10,          // You can change dynamically later
-            language: "en"    // English for now
+            age: 10,
+            language: "en",
           }),
         });
 
         const data = await res.json();
 
         if (data.steps && Array.isArray(data.steps)) {
-          setSteps(data.steps);
+          setLesson(data.steps.join(" → "));
         } else {
-          setSteps(["No lesson available."]);
+          setLesson("No lesson found.");
         }
       } catch (err) {
-        console.error("Lesson fetch failed:", err);
-        setSteps(["Error loading lesson."]);
+        console.error("Lesson fetch error:", err);
+        setLesson("Sorry, lesson not available.");
       }
     }
 
@@ -37,12 +37,9 @@ export default function LessonPage() {
   return (
     <div style={{ padding: "2rem" }}>
       <h1>{subject.toUpperCase()} Lesson</h1>
-
-      {steps.map((step, i) => (
-        <p key={i} style={{ fontSize: "1.3rem", margin: "1rem 0" }}>
-          👉 {step}
-        </p>
-      ))}
+      <p style={{ fontSize: "1.3rem", marginTop: "1rem", lineHeight: "2rem" }}>
+        {lesson}
+      </p>
     </div>
   );
 }
