@@ -1,43 +1,44 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import Home from "./components/Home";
 import WorldMap from "./components/WorldMap";
 import QuizPage from "./components/QuizPage";
 import LessonPage from "./pages/LessonPage";
 import SubjectsPage from "./pages/SubjectsPage";
 import AlphabetPage from "./pages/AlphabetPage";
+import LeaderboardPage from "./pages/LeaderboardPage";
 
-export default function App() {
+function App() {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* HOME PAGE */}
+        {/* HOME SCREEN */}
         <Route path="/" element={<Home />} />
 
-        {/* CONTINENT EXPLORATION */}
-        <Route path="/world" element={<WorldMap />} />
+        {/* WORLD CONTINENT QUIZZES */}
         <Route path="/quiz/:continent" element={<QuizPage />} />
 
-        {/* SUBJECT SELECTION + AI LESSONS */}
+        {/* SUBJECT QUIZZES */}
         <Route path="/subjects" element={<SubjectsPage />} />
+
+        {/* SUBJECT → AI LESSON ENGINE */}
         <Route path="/lesson/:subject" element={<LessonPage />} />
 
-        {/* ALPHABET LAB */}
+        {/* ALPHABET MODE */}
         <Route path="/alphabet" element={<AlphabetPage />} />
 
-        {/* CATCH-ALL 404 */}
-        <Route
-          path="*"
-          element={
-            <div style={{ textAlign: "center", padding: "2rem" }}>
-              <h2>404 - Page Not Found</h2>
-              <p>Return to the main menu</p>
-            </div>
-          }
-        />
+        {/* WORLD MAP BUTTON */}
+        <Route path="/world" element={<WorldMap />} />
+
+        {/* LEADERBOARD */}
+        <Route path="/leaderboard" element={<LeaderboardPage />} />
+
+        {/* 404 FALLBACK */}
+        <Route path="*" element={<h2 style={{textAlign:'center',marginTop:'3rem'}}>
+          🚫 Page Not Found</h2>} />
       </Routes>
     </BrowserRouter>
   );
 }
+
+export default App;
