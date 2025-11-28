@@ -1,59 +1,48 @@
-import { runAI } from "./chatgptService.js";   // 🚀 Correct path
-
-export const config = {
-  runtime: "nodejs",     // MUST be "nodejs" — NOT nodejs18.x
-  maxDuration: 60        // Allows long AI responses
-};
+export const config = { runtime: "nodejs" };
+import { runAI } from "./chatgptService.js";
 
 export default async function handler(req) {
   try {
-    const body = await req.json().catch(() => null);
-
-    if (!body) {
-      return new Response(
-        JSON.stringify({ error: "Invalid JSON body" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
-      );
-    }
-
+    const body = await req.json();
     const { topic, age, language } = body;
 
-    if (!topic || !age) {
-      return new Response(
-        JSON.stringify({ error: "Missing lesson parameters" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
-      );
+    if (!topic) {
+      return jsonError("Missing topic");
     }
 
-    const systemPrompt = `
-      Create a kid-friendly mini-lesson for ages ${age}.
-      Write exactly 4 steps separated by ||
-      Use simple language.
-      No markdown, no emojis, no bullet points.
-      Respond in language: ${language || "en"}.
+    const system = `
+      Create a simple ${age}-year-old-friendly lesson.
+      Format exactly like: Step 1 || Step 2 || Step 3 || Step 4
+      No bullet points, no markdown.
+      Language: ${language || "en"}.
     `;
 
-    const userPrompt = `Create a mini-lesson about: ${topic}`;
+    const user = `Create a lesson about ${topic}`;
 
-    let raw = await runAI(systemPrompt, userPrompt);
-    if (!raw) raw = "Step 1 || Step 2 || Step 3 || Step 4";
+    const output = await runAI(system, user);
 
-    const steps = raw
-      .replace(/```/g, "")
-      .trim()
-      .split("||")
-      .map((s) => s.trim())
-      .filter(Boolean);
+    if (!output) return jsonError("AI returned no content");
 
-    return new Response(
-      JSON.stringify({ steps }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
-    );
+    const steps = output.split("||").map(s => s.trim()).filter(Boolean);
+
+    return jsonOK({ steps });
 
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: err.message || "Server error" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    console.error("Lesson API Error:", err);
+    return jsonError(err.message || "Internal error");
   }
+}
+
+function jsonOK(obj) {
+  return new Response(JSON.stringify(obj), {
+    status: 200,
+    headers: { "Content-Type": "application/json" }
+  });
+}
+
+function jsonError(msg) {
+  return new Response(JSON.stringify({ error: msg }), {
+    status: 500,
+    headers: { "Content-Type": "application/json" }
+  });
 }
