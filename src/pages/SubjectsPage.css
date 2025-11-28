@@ -1,0 +1,32 @@
+.subjects-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.subjects-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.subject-card {
+  background: #ffe87c;
+  border-radius: 12px;
+  padding: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 2px solid #f3c623;
+}
+
+.subject-card:hover {
+  background: #ffd84a;
+  transform: scale(1.05);
+}
