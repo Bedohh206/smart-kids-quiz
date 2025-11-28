@@ -2,45 +2,32 @@ export const config = { runtime: "nodejs" };
 
 import OpenAI from "openai";
 
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
 /**
- * 🔥 UNIVERSAL AI HELPER FUNCTION
- * Supports: lessons, questions, explanations, translations
+ * 🌟 UNIVERSAL AI HELPER FUNCTION
  */
-export async function runAI(system, user) {
+export async function runAI(systemPrompt, userPrompt) {
   try {
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      console.error("❌ Missing OPENAI_API_KEY");
-      return null;
-    }
-
-    const client = new OpenAI({ apiKey });
-
     const response = await client.responses.create({
       model: "gpt-4o-mini",
-      input: [
-        { role: "system", content: system },
-        { role: "user", content: user }
-      ],
+      input: `${systemPrompt}\nUser: ${userPrompt}`,
       max_output_tokens: 300,
       temperature: 0.7,
     });
 
     let text = response.output_text;
 
-    if (!text || typeof text !== "string") {
-      console.warn("⚠️ AI returned empty output");
-      return null;
-    }
+    if (!text) return null;
 
-    text = text
+    return text
       .replace(/```/g, "")
       .replace(/\*\*/g, "")
       .replace(/\*/g, "")
       .replace(/\s{2,}/g, " ")
       .trim();
-
-    return text;
 
   } catch (err) {
     console.error("🔥 AI Error:", err);
@@ -48,7 +35,6 @@ export async function runAI(system, user) {
   }
 }
 
-// Test Route
 export default async function handler() {
   return new Response(
     JSON.stringify({ status: "AI service running" }),
