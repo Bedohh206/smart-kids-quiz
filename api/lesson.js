@@ -1,31 +1,32 @@
+import OpenAI from "openai";
+
 export const config = { runtime: "nodejs" };
 
-import { runAI } from "../chatgptService.js";
-
-export async function POST(req) {
+export async function runAI(systemPrompt, userPrompt) {
   try {
-    const body = await req.json();
-    const { topic, age = 10, language = "en" } = body;
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-    if (!topic) {
-      return Response.json({ error: "Missing topic" }, { status: 400 });
-    }
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ],
+      max_tokens: 200,
+      temperature: 0.6,
+    });
 
-    const sys = `
-      Create a kid-friendly mini-lesson on ${topic}.
-      EXACTLY 4 steps.
-      Format: Step 1 || Step 2 || Step 3 || Step 4
-      Age ${age}, language ${language}.
-    `;
-
-    const answer = await runAI(sys, "Generate now");
-
-    const steps = answer.split("||").map(s => s.trim()).filter(Boolean);
-
-    return Response.json({ steps });
+    return response.choices[0].message.content.trim();
 
   } catch (err) {
-    console.error("Lesson API error:", err);
-    return Response.json({ error: err.message }, { status: 500 });
+    console.error("🔥 OpenAI Error:", err.message);
+    return null;
   }
+}
+
+export default async function handler() {
+  return new Response(
+    JSON.stringify({ status: "AI service running" }),
+    { status: 200, headers: { "Content-Type": "application/json" } }
+  );
 }

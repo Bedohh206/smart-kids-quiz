@@ -1,36 +1,25 @@
-export const config = { runtime: "nodejs" };
-
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+export const config = { runtime: "nodejs" };
 
-/**
- * 🌟 UNIVERSAL AI HELPER FUNCTION
- */
 export async function runAI(systemPrompt, userPrompt) {
   try {
-    const response = await client.responses.create({
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+    const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
-      input: `${systemPrompt}\nUser: ${userPrompt}`,
-      max_output_tokens: 300,
-      temperature: 0.7,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ],
+      max_tokens: 200,
+      temperature: 0.6,
     });
 
-    let text = response.output_text;
-
-    if (!text) return null;
-
-    return text
-      .replace(/```/g, "")
-      .replace(/\*\*/g, "")
-      .replace(/\*/g, "")
-      .replace(/\s{2,}/g, " ")
-      .trim();
+    return response.choices[0].message.content.trim();
 
   } catch (err) {
-    console.error("🔥 AI Error:", err);
+    console.error("🔥 OpenAI Error:", err.message);
     return null;
   }
 }
