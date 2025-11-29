@@ -1,32 +1,56 @@
 import OpenAI from "openai";
 
-export const config = { runtime: "nodejs" };
+export const config = {
+  runtime: "nodejs",
+  maxDuration: 20, // prevents timeout
+};
 
-export async function runAI(systemPrompt, userPrompt) {
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+export default async function handler(req) {
   try {
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    if (req.method !== "POST") {
+      return new Response(
+        JSON.stringify({ error: "Use POST only" }),
+        { status: 405, headers: { "Content-Type": "application/json" } }
+      );
+    }
 
-    const response = await openai.chat.completions.create({
+    const body = await req.json();
+    const { topic, age = 10, language = "English" } = body;
+
+    const prompt = `
+      Create a child-friendly mini-lesson.
+      Topic: ${topic}
+      Age: ${age}
+      Language: ${language}
+
+      Rules:
+      - EXACTLY 4 steps
+      - One short sentence each
+      - No numbering, no markdown
+      - Split steps using ||
+    `;
+
+    const completion = await client.responses.create({
       model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt }
-      ],
-      max_tokens: 200,
-      temperature: 0.6,
+      input: prompt,
     });
 
-    return response.choices[0].message.content.trim();
+    let text = completion.output_text?.trim() || "";
+    const steps = text.split("||").map(s => s.trim()).filter(Boolean);
 
+    return new Response(
+      JSON.stringify({ steps }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
   } catch (err) {
-    console.error("🔥 OpenAI Error:", err.message);
-    return null;
+    console.error("Lesson API Error:", err);
+    return new Response(
+      JSON.stringify({ error: "Server failed to generate lesson" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
-}
-
-export default async function handler() {
-  return new Response(
-    JSON.stringify({ status: "AI service running" }),
-    { status: 200, headers: { "Content-Type": "application/json" } }
-  );
 }
