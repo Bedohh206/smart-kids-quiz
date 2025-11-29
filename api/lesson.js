@@ -1,55 +1,44 @@
-import OpenAI from "openai";
+export const config = { runtime: "edge" };
 
-export const config = {
-  runtime: "nodejs",
-  maxDuration: 20, // prevents timeout
-};
+import OpenAI from "openai";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function handler(req) {
+export default async function handler(request) {
   try {
-    if (req.method !== "POST") {
-      return new Response(
-        JSON.stringify({ error: "Use POST only" }),
-        { status: 405, headers: { "Content-Type": "application/json" } }
-      );
-    }
+    const { topic, age = 8 } = await request.json();
 
-    const body = await req.json();
-    const { topic, age = 10, language = "English" } = body;
-
-    const prompt = `
-      Create a child-friendly mini-lesson.
+    const system = `
+      Create a kids mini-lesson in 4 small steps.
       Topic: ${topic}
       Age: ${age}
-      Language: ${language}
-
-      Rules:
-      - EXACTLY 4 steps
-      - One short sentence each
-      - No numbering, no markdown
-      - Split steps using ||
+      Format: Step 1 || Step 2 || Step 3 || Step 4
     `;
 
-    const completion = await client.responses.create({
+    const user = "Generate now.";
+
+    const response = await client.responses.create({
       model: "gpt-4o-mini",
-      input: prompt,
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: user }
+      ],
+      max_output_tokens: 150
     });
 
-    let text = completion.output_text?.trim() || "";
-    const steps = text.split("||").map(s => s.trim()).filter(Boolean);
+    const raw = response.output_text.trim();
+    const steps = raw.split("||").map(x => x.trim());
 
     return new Response(
       JSON.stringify({ steps }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
+
   } catch (err) {
-    console.error("Lesson API Error:", err);
     return new Response(
-      JSON.stringify({ error: "Server failed to generate lesson" }),
+      JSON.stringify({ error: err.message }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
