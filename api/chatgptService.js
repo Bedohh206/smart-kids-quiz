@@ -1,4 +1,5 @@
 export const config = { runtime: "nodejs" };
+export { runAI };
 
 export default function handler() {
   return new Response(
