@@ -1,30 +1,22 @@
 import { runAI } from "./chatgptService.js";
+
 export const config = { runtime: "edge" };
 
-export default async function handler(request) {
+export default async function handler(req) {
   try {
-    const { topic, age = 8 } = await request.json();
+    const { topic, age = 8 } = await req.json();
+    const sys = `Create a 4-step fun lesson about ${topic} for kids age ${age}. Use this format: Step 1 || Step 2 || Step 3 || Step 4`;
 
-    const sys = `
-      Create a kid-friendly mini-lesson in 4 simple steps.
-      Topic: ${topic}
-      Age: ${age}
-      Format: Step 1 || Step 2 || Step 3 || Step 4
-      Simple words, fun style.
-    `;
-
-    const raw = await runAI(sys, "Generate now.");
-    const steps = raw.split("||").map(s => s.trim());
+    const text = await runAI(sys, "Generate now");
+    const steps = text.split("||").map(s => s.trim());
 
     return new Response(JSON.stringify({ steps }), {
-      status: 200,
       headers: { "Content-Type": "application/json" }
     });
 
   } catch (err) {
-    return new Response(
-      JSON.stringify({ steps: ["Lesson not available"] }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ steps: ["Lesson not available"] }), {
+      headers: { "Content-Type": "application/json" }
+    });
   }
 }
