@@ -1,22 +1,32 @@
-// api/chatgptService.js
 import OpenAI from "openai";
 
+export const config = { runtime: "edge" };
+
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY
 });
 
 export async function runAI(system, user) {
-  const result = await client.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: system },
-      { role: "user", content: user }
-    ],
-    max_tokens: 200,
-    temperature: 0.3
-  });
+  try {
+    const response = await client.responses.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: user }
+      ],
+      max_output_tokens: 150
+    });
 
-  return result.choices[0].message.content.trim();
+    // Extract model text safely
+    const output = response.output_text;
+
+    if (!output) {
+      throw new Error("Empty AI response");
+    }
+
+    return output.trim();
+  } catch (e) {
+    console.error("AI ERROR:", e);
+    return "Lesson not available";
+  }
 }
-
-export const config = { runtime: "edge" };
