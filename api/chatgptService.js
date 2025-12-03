@@ -1,5 +1,3 @@
-export const config = { runtime: "edge" };
-
 import OpenAI from "openai";
 
 const client = new OpenAI({
@@ -13,6 +11,7 @@ export async function runAI(system, user) {
       { role: "system", content: system },
       { role: "user", content: user }
     ],
+    temperature: 0.3
   });
 
   return completion.choices[0].message.content.trim();
@@ -20,7 +19,7 @@ export async function runAI(system, user) {
 
 export default function handler() {
   return new Response(
-    JSON.stringify({ status: "AI service OK 🚀" }),
+    JSON.stringify({ status: "AI service running 🚀" }),
     { status: 200, headers: { "Content-Type": "application/json" } }
   );
 }
