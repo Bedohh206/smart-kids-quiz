@@ -19,14 +19,14 @@ export async function runAI(system, user) {
 
     return completion.output_text.trim();
   } catch (err) {
-    console.error("🔥 OpenAI Failure:", err.message);
-    return null;
+    console.error("🔥 OpenAI error:", err.message);
+    return "AI unavailable — try again later";
   }
 }
 
 export default function handler() {
-  return new Response(JSON.stringify({ status: "AI OK 🚀" }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" }
-  });
+  return new Response(
+    JSON.stringify({ status: "AI ready 🚀" }),
+    { status: 200, headers: { "Content-Type": "application/json" } }
+  );
 }
