@@ -1,39 +1,32 @@
-import OpenAI from "openai";
-
 export const config = { runtime: "edge" };
+
+import OpenAI from "openai";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-/** 🔥 UNIVERSAL AI CALLER FOR EDGE RUNTIME */
 export async function runAI(system, user) {
   try {
-    const resp = await client.responses.create({
+    const completion = await client.responses.create({
       model: "gpt-4o-mini",
       input: [
         { role: "system", content: system },
         { role: "user", content: user }
       ],
-      max_output_tokens: 250,
-      temperature: 0.4
+      max_output_tokens: 200
     });
 
-    // 🟢 CORRECT way to extract text
-    const text = resp.output[0].content[0].text.trim();
-
-    return text;
-
+    return completion.output_text.trim();
   } catch (err) {
-    console.error("🔥 OpenAI Failure:", err);
+    console.error("🔥 OpenAI Failure:", err.message);
     return null;
   }
 }
 
-/** 🟣 TESTING ROUTE */
 export default function handler() {
-  return new Response(
-    JSON.stringify({ status: "AI Online 🚀" }),
-    { status: 200, headers: { "Content-Type": "application/json" } }
-  );
+  return new Response(JSON.stringify({ status: "AI OK 🚀" }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" }
+  });
 }
