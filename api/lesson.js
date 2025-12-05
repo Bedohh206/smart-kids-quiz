@@ -1,47 +1,20 @@
-export const config = { runtime: "edge" };
 import { runAI } from "./chatgptService.js";
+export const config = { runtime: "edge" };
 
-export default async function handler(request) {
+export default async function handler(req) {
   try {
-    const { topic, age = 8 } = await request.json();
+    const { topic, age = 8 } = await req.json();
+    const sys = `Create a kids mini-lesson in 4 steps about ${topic}`;
 
-    if (!topic) {
-      return new Response(JSON.stringify({ steps: ["Topic missing"] }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" }
-      });
-    }
+    const result = await runAI(sys, "Begin now.");
+    if (!result) throw new Error("AI failed");
 
-    const system = `
-      You are a kids' learning tutor.
-      Create a fun 4-step lesson.
-      Topic: ${topic}
-      Age: ${age}
-      Format MUST be: Step 1 || Step 2 || Step 3 || Step 4
-      Keep each step short and engaging.
-    `;
-
-    const result = await runAI(system, "Generate now.");
-    if (!result) throw new Error("AI returned null");
-
-    const steps = result
-      .split("||")
-      .map(s => s.trim())
-      .filter(Boolean);
-
-    return new Response(JSON.stringify({ steps }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" }
-    });
-
+    return new Response(JSON.stringify({
+      steps: result.split("||").map(s => s.trim())
+    }));
   } catch (err) {
-    console.error("Lesson Error:", err);
     return new Response(
-      JSON.stringify({ steps: ["AI unavailable — try again later"] }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" }
-      }
+      JSON.stringify({ steps: ["AI unavailable — try again later"] })
     );
   }
 }

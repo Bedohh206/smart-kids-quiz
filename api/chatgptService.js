@@ -1,6 +1,5 @@
-export const config = { runtime: "edge" };
-
 import OpenAI from "openai";
+export const config = { runtime: "edge" };
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -8,25 +7,22 @@ const client = new OpenAI({
 
 export async function runAI(system, user) {
   try {
-    const completion = await client.responses.create({
+    const response = await client.responses.create({
       model: "gpt-4o-mini",
       input: [
         { role: "system", content: system },
         { role: "user", content: user }
-      ],
-      max_output_tokens: 200
+      ]
     });
 
-    return completion.output_text.trim();
+    return response.output_text.trim();
   } catch (err) {
-    console.error("🔥 OpenAI error:", err.message);
-    return "AI unavailable — try again later";
+    console.error("🔥 AI ERROR:", err);
+    return null; // triggers fallback "AI unavailable — try again later"
   }
 }
 
-export default function handler() {
-  return new Response(
-    JSON.stringify({ status: "AI ready 🚀" }),
-    { status: 200, headers: { "Content-Type": "application/json" } }
-  );
-}
+export default () =>
+  new Response(JSON.stringify({ ok: true }), {
+    headers: { "Content-Type": "application/json" }
+  });
