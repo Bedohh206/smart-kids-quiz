@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+
 export const config = { runtime: "edge" };
 
 const client = new OpenAI({
@@ -7,22 +8,26 @@ const client = new OpenAI({
 
 export async function runAI(system, user) {
   try {
-    const response = await client.responses.create({
+    const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
-      input: [
+      messages: [
         { role: "system", content: system },
         { role: "user", content: user }
-      ]
+      ],
+      max_tokens: 180,
+      temperature: 0.4,
     });
 
-    return response.output_text.trim();
+    return completion.choices[0].message.content.trim();
   } catch (err) {
     console.error("🔥 AI ERROR:", err);
-    return null; // triggers fallback "AI unavailable — try again later"
+    return null;
   }
 }
 
-export default () =>
-  new Response(JSON.stringify({ ok: true }), {
+export default function handler() {
+  return new Response(JSON.stringify({ status: "AI READY 🚀" }), {
+    status: 200,
     headers: { "Content-Type": "application/json" }
   });
+}
