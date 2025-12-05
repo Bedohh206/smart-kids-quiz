@@ -4,32 +4,17 @@ export const config = { runtime: "edge" };
 export default async function handler(req) {
   try {
     const { topic, age = 8 } = await req.json();
+    const sys = `Create a kids mini-lesson in 4 steps about ${topic}`;
 
-    const system = `
-You are a kids lesson generator. Create a fun mini-lesson for children age ${age}.
-The lesson MUST have EXACTLY 4 steps.
-Each step MUST be one simple sentence.
-ABSOLUTELY NO markdown, no headers, no bullet points, no emojis.
-Format MUST be:
+    const result = await runAI(sys, "Begin now.");
+    if (!result) throw new Error("AI failed");
 
-Step 1: <sentence> || Step 2: <sentence> || Step 3: <sentence> || Step 4: <sentence>
-`;
-
-    const raw = await runAI(system, `Generate a lesson about ${topic}`);
-    if (!raw) throw new Error("AI failed");
-
-    const steps = raw.split("||").map(s => s.trim());
-
-    return new Response(JSON.stringify({ steps }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" }
-    });
-
+    return new Response(JSON.stringify({
+      steps: result.split("||").map(s => s.trim())
+    }));
   } catch (err) {
-    // If AI fails, provide safe default response
     return new Response(
-      JSON.stringify({ steps: ["Lesson not available"] }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+      JSON.stringify({ steps: ["AI unavailable — try again later"] })
     );
   }
 }
