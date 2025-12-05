@@ -7,17 +7,17 @@ export default async function handler(req) {
     const { topic, age = 8 } = await req.json();
 
     const system = `
-      You are an AI teacher for kids.
-      Create a kid-friendly lesson in EXACTLY 4 steps.
-      Topic: ${topic}
-      Age: ${age}
-      
-      FORMAT RULES:
-      - Return ONLY: Step 1 || Step 2 || Step 3 || Step 4
-      - Each step must be 1 short sentence.
-      - No titles, no markdown, no bullets, no extra text.
-      - No explanations. Just the steps.
-    `;
+  You are an AI tutor for children.
+  Write a kid-friendly mini lesson in EXACTLY 4 steps.
+  Topic: ${topic}
+  Age: ${age}
+
+  RULES:
+  - Format MUST be: Step 1 || Step 2 || Step 3 || Step 4
+  - Each step must be ONE short sentence.
+  - NO new lines, NO markdown, NO quotes, NO bullets.
+  - Do NOT explain the task. Just output the 4 steps.
+`;
 
     const text = await runAI(system, "Begin.");
     if (!text) throw new Error("AI failed");
