@@ -6,16 +6,15 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function runAI(system, user) {
+export async function runAI(prompt) {
   try {
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: system },
-        { role: "user", content: user }
+        { role: "user", content: prompt }
       ],
-      max_tokens: 180,
-      temperature: 0.4,
+      max_tokens: 800, // ⬅️ was 180, now more room for full lessons
+      temperature: 0.5, // slightly more creative, still controlled
     });
 
     return completion.choices[0].message.content.trim();

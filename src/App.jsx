@@ -1,43 +1,22 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import WorldMap from "./components/WorldMap";
-import QuizPage from "./components/QuizPage";
-import LessonPage from "./pages/LessonPage";
-import SubjectsPage from "./pages/SubjectsPage";
-import AlphabetPage from "./pages/AlphabetPage";
-import LeaderboardPage from "./pages/LeaderboardPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import GradePage from "./components/GradePage";
+import SubjectPage from "./components/SubjectPage";
+import TopicPage from "./components/TopicPage";
+import LessonPage from "./components/LessonPage";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        {/* HOME SCREEN */}
-        <Route path="/" element={<Home />} />
-
-        {/* WORLD CONTINENT QUIZZES */}
-        <Route path="/quiz/:continent" element={<QuizPage />} />
-
-        {/* SUBJECT QUIZZES */}
-        <Route path="/subjects" element={<SubjectsPage />} />
-
-        {/* SUBJECT → AI LESSON ENGINE */}
-        <Route path="/lesson/:subject" element={<LessonPage />} />
-
-        {/* ALPHABET MODE */}
-        <Route path="/alphabet" element={<AlphabetPage />} />
-
-        {/* WORLD MAP BUTTON */}
-        <Route path="/world" element={<WorldMap />} />
-
-        {/* LEADERBOARD */}
-        <Route path="/leaderboard" element={<LeaderboardPage />} />
-
-        {/* 404 FALLBACK */}
-        <Route path="*" element={<h2 style={{textAlign:'center',marginTop:'3rem'}}>
-          🚫 Page Not Found</h2>} />
+        <Route path="/" element={<GradePage />} />
+        <Route path="/grades" element={<GradePage />} />
+        <Route path="/subjects/:grade" element={<SubjectPage />} />
+        <Route path="/topics/:grade/:subject" element={<TopicPage />} />
+        <Route path="/lesson/:grade/:subject/:topic" element={<LessonPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
