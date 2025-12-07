@@ -1,7 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import GradePage from "./components/GradePage";
-import SubjectPage from "./components/SubjectPage";
-import TopicPage from "./components/TopicPage";
+import GradePage from "./pages/GradePage";
+import SubjectPage from "./pages/SubjectPage";
+import TopicPage from "./pages/TopicPage";
 import LessonPage from "./components/LessonPage";
 import Dashboard from "./components/Dashboard";
 
