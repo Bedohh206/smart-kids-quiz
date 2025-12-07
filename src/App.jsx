@@ -1,3 +1,4 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import GradePage from "./pages/GradePage";
 import SubjectPage from "./pages/SubjectPage";
 import TopicPage from "./pages/TopicPage";
