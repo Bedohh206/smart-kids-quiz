@@ -15,6 +15,7 @@ function App() {
         <Route path="/topics/:grade/:subject" element={<TopicPage />} />
         <Route path="/lesson/:grade/:subject/:topic" element={<LessonPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/shop" element={<AvatarShop />} />
       </Routes>
     </Router>
   );

@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+
 import { useLesson } from "../hooks/useLesson.js";
+import { useUserProfile, getRank } from "../hooks/useUserProfile.js"; // ✅ FIXED
 
 import smartQuizLogo from "../assets/smartquiz/smartquiz.png";
 import africaIcon from "../assets/africa/africa.png";
@@ -22,7 +24,6 @@ import geographyIcon from "../assets/geography/geography.png";
 import healthIcon from "../assets/health/health.png";
 import historyIcon from "../assets/history/history.png";
 import computerIcon from "../assets/computer/computer.png";
-import worldMap from "../assets/worldmap/worldmap.png";
 
 import "./WorldMap.css";
 
@@ -31,20 +32,18 @@ const clickSound = "/sounds/click.wav";
 
 export default function WorldMap() {
   const navigate = useNavigate();
+  const { steps, loading, error, loadLesson } = useLesson();
+  const { profile, updateProfile } = useUserProfile(); // includes rankable XP
 
   const [muted, setMuted] = useState(false);
   const musicRef = useRef(null);
 
-  // 🔹 AI Lesson hook
-  const { steps, loading, error, loadLesson } = useLesson();
-
-  /* ---------------------- INITIAL AI LESSON ---------------------- */
+  /* ---------------- AI MINI LESSON ---------------- */
   useEffect(() => {
-    // Simple default mini-lesson for the homepage
     loadLesson({ topic: "geography", age: 10, language: "en" });
   }, [loadLesson]);
 
-  /* ---------------------- BACKGROUND MUSIC ---------------------- */
+  /* ---------------- BACKGROUND MUSIC ---------------- */
   useEffect(() => {
     const music = new Audio(backgroundMusic);
     music.loop = true;
@@ -52,14 +51,7 @@ export default function WorldMap() {
     musicRef.current = music;
 
     const start = () => {
-      music
-        .play()
-        .then(() => {
-          // started
-        })
-        .catch(() => {
-          // user blocked autoplay – ignore
-        });
+      music.play().catch(() => {});
       document.removeEventListener("click", start);
     };
 
@@ -73,78 +65,59 @@ export default function WorldMap() {
 
   const toggleMusic = () => {
     if (!musicRef.current) return;
-    if (muted) {
-      musicRef.current.play().catch(() => {});
-    } else {
-      musicRef.current.pause();
-    }
+    muted ? musicRef.current.play() : musicRef.current.pause();
     setMuted(!muted);
   };
 
-  const playClick = () => {
-    const snd = new Audio(clickSound);
-    snd.play().catch(() => {});
-  };
+  const playClick = () => new Audio(clickSound).play().catch(() => {});
 
-  const goToQuiz = (id) => {
+  const goToQuiz = (subjectId) => {
     playClick();
-    navigate(`/quiz/${id}`);
+    navigate(`/quiz/${subjectId}`);
   };
 
-  /* ---------------------- CONTINENT PROGRESSION ---------------------- */
-  const [unlocked, setUnlocked] = useState(() => {
-    return JSON.parse(localStorage.getItem("unlockedContinents")) || ["africa"];
-  });
+  /* ---------------- CONTINENT UNLOCK VIA XP ---------------- */
+  const XP_UNLOCKS = {
+    africa: 0,
+    southamerica: 200,
+    northamerica: 400,
+    europe: 700,
+    asia: 1200,
+    australia: 1700,
+    antarctica: 2500,
+  };
 
-  useEffect(() => {
-    const saved =
-      JSON.parse(localStorage.getItem("unlockedContinents")) || ["africa"];
-    setUnlocked(saved);
-  }, []);
+  const handleContinentClick = (continentId) => {
+    playClick();
+    const requiredXP = XP_UNLOCKS[continentId];
 
-  const handleContinentClick = (id) => {
-    if (!unlocked.includes(id)) {
+    if ((profile.xp || 0) < requiredXP) {
       alert(
-        "❌ This continent is locked. Complete earlier continents to unlock it!"
+        `🔒 This continent is locked!\n` +
+        `Required XP: ${requiredXP}\n` +
+        `Your XP: ${profile.xp || 0}\n\n` +
+        `🎮 Play quizzes to earn XP!`
       );
       return;
     }
-    goToQuiz(id);
+
+    updateProfile({
+      continent: continentId,
+      level: profile.level || 1,
+    });
+
+    navigate("/grades");
   };
 
-  /* ---------------------- DATA ---------------------- */
+  /* ---------------- DATA ---------------- */
   const continents = [
-    {
-      id: "northamerica",
-      name: "North America",
-      icon: northAmericaIcon,
-      x: "22%",
-      y: "32%",
-    },
-    {
-      id: "southamerica",
-      name: "South America",
-      icon: southAmericaIcon,
-      x: "28%",
-      y: "62%",
-    },
+    { id: "northamerica", name: "North America", icon: northAmericaIcon, x: "22%", y: "32%" },
+    { id: "southamerica", name: "South America", icon: southAmericaIcon, x: "28%", y: "62%" },
     { id: "europe", name: "Europe", icon: europeIcon, x: "55%", y: "28%" },
     { id: "africa", name: "Africa", icon: africaIcon, x: "52%", y: "52%" },
     { id: "asia", name: "Asia", icon: asiaIcon, x: "72%", y: "40%" },
-    {
-      id: "australia",
-      name: "Australia",
-      icon: australiaIcon,
-      x: "82%",
-      y: "72%",
-    },
-    {
-      id: "antarctica",
-      name: "Antarctica",
-      icon: antarcticaIcon,
-      x: "50%",
-      y: "90%",
-    },
+    { id: "australia", name: "Australia", icon: australiaIcon, x: "82%", y: "72%" },
+    { id: "antarctica", name: "Antarctica", icon: antarcticaIcon, x: "50%", y: "90%" },
   ];
 
   const subjects = [
@@ -159,15 +132,13 @@ export default function WorldMap() {
     { id: "computer", name: "Computer Science", icon: computerIcon },
   ];
 
-  /* ---------------------- RENDER ---------------------- */
+  /* ---------------- UI ---------------- */
   return (
     <div className="worldmap-container">
       <header className="hero-section">
         <div className="hero-left">
           <h1 className="hero-title">Smart Kids Quiz</h1>
-          <p className="hero-tagline">
-            Explore the world, unlock continents, and master fun subjects!
-          </p>
+          <p className="hero-tagline">Explore the world, unlock continents, and master fun subjects!</p>
         </div>
 
         <button className="music-btn" onClick={toggleMusic}>
@@ -175,66 +146,54 @@ export default function WorldMap() {
         </button>
       </header>
 
-      <div className="two-column-layout">
-        {/* LEFT: WORLD MAP */}
-        <section
-          className="worldmap-area"
-          style={{ backgroundImage: `url(${worldMapImg})` }}
-        >
-          <img
-            src={smartQuizLogo}
-            alt="Smart Quiz Logo"
-            className="smartquiz-logo"
+      {/* ⭐ XP / RANK BAR */}
+      <div className="xp-bar-container">
+        <span className="xp-rank">
+          {getRank(profile.xp).emoji} {getRank(profile.xp).title}
+        </span>
+
+        <div className="xp-bar">
+          <div
+            className="xp-fill"
+            style={{ width: `${(profile.xp % 1000) / 10}%` }}
           />
+        </div>
 
-          {continents.map((c) => {
-            const isUnlocked = unlocked.includes(c.id);
-            return (
-              <motion.button
-                key={c.id}
-                className={`continent-button ${
-                  isUnlocked ? "unlocked" : "locked"
-                }`}
-                onClick={() => handleContinentClick(c.id)}
-                whileHover={
-                  isUnlocked ? { scale: 1.15, rotate: 3, y: -4 } : {}
-                }
-                whileTap={isUnlocked ? { scale: 0.9 } : {}}
-                style={{ left: c.x, top: c.y }}
-              >
-                <img src={c.icon} className="continent-icon" alt={c.name} />
-                <span className="continent-label">
-                  {c.name}
-                  {!isUnlocked && <span className="lock-badge">🔒</span>}
-                </span>
-              </motion.button>
-            );
-          })}
+        <span className="xp-value">{profile.xp} XP</span>
+      </div>
 
-          <button
-            className="leaderboard-btn"
-            onClick={() => navigate("/leaderboard")}
-          >
+      <div className="two-column-layout">
+        <section className="worldmap-area" style={{ backgroundImage: `url(${worldMapImg})` }}>
+          <img src={smartQuizLogo} alt="Smart Quiz Logo" className="smartquiz-logo" />
+
+          {continents.map((c) => (
+            <motion.button
+              key={c.id}
+              className="continent-button"
+              onClick={() => handleContinentClick(c.id)}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.95 }}
+              style={{ left: c.x, top: c.y }}
+            >
+              <img src={c.icon} className="continent-icon" alt={c.name} />
+              <span className="continent-label">{c.name}</span>
+            </motion.button>
+          ))}
+
+          <button className="leaderboard-btn" onClick={() => navigate("/leaderboard")}>
             🏆 Leaderboard
           </button>
-
-          <div className="antarctica-waves" />
         </section>
 
-        {/* RIGHT: SUBJECTS + AI BOX */}
         <section className="right-pane">
           <div className="subjects-box">
             <h2>📘 Subjects</h2>
-            <p className="subjects-subtitle">
-              Tap a subject to start a quiz right away.
-            </p>
             <div className="items-grid">
               {subjects.map((s) => (
                 <motion.button
                   key={s.id}
                   className="item-card"
-                  whileHover={{ scale: 1.08, y: -3 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.1 }}
                   onClick={() => goToQuiz(s.id)}
                 >
                   <img src={s.icon} className="item-icon" alt={s.name} />
@@ -246,34 +205,17 @@ export default function WorldMap() {
 
           <div className="ai-box">
             <h2>🤖 AI Tutor</h2>
-            <ul className="ai-list">
-              <li>🔊 Reads questions aloud</li>
-              <li>🎤 Voice answering</li>
-              <li>✨ AI Lesson Mode</li>
-              <li>🌍 Multi-language support</li>
-              <li>⭐ Leaderboard progress</li>
-            </ul>
+            {loading && <p>Loading AI lesson…</p>}
+            {error && <p className="ai-error">AI lesson unavailable right now.</p>}
 
-            <div className="ai-lesson-preview">
-              {loading && <p>Loading AI lesson…</p>}
-              {error && (
-                <p className="ai-error">
-                  AI lesson is not available right now. You can still enjoy the
-                  quizzes!
-                </p>
-              )}
-
-              {Array.isArray(steps) && steps.length > 0 && !loading && !error && (
-                <div className="lesson-box">
-                  <h3>Today&apos;s mini-lesson</h3>
-                  <ol className="lesson-steps-list">
-                    {steps.slice(0, 3).map((step, i) => (
-                      <li key={i}>{step}</li>
-                    ))}
-                  </ol>
-                </div>
-              )}
-            </div>
+            {!loading && !error && steps?.length > 0 && (
+              <div className="lesson-box">
+                <h3>Today's Mini-Lesson</h3>
+                <ol className="lesson-steps-list">
+                  {steps.slice(0, 3).map((step, i) => <li key={i}>{step}</li>)}
+                </ol>
+              </div>
+            )}
           </div>
         </section>
       </div>
