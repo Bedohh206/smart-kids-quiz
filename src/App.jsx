@@ -4,6 +4,7 @@ import SubjectPage from "./pages/SubjectPage";
 import TopicPage from "./pages/TopicPage";
 import LessonPage from "./components/LessonPage";
 import Dashboard from "./components/Dashboard";
+import AvatarShop from "./components/AvatarShop.jsx";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         <Route path="/topics/:grade/:subject" element={<TopicPage />} />
         <Route path="/lesson/:grade/:subject/:topic" element={<LessonPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/shop" element={<AvatarShop />} />
+        <Route path="/avatar-shop" element={<AvatarShop />} />
       </Routes>
     </Router>
   );
