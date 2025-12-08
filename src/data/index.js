@@ -1,39 +1,51 @@
-import africaQuestions from "./africaQuestions.js";
-import antarcticaQuestions from "./antarcticaQuestions.js";
-import asiaQuestions from "./asiaQuestions.js";
-import australiaQuestions from "./australiaQuestions.js";
+import {
+  africaQuestions,
+  antarcticaQuestions,
+  asiaQuestions,
+  australiaQuestions,
+  englishQuestionsBase,
+  europeQuestions,
+  mathQuestionsBase,
+  northAmericaQuestions,
+  scienceQuestionsBase,
+  southAmericaQuestions,
+  biologyQuestionsBase,
+  chemistryQuestionsBase,
+  geographyQuestionsBase,
+  healthQuestionsBase,
+  historyQuestionsBase,
+  computerQuestionsBase,
+} from "./raw.js"; // Your existing raw questions
 
-import biologyQuestions from "./biologyQuestions.js";
-import chemistryQuestions from "./chemistryQuestions.js";
-import computerQuestions from "./computerQuestions.js";
-import englishQuestions from "./englishQuestions.js";
-import geographyQuestions from "./geographyQuestions.js";
-import healthQuestions from "./healthQuestions.js";
-import historyQuestions from "./historyQuestions.js";
-import mathQuestions from "./mathQuestions.js";
-import scienceQuestions from "./scienceQuestions.js";
+// Duplicate the same question set for all grades
+function wrapGrades(base) {
+  return {
+    kindergarten: base,
+    grade1: base,
+    grade2: base,
+    grade3: base,
+    grade4: base,
+    grade5: base,
+  };
+}
 
-import northAmericaQuestions from "./northAmericaQuestions.js";
-import southAmericaQuestions from "./southAmericaQuestions.js";
-import europeQuestions from "./europeQuestions.js";
+export const englishQuestions = wrapGrades(englishQuestionsBase);
+export const mathQuestions     = wrapGrades(mathQuestionsBase);
+export const scienceQuestions  = wrapGrades(scienceQuestionsBase);
+export const biologyQuestions  = wrapGrades(biologyQuestionsBase);
+export const chemistryQuestions = wrapGrades(chemistryQuestionsBase);
+export const geographyQuestions = wrapGrades(geographyQuestionsBase);
+export const healthQuestions    = wrapGrades(healthQuestionsBase);
+export const historyQuestions   = wrapGrades(historyQuestionsBase);
+export const computerQuestions  = wrapGrades(computerQuestionsBase);
 
+// Your continent sets (unchanged)
 export {
   africaQuestions,
   antarcticaQuestions,
   asiaQuestions,
   australiaQuestions,
-
-  biologyQuestions,
-  chemistryQuestions,
-  computerQuestions,
-  englishQuestions,
-  geographyQuestions,
-  healthQuestions,
-  historyQuestions,
-  mathQuestions,
-  scienceQuestions,
-
+  europeQuestions,
   northAmericaQuestions,
   southAmericaQuestions,
-  europeQuestions,
 };
