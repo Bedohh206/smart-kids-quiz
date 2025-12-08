@@ -1,0 +1,44 @@
+.avatar-shop {
+  padding: 20px;
+  text-align: center;
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.avatar-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 2px solid transparent;
+}
+
+.avatar-card:hover {
+  transform: scale(1.05);
+  border-color: gold;
+}
+
+.avatar-card.selected {
+  border-color: #00bfff;
+}
+
+.avatar-icon {
+  width: 80px;
+  height: 80px;
+}
+
+.avatar-info {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.avatar-small {
+  width: 50px;
+  vertical-align: middle;
+}
