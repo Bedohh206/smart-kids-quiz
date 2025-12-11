@@ -6,44 +6,46 @@ import { motion } from "framer-motion";
 import { useLesson } from "../hooks/useLesson.js";
 import { useUserProfile, getRank } from "../hooks/useUserProfile.js";
 
-// 🔁 NO MORE IMPORTS FOR IMAGES
-const smartQuizLogo = "/assets/smartquiz/smartquiz.png";
-const africaIcon = "/assets/africa/africa.png";
-const asiaIcon = "/assets/asia/asia.png";
-const europeIcon = "/assets/europe/europe.png";
-const northAmericaIcon = "/assets/north-america/north-america.png";
-const southAmericaIcon = "/assets/south-america/south-america.png";
-const australiaIcon = "/assets/australia/australia.png";
-const antarcticaIcon = "/assets/antarctica/antarctica.png";
+// STATIC ASSETS (served from public/assets)
 const worldMapImg = "/assets/worldmap/worldmap.png";
 
-// SUBJECT ICONS
-const englishIcon = "/assets/english/english.png";
-const mathIcon = "/assets/math/math.png";
-const scienceIcon = "/assets/science/science.png";
-const biologyIcon = "/assets/biology/biology.png";
-const chemistryIcon = "/assets/chemistry/chemistry.png";
-const geographyIcon = "/assets/geography/geography.png";
-const healthIcon = "/assets/health/health.png";
-const historyIcon = "/assets/history/history.png";
-const computerIcon = "/assets/computer/computer.png";
+const icons = {
+  africa: "/assets/africa/africa.png",
+  asia: "/assets/asia/asia.png",
+  europe: "/assets/europe/europe.png",
+  northamerica: "/assets/north-america/north-america.png",
+  southamerica: "/assets/south-america/south-america.png",
+  australia: "/assets/australia/australia.png",
+  antarctica: "/assets/antarctica/antarctica.png",
 
-// 🎵 MUST LIVE IN /public/sounds
+  english: "/assets/english/english.png",
+  math: "/assets/math/math.png",
+  science: "/assets/science/science.png",
+  biology: "/assets/biology/biology.png",
+  chemistry: "/assets/chemistry/chemistry.png",
+  geography: "/assets/geography/geography.png",
+  health: "/assets/health/health.png",
+  history: "/assets/history/history.png",
+  computer: "/assets/computer/computer.png",
+};
+
 const backgroundMusic = "/sounds/background.mp3";
 const clickSound = "/sounds/click.wav";
 
 export default function WorldMap() {
   const navigate = useNavigate();
-  const { steps, loading, error, loadLesson } = useLesson();
+  const { loadLesson } = useLesson();
   const { profile, updateProfile } = useUserProfile();
 
   const [muted, setMuted] = useState(false);
   const musicRef = useRef(null);
 
+  // Load intro lesson
   useEffect(() => {
-    loadLesson({ topic: "geography", age: 10, language: "en" });
-  }, [loadLesson]);
+    loadLesson({ topic: "geography", age: 10 });
+  }, []);
 
+  // Auto-play music
   useEffect(() => {
     const music = new Audio(backgroundMusic);
     music.loop = true;
@@ -63,18 +65,13 @@ export default function WorldMap() {
     };
   }, []);
 
+  const playClick = () => new Audio(clickSound).play().catch(() => {});
   const toggleMusic = () => {
     muted ? musicRef.current.play() : musicRef.current.pause();
     setMuted(!muted);
   };
 
-  const playClick = () => new Audio(clickSound).play().catch(() => {});
-
-  const goToQuiz = (subjectId) => {
-    playClick();
-    navigate(`/quiz/${subjectId}`);
-  };
-
+  // XP requirements
   const XP_UNLOCKS = {
     africa: 0,
     southamerica: 200,
@@ -85,42 +82,81 @@ export default function WorldMap() {
     antarctica: 2500,
   };
 
+  // USER CLICKS CONTINENT
   const handleContinentClick = (id) => {
     playClick();
+
     if (profile.xp < XP_UNLOCKS[id]) {
-      alert(`🔒 Locked!\nNeed ${XP_UNLOCKS[id]} XP.\nYou have ${profile.xp} XP.`);
+      alert(
+        `🔒 Locked!\nNeed ${XP_UNLOCKS[id]} XP.\nYou have ${profile.xp} XP.`
+      );
       return;
     }
-    updateProfile({ continent: id, level: profile.level || 1 });
-    navigate("/grades");
+
+    updateProfile({ continent: id });
+    navigate(`/quiz/${id}`); // FIXED — was /grades
   };
 
   const continents = [
-    { id: "northamerica", name: "North America", icon: northAmericaIcon, x: "22%", y: "32%" },
-    { id: "southamerica", name: "South America", icon: southAmericaIcon, x: "28%", y: "62%" },
-    { id: "europe", name: "Europe", icon: europeIcon, x: "55%", y: "28%" },
-    { id: "africa", name: "Africa", icon: africaIcon, x: "52%", y: "52%" },
-    { id: "asia", name: "Asia", icon: asiaIcon, x: "72%", y: "40%" },
-    { id: "australia", name: "Australia", icon: australiaIcon, x: "82%", y: "72%" },
-    { id: "antarctica", name: "Antarctica", icon: antarcticaIcon, x: "50%", y: "90%" },
+    { id: "northamerica", name: "North America", x: "22%", y: "32%" },
+    { id: "southamerica", name: "South America", x: "28%", y: "62%" },
+    { id: "europe", name: "Europe", x: "55%", y: "28%" },
+    { id: "africa", name: "Africa", x: "52%", y: "52%" },
+    { id: "asia", name: "Asia", x: "72%", y: "40%" },
+    { id: "australia", name: "Australia", x: "82%", y: "72%" },
+    { id: "antarctica", name: "Antarctica", x: "50%", y: "90%" },
   ];
 
   const subjects = [
-    { id: "english", name: "English Language", icon: englishIcon },
-    { id: "math", name: "Mathematics", icon: mathIcon },
-    { id: "science", name: "Basic Science", icon: scienceIcon },
-    { id: "biology", name: "Biology", icon: biologyIcon },
-    { id: "chemistry", name: "Chemistry", icon: chemistryIcon },
-    { id: "geography", name: "Geography", icon: geographyIcon },
-    { id: "health", name: "Health Education", icon: healthIcon },
-    { id: "history", name: "History", icon: historyIcon },
-    { id: "computer", name: "Computer Science", icon: computerIcon },
+    { id: "english", name: "English Language" },
+    { id: "math", name: "Mathematics" },
+    { id: "science", name: "Basic Science" },
+    { id: "biology", name: "Biology" },
+    { id: "chemistry", name: "Chemistry" },
+    { id: "geography", name: "Geography" },
+    { id: "health", name: "Health Education" },
+    { id: "history", name: "History" },
+    { id: "computer", name: "Computer Science" },
   ];
 
   return (
     <div className="worldmap-container">
-      {/* XP BAR */}
-      {/* REST OF UI — unchanged */}
+      <img src={worldMapImg} alt="World Map" className="worldmap-image" />
+
+      {/* CONTINENT ICONS */}
+      {continents.map((c) => (
+        <motion.img
+          key={c.id}
+          src={icons[c.id]}
+          className="continent-icon"
+          style={{ left: c.x, top: c.y }}
+          onClick={() => handleContinentClick(c.id)}
+          whileHover={{ scale: 1.2 }}
+          transition={{ duration: 0.2 }}
+        />
+      ))}
+
+      {/* SUBJECT ICONS */}
+      <div className="subjects-panel">
+        {subjects.map((s) => (
+          <div
+            key={s.id}
+            className="subject-card"
+            onClick={() => {
+              playClick();
+              navigate(`/lesson/${s.id}`);
+            }}
+          >
+            <img src={icons[s.id]} alt={s.name} className="subject-icon" />
+            <p>{s.name}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* MUSIC BUTTON */}
+      <button className="music-btn" onClick={toggleMusic}>
+        {muted ? "🔈" : "🔊"}
+      </button>
     </div>
   );
 }
