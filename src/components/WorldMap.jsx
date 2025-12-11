@@ -1,34 +1,34 @@
 // src/components/WorldMap.jsx
+
+// CONTINENT ICONS
+import africaIcon from "../assets/africa/africa.png";
+import antarcticaIcon from "../assets/antarctica/antarctica.png";
+import asiaIcon from "../assets/asia/asia.png";
+import australiaIcon from "../assets/australia/australia.png";
+import europeIcon from "../assets/europe/europe.png";
+import northAmericaIcon from "../assets/north-america/north-america.png";
+import southAmericaIcon from "../assets/south-america/south-america.png";
+
+// SUBJECT ICONS
+import englishIcon from "../assets/english/english.png";
+import mathIcon from "../assets/math/math.png";
+import scienceIcon from "../assets/science/science.png";
+import biologyIcon from "../assets/biology/biology.png";
+import chemistryIcon from "../assets/chemistry/chemistry.png";
+import geographyIcon from "../assets/geography/geography.png";
+import healthIcon from "../assets/health/health.png";
+import historyIcon from "../assets/history/history.png";
+import computerIcon from "../assets/computer/computer.png";
+
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import { useLesson } from "../hooks/useLesson.js";
-import { useUserProfile, getRank } from "../hooks/useUserProfile.js";
+import { useUserProfile } from "../hooks/useUserProfile.js";
 
-// STATIC ASSETS (served from public/assets)
+// STATIC ASSETS FROM PUBLIC
 const worldMapImg = "/assets/worldmap/worldmap.png";
-
-const icons = {
-  africa: "/assets/africa/africa.png",
-  asia: "/assets/asia/asia.png",
-  europe: "/assets/europe/europe.png",
-  northamerica: "/assets/north-america/north-america.png",
-  southamerica: "/assets/south-america/south-america.png",
-  australia: "/assets/australia/australia.png",
-  antarctica: "/assets/antarctica/antarctica.png",
-
-  english: "/assets/english/english.png",
-  math: "/assets/math/math.png",
-  science: "/assets/science/science.png",
-  biology: "/assets/biology/biology.png",
-  chemistry: "/assets/chemistry/chemistry.png",
-  geography: "/assets/geography/geography.png",
-  health: "/assets/health/health.png",
-  history: "/assets/history/history.png",
-  computer: "/assets/computer/computer.png",
-};
-
 const backgroundMusic = "/sounds/background.mp3";
 const clickSound = "/sounds/click.wav";
 
@@ -40,12 +40,10 @@ export default function WorldMap() {
   const [muted, setMuted] = useState(false);
   const musicRef = useRef(null);
 
-  // Load intro lesson
   useEffect(() => {
     loadLesson({ topic: "geography", age: 10 });
   }, []);
 
-  // Auto-play music
   useEffect(() => {
     const music = new Audio(backgroundMusic);
     music.loop = true;
@@ -71,7 +69,6 @@ export default function WorldMap() {
     setMuted(!muted);
   };
 
-  // XP requirements
   const XP_UNLOCKS = {
     africa: 0,
     southamerica: 200,
@@ -82,52 +79,49 @@ export default function WorldMap() {
     antarctica: 2500,
   };
 
-  // USER CLICKS CONTINENT
   const handleContinentClick = (id) => {
     playClick();
 
     if (profile.xp < XP_UNLOCKS[id]) {
-      alert(
-        `🔒 Locked!\nNeed ${XP_UNLOCKS[id]} XP.\nYou have ${profile.xp} XP.`
-      );
+      alert(`Locked. Need ${XP_UNLOCKS[id]} XP.`);
       return;
     }
 
     updateProfile({ continent: id });
-    navigate(`/quiz/${id}`); // FIXED — was /grades
+    navigate(`/quiz/${id}`);
   };
 
+  // CONTINENTS WITH FIXED COORDINATES
   const continents = [
-    { id: "northamerica", name: "North America", x: "22%", y: "32%" },
-    { id: "southamerica", name: "South America", x: "28%", y: "62%" },
-    { id: "europe", name: "Europe", x: "55%", y: "28%" },
-    { id: "africa", name: "Africa", x: "52%", y: "52%" },
-    { id: "asia", name: "Asia", x: "72%", y: "40%" },
-    { id: "australia", name: "Australia", x: "82%", y: "72%" },
-    { id: "antarctica", name: "Antarctica", x: "50%", y: "90%" },
+    { id: "africa", name: "Africa", icon: africaIcon, x: "52%", y: "58%" },
+    { id: "antarctica", name: "Antarctica", icon: antarcticaIcon, x: "48%", y: "85%" },
+    { id: "asia", name: "Asia", icon: asiaIcon, x: "70%", y: "40%" },
+    { id: "australia", name: "Australia", icon: australiaIcon, x: "78%", y: "70%" },
+    { id: "europe", name: "Europe", icon: europeIcon, x: "55%", y: "32%" },
+    { id: "northAmerica", name: "North America", icon: northAmericaIcon, x: "28%", y: "35%" },
+    { id: "southAmerica", name: "South America", icon: southAmericaIcon, x: "35%", y: "62%" },
   ];
 
   const subjects = [
-    { id: "english", name: "English Language" },
-    { id: "math", name: "Mathematics" },
-    { id: "science", name: "Basic Science" },
-    { id: "biology", name: "Biology" },
-    { id: "chemistry", name: "Chemistry" },
-    { id: "geography", name: "Geography" },
-    { id: "health", name: "Health Education" },
-    { id: "history", name: "History" },
-    { id: "computer", name: "Computer Science" },
+    { id: "english", icon: englishIcon, name: "English" },
+    { id: "math", icon: mathIcon, name: "Math" },
+    { id: "science", icon: scienceIcon, name: "Science" },
+    { id: "biology", icon: biologyIcon, name: "Biology" },
+    { id: "chemistry", icon: chemistryIcon, name: "Chemistry" },
+    { id: "geography", icon: geographyIcon, name: "Geography" },
+    { id: "health", icon: healthIcon, name: "Health" },
+    { id: "history", icon: historyIcon, name: "History" },
+    { id: "computer", icon: computerIcon, name: "Computer" },
   ];
 
   return (
     <div className="worldmap-container">
       <img src={worldMapImg} alt="World Map" className="worldmap-image" />
 
-      {/* CONTINENT ICONS */}
       {continents.map((c) => (
         <motion.img
           key={c.id}
-          src={icons[c.id]}
+          src={c.icon}
           className="continent-icon"
           style={{ left: c.x, top: c.y }}
           onClick={() => handleContinentClick(c.id)}
@@ -136,7 +130,6 @@ export default function WorldMap() {
         />
       ))}
 
-      {/* SUBJECT ICONS */}
       <div className="subjects-panel">
         {subjects.map((s) => (
           <div
@@ -147,13 +140,12 @@ export default function WorldMap() {
               navigate(`/lesson/${s.id}`);
             }}
           >
-            <img src={icons[s.id]} alt={s.name} className="subject-icon" />
+            <img src={s.icon} alt={s.name} className="subject-icon" />
             <p>{s.name}</p>
           </div>
         ))}
       </div>
 
-      {/* MUSIC BUTTON */}
       <button className="music-btn" onClick={toggleMusic}>
         {muted ? "🔈" : "🔊"}
       </button>

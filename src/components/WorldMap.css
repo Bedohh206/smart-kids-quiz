@@ -1,358 +1,219 @@
-/* =========================================
-   BASE LAYOUT
-========================================= */
-.worldmap-container {
-  min-height: 100vh;
-  padding: 20px 18px 40px;
-  background: radial-gradient(circle at top, #dff5ff 0%, #ffffff 55%);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
-/* =========================================
-   HEADER (HERO SECTION)
-========================================= */
-.hero-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 18px 20px;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-}
+import { useLesson } from "../hooks/useLesson";
+import { useUserProfile, getRank } from "../hooks/useUserProfile";
 
-.hero-title {
-  font-size: 1.8rem;
-  margin: 0;
-  color: #0b3b64;
-}
+import "./WorldMap.css";
 
-.music-btn {
-  background: #0b3b64;
-  color: #ffffff;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 999px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.18);
-  transition: 0.25s ease;
-}
+// -------------------------------------------
+// IMPORT CONTINENT ICONS
+// -------------------------------------------
+import africaIcon from "../assets/africa/africa.png";
+import antarcticaIcon from "../assets/antarctica/antarctica.png";
+import asiaIcon from "../assets/asia/asia.png";
+import australiaIcon from "../assets/australia/australia.png";
+import europeIcon from "../assets/europe/europe.png";
+import northAmericaIcon from "../assets/north-america/north-america.png";
+import southAmericaIcon from "../assets/south-america/south-america.png";
 
-.music-btn:hover {
-  background: #106db3;
-  transform: translateY(-1px) scale(1.03);
-}
+// SUBJECT ICONS
+import englishIcon from "../assets/english/english.png";
+import mathIcon from "../assets/math/math.png";
+import scienceIcon from "../assets/science/science.png";
+import biologyIcon from "../assets/biology/biology.png";
+import chemistryIcon from "../assets/chemistry/chemistry.png";
+import geographyIcon from "../assets/geography/geography.png";
+import historyIcon from "../assets/history/history.png";
+import healthIcon from "../assets/health/health.png";
+import computerIcon from "../assets/computer/computer.png";
 
-/* =========================================
-   TWO COLUMN LAYOUT
-========================================= */
-.two-column-layout {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 18px;
-  width: 100%;
-  margin-top: 12px;
-}
+// STATIC ASSETS
+const worldMapImg = "/assets/worldmap/worldmap.png";
+const backgroundMusic = "/sounds/background.mp3";
+const clickSound = "/sounds/click.wav";
+const smartQuizLogo = "/assets/logo/smartquiz.png";
 
-/* =========================================
-   LEFT — WORLD MAP AREA
-========================================= */
-.worldmap-area {
-  width: 100%;
-  height: 480px;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+export default function WorldMap() {
+  const navigate = useNavigate();
+  const { loadLesson } = useLesson();
+  const { profile, updateProfile } = useUserProfile();
 
-/* Floating SMART QUIZ LOGO */
-.smartquiz-logo {
-  position: absolute;
-  top: 4%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 150px;
-  height: auto;
-  z-index: 20;
-  animation: float 3s ease-in-out infinite;
-}
+  const [muted, setMuted] = useState(false);
+  const musicRef = useRef(null);
 
-@keyframes float {
-  0%   { transform: translate(-50%, -3px); }
-  50%  { transform: translate(-50%, 4px); }
-  100% { transform: translate(-50%, -3px); }
-}
+  // -------------------------------------------
+  // POSITION CONTINENTS (ABSOLUTE)
+  // -------------------------------------------
+  const continents = [
+    { id: "africa", name: "Africa", icon: africaIcon, x: "52%", y: "58%" },
+    { id: "europe", name: "Europe", icon: europeIcon, x: "55%", y: "35%" },
+    { id: "asia", name: "Asia", icon: asiaIcon, x: "70%", y: "42%" },
+    { id: "northamerica", name: "North America", icon: northAmericaIcon, x: "28%", y: "38%" },
+    { id: "southamerica", name: "South America", icon: southAmericaIcon, x: "35%", y: "63%" },
+    { id: "australia", name: "Australia", icon: australiaIcon, x: "82%", y: "68%" },
+    { id: "antarctica", name: "Antarctica", icon: antarcticaIcon, x: "50%", y: "92%" },
+  ];
 
-/* =========================================
-   CONTINENT BUTTONS
-========================================= */
-.continent-button {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  background: #ffffffee;
-  border-radius: 12px;
-  padding: 6px;
-  border: none;
-  cursor: pointer;
-  text-align: center;
-  transition: 0.25s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-}
+  // SUBJECTS
+  const subjects = [
+    { id: "english", label: "English", icon: englishIcon },
+    { id: "math", label: "Math", icon: mathIcon },
+    { id: "science", label: "Science", icon: scienceIcon },
+    { id: "biology", label: "Biology", icon: biologyIcon },
+    { id: "chemistry", label: "Chemistry", icon: chemistryIcon },
+    { id: "geography", label: "Geography", icon: geographyIcon },
+    { id: "history", label: "History", icon: historyIcon },
+    { id: "health", label: "Health", icon: healthIcon },
+    { id: "computer", label: "Computer", icon: computerIcon },
+  ];
 
-/* Hover for unlocked */
-.continent-button:hover:not(.locked) {
-  filter: drop-shadow(0px 0px 12px rgba(255,255,255,0.9));
-  transform: translate(-50%, -50%) scale(1.1);
-}
+  // XP UNLOCK SYSTEM
+  const XP_UNLOCKS = {
+    africa: 0,
+    southamerica: 200,
+    northamerica: 400,
+    europe: 700,
+    asia: 1200,
+    australia: 1700,
+    antarctica: 2500,
+  };
 
-.continent-icon {
-  width: 55px;
-  height: 55px;
-}
+  // RECOMMENDED CONTINENT = next unlock
+  const nextUnlock = Object.entries(XP_UNLOCKS)
+    .filter(([id, req]) => profile.xp < req)
+    .sort((a, b) => a[1] - b[1])[0]?.[0];
 
-.continent-label {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 700;
-  margin-top: 3px;
-}
+  // -------------------------------------------
+  // MUSIC
+  // -------------------------------------------
+  useEffect(() => {
+    const music = new Audio(backgroundMusic);
+    music.loop = true;
+    music.volume = 0.35;
+    musicRef.current = music;
 
-/* =========================================
-   LOCKED CONTINENTS
-========================================= */
-.continent-button.locked {
-  opacity: 0.35;
-  filter: grayscale(100%);
-  cursor: not-allowed;
-}
+    const startMusic = () => {
+      music.play().catch(() => {});
+      document.removeEventListener("click", startMusic);
+    };
 
-.continent-button.locked:hover {
-  filter: none !important;
-  transform: translate(-50%, -50%) !important;
-  box-shadow: none !important;
-}
+    document.addEventListener("click", startMusic);
+    return () => {
+      document.removeEventListener("click", startMusic);
+      music.pause();
+    };
+  }, []);
 
-.continent-button.locked::after {
-  content: "🔒";
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background: #ff4d4d;
-  color: white;
-  font-size: 0.7rem;
-  padding: 3px 6px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-}
+  const toggleMusic = () => {
+    muted ? musicRef.current.play() : musicRef.current.pause();
+    setMuted(!muted);
+  };
 
-/* Glow animation for unlocked */
-.continent-button:not(.locked) {
-  animation: pulseGlow 4s infinite ease-in-out;
-}
+  const handleContinentClick = (id) => {
+    new Audio(clickSound).play().catch(() => {});
 
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 4px rgba(0,200,255,0.3); }
-  50% { box-shadow: 0 0 12px rgba(0,200,255,0.5); }
-  100% { box-shadow: 0 0 4px rgba(0,200,255,0.3); }
-}
+    if (profile.xp < XP_UNLOCKS[id]) {
+      alert(`🔒 Locked!\nNeed ${XP_UNLOCKS[id]} XP.\nYou have ${profile.xp}.`);
+      return;
+    }
 
-/* =========================================
-   ANTARCTICA WAVES
-========================================= */
-.antarctica-waves {
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-  width: 200px;
-  height: 20px;
-  background: rgba(173,216,230,0.55);
-  filter: blur(6px);
-  transform: translateX(-50%);
-  border-radius: 50%;
-  animation: waveMove 3s infinite ease-in-out;
-}
+    updateProfile({ continent: id });
+    navigate(`/quiz/${id}`);
+  };
 
-@keyframes waveMove {
-  0%,100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(4px); }
-}
+  // Load intro AI lesson
+  useEffect(() => {
+    loadLesson({ topic: "world geography", age: 10 });
+  }, []);
 
-/* =========================================
-   RIGHT SIDE — SUBJECTS & AI
-========================================= */
-.right-pane {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
+  // -------------------------------------------
+  // RENDER UI
+  // -------------------------------------------
+  return (
+    <div className="worldmap-container">
 
-.subjects-box,
-.ai-box {
-  background: white;
-  padding: 16px;
-  border-radius: 14px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-}
+      {/* HEADER */}
+      <div className="hero-section">
+        <h1 className="hero-title">SMART KIDS QUIZ</h1>
+        <button className="music-btn" onClick={toggleMusic}>
+          {muted ? "🔈" : "🔊"}
+        </button>
+      </div>
 
-.items-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
+      {/* XP BAR */}
+      <div className="xp-bar-container">
+        <span className="xp-rank">{getRank(profile.xp)}</span>
+        <div className="xp-bar">
+          <div
+            className="xp-fill"
+            style={{ width: `${(profile.xp / 2500) * 100}%` }}
+          ></div>
+        </div>
+        <span className="xp-value">{profile.xp} XP</span>
+      </div>
 
-.item-card {
-  flex: 0 0 calc(50% - 8px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #f9fcff;
-  padding: 8px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: 0.25s ease;
-}
+      {/* TWO COLUMN LAYOUT */}
+      <div className="two-column-layout">
 
-.item-card:hover {
-  background: #e6f7ff;
-  box-shadow: 0 0 12px rgba(0,200,255,0.35);
-}
+        {/* LEFT SIDE — WORLD MAP */}
+        <div
+          className="worldmap-area"
+          style={{ backgroundImage: `url(${worldMapImg})` }}
+        >
+          <img src={smartQuizLogo} className="smartquiz-logo" alt="SmartQuiz" />
 
-.item-icon {
-  width: 40px;
-  height: 40px;
-}
+          {continents.map((c) => {
+            const locked = profile.xp < XP_UNLOCKS[c.id];
+            const isRecommended = nextUnlock === c.id;
 
-.item-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-top: 4px;
-}
+            return (
+              <button
+                key={c.id}
+                className={`continent-button ${locked ? "locked" : ""} ${
+                  isRecommended ? "recommended" : ""
+                }`}
+                style={{ left: c.x, top: c.y }}
+                onClick={() => handleContinentClick(c.id)}
+              >
+                <img src={c.icon} className="continent-icon" alt={c.name} />
+                <span className="continent-label">{c.name}</span>
+              </button>
+            );
+          })}
 
-/* =========================================
-   BADGES + RECOMMENDED TAG
-========================================= */
-.continent-progress {
-  display: block;
-  font-size: 0.7rem;
-  color: #555;
-}
+          {/* Antarctica wave effect */}
+          <div className="antarctica-waves"></div>
+        </div>
 
-.continent-badge {
-  display: inline-block;
-  font-size: 0.8rem;
-  margin-top: 2px;
-}
+        {/* RIGHT SIDE — SUBJECTS */}
+        <div className="right-pane">
 
-.continent-tag {
-  display: inline-block;
-  margin-top: 3px;
-  padding: 2px 6px;
-  font-size: 0.65rem;
-  border-radius: 999px;
-  background: #ffeaa7;
-  color: #5a3e02;
-}
+          <div className="subjects-box">
+            <h3>Subjects</h3>
+            <div className="items-grid">
+              {subjects.map((s) => (
+                <div
+                  key={s.id}
+                  className="item-card"
+                  onClick={() => navigate(`/lesson/${s.id}`)}
+                >
+                  <img src={s.icon} className="item-icon" alt={s.label} />
+                  <span className="item-label">{s.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
-.continent-button.recommended {
-  border: 2px solid #00cec9;
-}
+          {/* AI Box (Optional Future Feature) */}
+          <div className="ai-box">
+            <h3>AI Tutor</h3>
+            <p>Tap any subject or continent to begin learning!</p>
+          </div>
 
-/* =========================================
-   RESPONSIVE DESIGN
-========================================= */
-@media (max-width: 900px) {
-  .two-column-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .worldmap-area {
-    height: 380px;
-  }
-}
-
-@media (max-width: 680px) {
-  .continent-button {
-    padding: 4px;
-  }
-
-  .continent-icon {
-    width: 42px;
-    height: 42px;
-  }
-
-  .smartquiz-logo {
-    width: 120px;
-    top: 6%;
-  }
-}
-
-@media (max-width: 420px) {
-  .worldmap-area {
-    height: 320px;
-  }
-
-  .continent-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .smartquiz-logo {
-    width: 100px;
-    top: 7%;
-  }
-
-  .subjects-box .item-card {
-    flex: 0 0 calc(50% - 6px);
-  }
-}
-
-@media (max-width: 600px) {
-  .continent-button.locked::after {
-    font-size: 0.6rem;
-    top: -8px;
-    right: -8px;
-  }
-}
-.xp-bar-container {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 10px auto;
-  padding: 8px 12px;
-  background: #ffffffaa;
-  border-radius: 12px;
-  width: 80%;
-}
-
-.xp-rank {
-  font-weight: bold;
-  font-size: 1.1rem;
-}
-
-.xp-bar {
-  flex: 1;
-  height: 12px;
-  background: #ddd;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.xp-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #4caf50, #8bc34a);
-  transition: width 0.5s ease;
-}
-
-.xp-value {
-  font-size: 0.9rem;
-  font-weight: bold;
+        </div>
+      </div>
+    </div>
+  );
 }
