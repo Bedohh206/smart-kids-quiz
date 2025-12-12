@@ -237,4 +237,41 @@
     height: auto;
   }
 }
+/* --------------------------------------
+   FORCE WORLD MAP TO SIT BEHIND ICONS
+-----------------------------------------*/
+.worldmap-image {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+}
+
+/* --------------------------------------
+   MAKE CONTINENT ICONS VISIBLE
+-----------------------------------------*/
+.continent-icon {
+  position: absolute !important;
+  z-index: 5 !important;
+  width: 70px !important;
+  height: 70px !important;
+  display: block !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* OPTIONAL DEBUG – shows red border so we SEE the icons */
+.continent-icon {
+  outline: 2px solid red !important;
+}
+
+/* --------------------------------------
+   SUBJECT ICONS FIX
+-----------------------------------------*/
+.subject-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  display: block;
+}
 
