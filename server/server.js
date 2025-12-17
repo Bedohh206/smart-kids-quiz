@@ -4,17 +4,22 @@ import dotenv from "dotenv";
 import fetch from "node-fetch";
 
 dotenv.config();
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ⭐ IMPORTANT: Replace with your OpenAI key
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 /* ---------------------------------------------------------
-   🔧 HELPER — CALL OPENAI
+   🔧 HELPER — CALL OPENAI (single source of truth)
 --------------------------------------------------------- */
 async function callOpenAI(messages) {
+  if (!OPENAI_API_KEY) {
+    console.error("❌ Missing OPENAI_API_KEY");
+    return null;
+  }
+
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -31,35 +36,34 @@ async function callOpenAI(messages) {
 
     const data = await res.json();
 
-    if (!data.choices || !data.choices[0]) {
-      console.log("OpenAI bad response:", data);
+    if (!data.choices?.[0]?.message?.content) {
+      console.error("❌ Bad OpenAI response:", data);
       return null;
     }
 
     return data.choices[0].message.content;
   } catch (err) {
-    console.log("🔥 OpenAI Error:", err);
+    console.error("🔥 OpenAI Error:", err);
     return null;
   }
 }
 
 /* ---------------------------------------------------------
-   📘 1. AI LESSON MODE
+   📘 AI LESSON MODE
 --------------------------------------------------------- */
 app.post("/api/lesson", async (req, res) => {
   const { topic, age, language } = req.body;
 
   const prompt = `
-Create a simple step-by-step kid-friendly lesson.
+Create a kid-friendly lesson.
 Topic: ${topic}
 Age group: ${age}
 Language: ${language || "English"}
 
 Rules:
-- Produce EXACTLY 5–7 very short steps.
-- Each step must be 1–2 sentences.
-- Do NOT number them; return as a JSON array of strings.
-Return ONLY valid JSON.
+- Return EXACTLY 5 short steps
+- 1–2 sentences per step
+- Return ONLY valid JSON array of strings
 `;
 
   const result = await callOpenAI([{ role: "user", content: prompt }]);
@@ -67,34 +71,33 @@ Return ONLY valid JSON.
   try {
     const steps = JSON.parse(result);
     res.json({ steps });
-  } catch (e) {
-    res.json({ steps: ["Sorry, I couldn't load the lesson."] });
+  } catch {
+    res.json({ steps: ["Lesson unavailable. Please try again later."] });
   }
 });
 
 /* ---------------------------------------------------------
-   🎯 2. AI QUESTION GENERATOR
+   🎯 AI QUESTION GENERATOR
 --------------------------------------------------------- */
 app.post("/api/generate-question", async (req, res) => {
   const { subject, level, age } = req.body;
 
   const prompt = `
-Generate 5 multiple-choice quiz questions.
+Generate 5 multiple-choice questions.
 Subject: ${subject}
-Difficulty level: ${level}
-Age group: ${age}
+Level: ${level}
+Age: ${age}
 
-Format each item in JSON:
-{
-  "q": "question text",
-  "a": "correct answer",
-  "options": ["A","B","C","D"]
-}
+Format:
+[
+  {
+    "q": "...",
+    "a": "...",
+    "options": ["A","B","C","D"]
+  }
+]
 
-Rules:
-- Options must contain EXACTLY 4 items.
-- The correct answer must be included inside the options.
-- Return ONLY a JSON array.
+Return ONLY JSON.
 `;
 
   const result = await callOpenAI([{ role: "user", content: prompt }]);
@@ -102,88 +105,56 @@ Rules:
   try {
     const questions = JSON.parse(result);
     res.json({ questions });
-  } catch (e) {
+  } catch {
     res.json({ questions: [] });
   }
 });
 
 /* ---------------------------------------------------------
-   🤖 3. AI EXPLAIN ANSWER
+   🤖 AI EXPLAIN ANSWER
 --------------------------------------------------------- */
 app.post("/api/explain", async (req, res) => {
   const { question, answer, language } = req.body;
 
   const prompt = `
-Explain this quiz question like a friendly tutor.
+Explain simply for a child.
 Question: ${question}
-Correct answer: ${answer}
+Answer: ${answer}
 Language: ${language}
-
-Rules:
-- 2–4 sentences max.
-- Very easy to understand for kids.
 `;
 
   const explanation = await callOpenAI([{ role: "user", content: prompt }]);
-
   res.json({ explanation });
 });
 
 /* ---------------------------------------------------------
-   🌐 4. TRANSLATOR
+   🌐 TRANSLATOR
 --------------------------------------------------------- */
 app.post("/api/translate", async (req, res) => {
   const { text, targetLang } = req.body;
 
   const prompt = `
-Translate this JSON object into ${targetLang}.
-Keep keys exactly the same.
+Translate the following JSON to ${targetLang}.
+Keep keys unchanged.
 Return ONLY JSON.
-Content:
+
 ${text}
 `;
 
   const translated = await callOpenAI([{ role: "user", content: prompt }]);
-
   res.json({ translated });
 });
 
 /* ---------------------------------------------------------
-   🩺 5. HEALTH CHECK
+   🩺 HEALTH CHECK
 --------------------------------------------------------- */
-app.get("/", (req, res) => {
-  res.send("AI Smart Kids Quiz API is running 🚀");
+app.get("/", (_, res) => {
+  res.send("Smart Kids Quiz API running 🚀");
 });
 
 /* ---------------------------------------------------------
    🚀 START SERVER
 --------------------------------------------------------- */
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
-app.post("/api/lesson", async (req, res) => {
-  const { topic, age, language } = req.body;
-
-  try {
-    const prompt = `
-      Create a 5-step simplified lesson for a child age ${age}.
-      Topic: ${topic}.
-      Write in ${language}. 
-      Make each step short, fun, and educational.
-    `;
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
-    });
-
-    const text = response.choices[0].message.content;
-    const steps = text.split("\n").filter((line) => line.trim() !== "");
-
-    res.json({ steps });
-  } catch (err) {
-    console.log(err);
-    res.json({ steps: ["Sorry, I couldn’t load the lesson. Try again!"] });
-  }
+app.listen(5000, () => {
+  console.log("🚀 Server running on http://localhost:5000");
 });
