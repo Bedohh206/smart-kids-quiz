@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "🟢 Start Backend (Node Server)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/server/server.js",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/.env",
+      "restart": true
+    },
+    {
+      "name": "🟣 Start Frontend (Vite)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "🚀 Launch Full App (Frontend + Backend)",
+      "configurations": [
+        "🟢 Start Backend (Node Server)",
+        "🟣 Start Frontend (Vite)"
+      ]
+    }
+  ]
+}

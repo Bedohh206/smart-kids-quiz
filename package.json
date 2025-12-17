@@ -1,0 +1,33 @@
+{
+  "name": "smart-kids-quiz",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "client": "vite",
+    "server": "node server/server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "concurrently": "^9.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "framer-motion": "^12.23.24",
+    "node-fetch": "^2.7.0",
+    "openai": "^6.8.1",
+    "react": "19.2.0",
+    "react-confetti": "^6.1.0",
+    "react-dom": "19.2.0",
+    "react-router-dom": "^7.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "8.57.1",
+    "eslint-plugin-react-hooks": "4.6.2",
+    "vite": "^6.0.5"
+  }
+}
