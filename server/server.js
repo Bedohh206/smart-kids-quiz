@@ -25,30 +25,46 @@ app.get("/", (req, res) => {
    AI LESSON ROUTE
 ================================ */
 app.post("/api/lesson", async (req, res) => {
-  console.log("📩 /api/lesson HIT");
-  console.log("Request body:", req.body);
+  const { topic, age, language = "English" } = req.body;
 
-  try {
-    const { topic, age, language } = req.body;
+  const prompt = `
+You are an AI teacher for kids.
 
-    if (!topic || !age || !language) {
-      return res.status(400).json({
-        error: "Missing topic, age, or language",
-      });
-    }
+Create EXACTLY 5 short lesson steps.
 
-    const lesson = await createLesson(topic, age, language);
+Topic: ${topic}
+Age: ${age}
+Language: ${language}
 
-    console.log("✅ Lesson generated:", lesson);
-    res.json(lesson);
+FORMAT RULES (VERY IMPORTANT):
+- Return ONLY plain text
+- Separate each step with: ||
+- Example:
+Step 1 || Step 2 || Step 3 || Step 4 || Step 5
+- NO markdown
+- NO JSON
+- NO explanations
+`;
 
-  } catch (error) {
-    console.error("❌ Lesson error:", error);
-    res.status(500).json({
-      steps: ["Lesson not available right now"],
+  const text = await callOpenAI(prompt);
+
+  if (!text) {
+    return res.json({
+      steps: ["Lesson unavailable right now."],
     });
   }
+
+  // ✅ SAFE parsing — NEVER fails
+  const steps = text
+    .split("||")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  console.log("🧠 Parsed lesson steps:", steps);
+
+  res.json({ steps });
 });
+
 
 /* ===============================
    START SERVER
