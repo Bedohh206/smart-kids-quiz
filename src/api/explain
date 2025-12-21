@@ -1,0 +1,30 @@
+/**
+ * Request an AI explanation from the Express server.
+ * Falls back to static explanation if AI is unavailable.
+ *
+ * @param {string} question - The quiz question
+ * @param {string} answer - The correct answer
+ * @param {string} language - Language code (e.g., "en")
+ * @returns {string} Explanation text
+ */
+export async function explain(question, answer, language = "English") {
+  try {
+    const res = await fetch("http://localhost:5000/api/explain", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question, answer, language })
+    });
+
+    if (!res.ok) throw new Error("AI unavailable");
+
+    const data = await res.json();
+    if (data?.explanation) return data.explanation;
+
+    throw new Error("No explanation returned");
+  } catch (err) {
+    console.warn("⚠️ Using fallback explanation");
+
+    // ✅ SAFE FALLBACK (never breaks the UI)
+    return `The correct answer is "${answer}". This is an important fact to remember.`;
+  }
+}

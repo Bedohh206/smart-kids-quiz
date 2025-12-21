@@ -1,0 +1,54 @@
+import { runAI } from "./chatgptService.js";
+
+/**
+ * Generate quiz questions using AI (with fallback)
+ * @param {string} topic - e.g. "Africa"
+ * @param {string} age - e.g. "11-14"
+ * @param {string} level - e.g. "level1"
+ * @param {string} language - e.g. "en"
+ * @returns {Array} - Array of question objects
+ */
+export async function generateQuestions(topic, age, level, language = "English") {
+  const prompt = `
+Generate 5 kid-friendly multiple-choice quiz questions.
+
+Topic: ${topic}
+Age group: ${age}
+Difficulty: ${level}
+Language: ${language}
+
+FORMAT RULES:
+- Return ONLY a JSON array
+- Each item must be:
+{
+  "q": "Question text",
+  "a": "Correct answer",
+  "options": ["A","B","C","D"]
+}
+- EXACTLY 4 options
+- Answer must be one of the options
+`;
+
+  const text = await runAI(prompt);
+
+  try {
+    const parsed = JSON.parse(text);
+    if (Array.isArray(parsed)) return parsed;
+  } catch (err) {
+    console.error("⚠️ AI question parse failed:", err);
+  }
+
+  /* 🔁 FALLBACK QUESTIONS (AI OFF SAFE MODE) */
+  return [
+    {
+      q: `Which continent is ${topic} located in?`,
+      a: "Africa",
+      options: ["Africa", "Asia", "Europe", "South America"],
+    },
+    {
+      q: `Which famous river is found in ${topic}?`,
+      a: "Nile",
+      options: ["Nile", "Amazon", "Danube", "Mississippi"],
+    },
+  ];
+}

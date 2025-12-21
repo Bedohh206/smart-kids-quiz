@@ -1,0 +1,36 @@
+import { runAI } from "./chatgptService.js";
+
+/**
+ * Translate a JSON object or text into another language
+ * @param {string} text - JSON string or plain text
+ * @param {string} targetLang - Language code (e.g. "fr", "es", "sw")
+ * @returns {string|null} - Translated JSON string
+ */
+export async function translate(text, targetLang) {
+  // Skip translation for English
+  if (!targetLang || targetLang === "en") {
+    return text;
+  }
+
+  const prompt = `
+Translate the following content into ${targetLang}.
+
+RULES:
+- Preserve the original structure
+- If input is JSON, output must be valid JSON
+- Do NOT add explanations
+- Translate values only, not keys
+
+CONTENT:
+${text}
+`;
+
+  const result = await runAI(prompt);
+
+  if (!result) {
+    console.error("⚠️ Translation failed — returning original text");
+    return text;
+  }
+
+  return result;
+}

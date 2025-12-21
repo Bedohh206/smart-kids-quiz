@@ -28,8 +28,10 @@ import { motion } from "framer-motion";
 
 import "./WorldMap.css";
 
-const backgroundMusic = "/sounds/background.mp3";
-const clickSound = "/sounds/click.wav";
+const BASE = import.meta.env.BASE_URL;
+
+const backgroundMusic = `${BASE}sounds/background.mp3`;
+const clickSound = `${BASE}sounds/click.wav`;
 
 export default function WorldMap() {
   const navigate = useNavigate();
