@@ -1,42 +1,37 @@
-// lesson.js
-import fetch from "node-fetch";
+import { runAI } from "./chatgptService.js";
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+export const config = { runtime: "edge" };
 
-export async function createLesson(topic, age, language) {
-  const prompt = `
-Create a kid-friendly lesson.
+export default async function handler(req) {
+  try {
+    const { topic, age = 8 } = await req.json();
 
-Topic: ${topic}
-Age group: ${age}
-Language: ${language}
+    const system = `
+      You are an AI teacher for kids.
+      Create a kid-friendly lesson in EXACTLY 4 steps.
+      Topic: ${topic}
+      Age: ${age}
+      
+      FORMAT RULES:
+      - Return ONLY: Step 1 || Step 2 || Step 3 || Step 4
+      - Each step must be 1 short sentence.
+      - No titles, no markdown, no bullets, no extra text.
+      - No explanations. Just the steps.
+    `;
 
-RULES:
-- EXACTLY 5 steps
-- Each step 1 short sentence
-- Return ONLY a JSON array of strings
-`;
+    const text = await runAI(system, "Begin.");
+    if (!text) throw new Error("AI failed");
 
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${OPENAI_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.4,
-    }),
-  });
+    const steps = text.split("||").map(s => s.trim());
 
-  const data = await res.json();
+    return new Response(JSON.stringify({ steps }), {
+      headers: { "Content-Type": "application/json" }
+    });
 
-  const text = data?.choices?.[0]?.message?.content;
-
-  if (!text) {
-    throw new Error("OpenAI returned empty response");
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ steps: ["Lesson not available"] }),
+      { headers: { "Content-Type": "application/json" } }
+    );
   }
-
-  return { steps: JSON.parse(text) };
 }
