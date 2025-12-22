@@ -26,7 +26,8 @@ import {
 } from "../data/index.js";
 
 // Mascot
-import mascotImg from "../assets/mascot-hero.png";
+import mascotImg from "../assets/smartquiz/smartquiz.png";
+import Spinner from "./Spinner";
 
 // 🌍 Order used for adventure unlocking
 const CONTINENT_ORDER = [
@@ -107,6 +108,10 @@ export default function QuizPage() {
   const [lessonMode, setLessonMode] = useState(false);
   const [lessonSteps, setLessonSteps] = useState([]);
   const [lessonIndex, setLessonIndex] = useState(0);
+  const [lessonApiMode, setLessonApiMode] = useState("auto");
+
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
+  const [preparingLesson, setPreparingLesson] = useState(false);
 
   const [mascotMessage, setMascotMessage] = useState(
     "Hi! I'm RoboTutor — ready to help!"
@@ -397,22 +402,61 @@ export default function QuizPage() {
   /* ---------------------------------------------------------
      AI – LESSON MODE
   --------------------------------------------------------- */
-  const startLessonMode = async () => {
-    setLessonMode(true);
+  const startLessonMode = async (mode = "auto") => {
+    // Defer entering lesson view until both lesson steps and questions are prepared.
+    setPreparingLesson(true);
 
-    const res = await fetch("http://localhost:5000/api/lesson", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        topic: finalKey,
-        age: ageGroup,
-        language,
-      }),
-    });
+    try {
+      // Fetch lesson steps first (AI or static per mode)
+      const lessonResp = await fetch("http://localhost:5000/api/lesson", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          topic: finalKey,
+          age: ageGroup,
+          language,
+          mode,
+        }),
+      });
 
-    const data = await res.json();
-    setLessonSteps(data.steps || []);
-    setLessonIndex(0);
+      const lessonData = await lessonResp.json();
+      setLessonSteps(lessonData.steps || []);
+      setLessonIndex(0);
+
+      // Prepare questions depending on mode
+      if (mode === "static") {
+        // Use built-in question bank for static mode
+        const base = selectedSet && selectedSet[selectedLevel];
+        const filtered = Array.isArray(base)
+          ? base.filter((q) => !q.age || q.age === ageGroup)
+          : [];
+        setQuestions(filtered);
+        setCurrent(0);
+        setSelected("");
+        setShowResult(false);
+        setShowConfetti(false);
+        setScore(0);
+      } else {
+        // AI or auto: request AI-generated questions
+        try {
+          setLoadingQuestions(true);
+          await fetchAIQuestions();
+        } catch (err) {
+          console.warn("AI questions fetch failed:", err);
+        } finally {
+          setLoadingQuestions(false);
+        }
+      }
+
+      // All prepared — enter lesson mode
+      setLessonMode(true);
+    } catch (err) {
+      console.error("Failed to prepare lesson:", err);
+      // fallback: enter lesson mode with whatever we have
+      setLessonMode(true);
+    } finally {
+      setPreparingLesson(false);
+    }
   };
 
   /* ---------------------------------------------------------
@@ -491,8 +535,24 @@ export default function QuizPage() {
             ))}
         </div>
 
-        <button className="ai-btn" onClick={startLessonMode}>
-          📘 AI Lesson Mode
+        <div style={{ marginTop: 12 }}>
+          <label style={{ marginRight: 8 }}>Lesson Source:</label>
+          <select
+            value={lessonApiMode}
+            onChange={(e) => setLessonApiMode(e.target.value)}
+          >
+            <option value="auto">Auto (AI → fallback)</option>
+            <option value="ai">AI only</option>
+            <option value="static">Static only</option>
+          </select>
+        </div>
+
+        <button
+          className="ai-btn"
+          onClick={() => startLessonMode(lessonApiMode)}
+          style={{ marginTop: 12 }}
+        >
+          📘 Start Lesson
         </button>
 
         <button className="back-btn" onClick={goHome}>
@@ -512,6 +572,22 @@ export default function QuizPage() {
   --------------------------------------------------------- */
   if (lessonMode) {
     const step = lessonSteps[lessonIndex] || "Loading lesson...";
+    // If we're preparing the lesson (waiting for questions), show a waiting screen
+    if (preparingLesson) {
+      return (
+        <div className="quiz-page">
+          <h2>Preparing your lesson…</h2>
+          <p>Please wait while we create questions and arrange the lesson.</p>
+          <div style={{ marginTop: 16 }}>
+             <Spinner />
+          </div>
+
+          <button className="back-btn" onClick={goHome} style={{ marginTop: 16 }}>
+            Cancel
+          </button>
+        </div>
+      );
+    }
 
     return (
       <div className="quiz-page">
@@ -527,12 +603,23 @@ export default function QuizPage() {
           <button
             className="ai-btn"
             onClick={() => setLessonIndex((i) => i + 1)}
+            disabled={loadingQuestions}
           >
             Next →
+            {loadingQuestions && (
+              <span style={{ marginLeft: 8, fontSize: 12 }}>Loading questions...</span>
+            )}
           </button>
         ) : (
-          <button className="ai-btn" onClick={() => setLessonMode(false)}>
+          <button
+            className="ai-btn"
+            onClick={() => setLessonMode(false)}
+            disabled={loadingQuestions}
+          >
             Start Quiz →
+            {loadingQuestions && (
+              <span style={{ marginLeft: 8, fontSize: 12 }}>Loading questions...</span>
+            )}
           </button>
         )}
 

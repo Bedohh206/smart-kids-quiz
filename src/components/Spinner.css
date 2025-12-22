@@ -1,0 +1,19 @@
+.sk-spinner {
+  display: inline-block;
+  border-radius: 50%;
+  border: 6px solid rgba(0,0,0,0.08);
+  border-top-color: #2b6ef6;
+  animation: sk-spin 0.9s linear infinite;
+}
+
+@keyframes sk-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* small helper to center when used */
+.spinner-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
