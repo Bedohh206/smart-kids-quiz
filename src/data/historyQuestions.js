@@ -54,12 +54,22 @@ const historyQuestions = {
       options: ["Alan Turing", "Charles Babbage", "Bill Gates", "Steve Jobs"],
     },
 
-    // 40 EASY AUTO-GENERATED QUESTIONS
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `History Easy #${i + 11}: Who discovered America?`,
-      a: "Christopher Columbus",
-      options: ["Christopher Columbus", "Vasco da Gama", "Leif Erikson", "Magellan"],
-    })),
+    // More variety: explorers, inventions, leaders
+    { q: "Which explorer sailed for Spain and reached the Americas?", a: "Christopher Columbus", options: ["Christopher Columbus", "Vasco da Gama", "Leif Erikson", "Magellan"] },
+    { q: "Who invented the telephone?", a: "Alexander Graham Bell", options: ["Alexander Graham Bell", "Nikola Tesla", "Thomas Edison", "Benjamin Franklin"] },
+    { q: "Which American president was on Mount Rushmore?", a: "George Washington", options: ["George Washington", "Harry Truman", "Thomas Jefferson", "John Adams"] },
+    { q: "Which year did the Titanic sink?", a: "1912", options: ["1905", "1912", "1920", "1931"] },
+    { q: "Who was the first woman aviator?", a: "Amelia Earhart", options: ["Amelia Earhart", "Bessie Coleman", "Jackie Cochran", "Hedy Lamarr"] },
+    { q: "Which country hosted the first Olympics in ancient times?", a: "Greece", options: ["Greece", "Rome", "Egypt", "Persia"] },
+    { q: "Who was the king of England who had six wives?", a: "Henry VIII", options: ["Henry VIII", "Richard III", "Edward VI", "John"] },
+    { q: "Which document declared American independence?", a: "Declaration of Independence", options: ["Declaration of Independence", "Constitution", "Bill of Rights", "Magna Carta"] },
+    { q: "What year did the Berlin Wall fall?", a: "1989", options: ["1985", "1989", "1991", "1993"] },
+    { q: "Who was the first queen of a unified Egypt?", a: "Cleopatra", options: ["Hatshepsut", "Cleopatra", "Nefertiti", "Ankhesenamun"] },
+    { q: "Which explorer discovered the Americas for Europe?", a: "Christopher Columbus", options: ["Christopher Columbus", "John Cabot", "Leif Erikson", "Vasco Balboa"] },
+    { q: "Which famous inventor created many inventions including light bulb?", a: "Thomas Edison", options: ["Thomas Edison", "Nikola Tesla", "Alexander Graham Bell", "Benjamin Franklin"] },
+    { q: "Who was the first President of the United States?", a: "George Washington", options: ["George Washington", "Thomas Jefferson", "John Adams", "Benjamin Franklin"] },
+    { q: "Which war was fought between North and South USA?", a: "Civil War", options: ["Civil War", "Revolutionary War", "Spanish-American War", "World War I"] },
+    { q: "Who led India to independence?", a: "Mahatma Gandhi", options: ["Mahatma Gandhi", "Jawaharlal Nehru", "Subhash Chandra Bose", "Sardar Patel"] },
   ],
 
   // ---------------------------------------------------------
@@ -117,12 +127,22 @@ const historyQuestions = {
       options: ["Ancient Greece", "Rome", "Egypt", "China"],
     },
 
-    // 40 MEDIUM AUTO-GENERATED QUESTIONS
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `History Medium #${i + 11}: What document freed enslaved people in the U.S.?`,
-      a: "Emancipation Proclamation",
-      options: ["Emancipation Proclamation", "Bill of Rights", "13th Amendment", "Civil Rights Act"],
-    })),
+    // More variety: wars, treaties, revolutions
+    { q: "What document freed enslaved people in the U.S.?", a: "Emancipation Proclamation", options: ["Emancipation Proclamation", "Bill of Rights", "13th Amendment", "Civil Rights Act"] },
+    { q: "Which war lasted approximately 100 years?", a: "Hundred Years' War", options: ["Hundred Years' War", "Thirty Years' War", "Seven Years' War", "Crimean War"] },
+    { q: "Who was the first democratically elected leader of South Africa?", a: "Nelson Mandela", options: ["Nelson Mandela", "Desmond Tutu", "F.W. de Klerk", "Kofi Annan"] },
+    { q: "Which revolution occurred in 1917 in Russia?", a: "Bolshevik Revolution", options: ["Bolshevik Revolution", "French Revolution", "American Revolution", "Chinese Revolution"] },
+    { q: "Who led the Italian unification?", a: "Giuseppe Garibaldi", options: ["Giuseppe Garibaldi", "Benito Mussolini", "Victor Emmanuel", "Cavour"] },
+    { q: "Which Spanish conquistador conquered the Aztecs?", a: "Hernán Cortés", options: ["Hernán Cortés", "Francisco Pizarro", "Bartolomé de las Casas", "Juan Perón"] },
+    { q: "Who invented the printing press?", a: "Johannes Gutenberg", options: ["Johannes Gutenberg", "Nicolaus Copernicus", "Galileo Galilei", "Isaac Newton"] },
+    { q: "Which Scottish inventor revolutionized steam engines?", a: "James Watt", options: ["James Watt", "George Stephenson", "Richard Arkwright", "Samuel Morse"] },
+    { q: "Which American wrote the Declaration of Independence?", a: "Thomas Jefferson", options: ["Thomas Jefferson", "Benjamin Franklin", "John Adams", "George Washington"] },
+    { q: "Who was the first emperor of China?", a: "Qin Shi Huang", options: ["Qin Shi Huang", "Wu Zetian", "Han Wudi", "Sun Yat-sen"] },
+    { q: "What treaty ended World War I?", a: "Treaty of Versailles", options: ["Treaty of Versailles", "Treaty of Paris", "Munich Agreement", "Molotov-Ribbentrop Pact"] },
+    { q: "Which president ended slavery in the U.S.?", a: "Abraham Lincoln", options: ["Abraham Lincoln", "Andrew Johnson", "Ulysses Grant", "Rutherford Hayes"] },
+    { q: "What period followed the fall of Rome?", a: "Middle Ages", options: ["Middle Ages", "Renaissance", "Dark Ages only", "Classical period"] },
+    { q: "Which culture built the pyramids?", a: "Ancient Egyptians", options: ["Ancient Egyptians", "Romans", "Greeks", "Persians"] },
+    { q: "Who discovered penicillin?", a: "Alexander Fleming", options: ["Alexander Fleming", "Marie Curie", "Louis Pasteur", "Jonas Salk"] },
   ],
 
   // ---------------------------------------------------------
@@ -180,12 +200,22 @@ const historyQuestions = {
       options: ["Albert Einstein", "Isaac Newton", "Galileo", "Nikola Tesla"],
     },
 
-    // 40 HARD AUTO-GENERATED QUESTIONS
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `History Hard #${i + 11}: Which empire built Machu Picchu?`,
-      a: "Inca Empire",
-      options: ["Inca Empire", "Maya Empire", "Aztec Empire", "Olmec Civilization"],
-    })),
+    // More variety: empires, philosophers, dynasties
+    { q: "Which empire built Machu Picchu?", a: "Inca Empire", options: ["Inca Empire", "Maya Empire", "Aztec Empire", "Olmec Civilization"] },
+    { q: "Which philosopher wrote The Republic?", a: "Plato", options: ["Socrates", "Plato", "Aristotle", "Epicurus"] },
+    { q: "What was the longest-reigning Chinese dynasty?", a: "Zhou", options: ["Qin", "Han", "Song", "Zhou"] },
+    { q: "Which explorer sailed around the Cape of Good Hope?", a: "Vasco da Gama", options: ["Vasco da Gama", "Bartolomeu Dias", "Pedro Cabral", "Afonso de Albuquerque"] },
+    { q: "Who was the Arab military leader during the Crusades?", a: "Saladin", options: ["Saladin", "Nur ad-Din", "Qutuz", "Al-Kamil"] },
+    { q: "Which Roman Emperor moved the capital to Constantinople?", a: "Constantine I", options: ["Constantine I", "Diocletian", "Theodosius", "Hadrian"] },
+    { q: "What was the Renaissance movement's focus?", a: "Human potential and classical learning", options: ["Religious reform", "Human potential and classical learning", "Military conquest", "Trade expansion"] },
+    { q: "Which philosopher said 'I think, therefore I am'?", a: "René Descartes", options: ["René Descartes", "Immanuel Kant", "Friedrich Nietzsche", "Arthur Schopenhauer"] },
+    { q: "Which dynasty succeeded the Qin in China?", a: "Han", options: ["Zhou", "Song", "Han", "Tang"] },
+    { q: "Which ancient wonder is still standing?", a: "Great Pyramid of Giza", options: ["Great Pyramid of Giza", "Hanging Gardens", "Colossus of Rhodes", "Lighthouse of Alexandria"] },
+    { q: "What marked the end of feudalism?", a: "Renaissance and exploration", options: ["Renaissance and exploration", "Industrial Revolution", "Enlightenment", "Reformation"] },
+    { q: "Who discovered the New World for Europeans?", a: "Christopher Columbus", options: ["Christopher Columbus", "Amerigo Vespucci", "Leif Erikson", "John Cabot"] },
+    { q: "Which explorer led the first voyage around the world?", a: "Ferdinand Magellan", options: ["Ferdinand Magellan", "Vasco da Gama", "Columbus", "Drake"] },
+    { q: "What was the Holocaust?", a: "Nazi genocide of Jews", options: ["Nazi genocide of Jews", "War in Middle East", "Famine in Asia", "Disease outbreak"] },
+    { q: "Which country's empire was the largest?", a: "British Empire", options: ["Roman Empire", "Ottoman Empire", "British Empire", "Mongol Empire"] },
   ],
 };
 

@@ -54,12 +54,17 @@ const geographyQuestions = {
       options: ["Egypt", "China", "Mexico", "Peru"],
     },
 
-    // 40 easy filler questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Geography Easy #${i + 11}: Which continent is home to the Sahara Desert?`,
-      a: "Africa",
-      options: ["Africa", "Asia", "Europe", "Australia"],
-    })),
+    // More variety: capitals, continents, directions, landmarks
+    { q: "In which continent is Brazil?", a: "South America", options: ["South America", "Europe", "Asia", "Africa"] },
+    { q: "What is the capital of Italy?", a: "Rome", options: ["Rome", "Milan", "Venice", "Naples"] },
+    { q: "Which direction is opposite of East?", a: "West", options: ["West", "North", "South", "Up"] },
+    { q: "Which country has the Eiffel Tower?", a: "France", options: ["France", "Spain", "Germany", "UK"] },
+    { q: "Which is the smallest continent?", a: "Australia", options: ["Australia", "Europe", "Antarctica", "South America"] },
+    { q: "Which desert is the largest hot desert?", a: "Sahara", options: ["Sahara", "Gobi", "Kalahari", "Mojave"] },
+    { q: "What is the capital of Canada?", a: "Ottawa", options: ["Ottawa", "Toronto", "Vancouver", "Montreal"] },
+    { q: "Which ocean borders India?", a: "Indian Ocean", options: ["Indian Ocean", "Atlantic Ocean", "Pacific Ocean", "Arctic Ocean"] },
+    { q: "Mount Fuji is in which country?", a: "Japan", options: ["Japan", "China", "Korea", "Thailand"] },
+    { q: "Which continent is Egypt in?", a: "Africa", options: ["Africa", "Europe", "Asia", "Oceania"] },
   ],
 
   // ---------------------------------------------------------
@@ -117,12 +122,17 @@ const geographyQuestions = {
       options: ["Arctic Ocean", "Indian Ocean", "Atlantic Ocean", "Pacific Ocean"],
     },
 
-    // 40 medium filler questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Geography Medium #${i + 11}: Which continent is known as 'The Island Continent'?`,
-      a: "Australia",
-      options: ["Australia", "Africa", "Europe", "Asia"],
-    })),
+    // More variety: population, capitals, rivers, climate, regions
+    { q: "What is the capital of Australia?", a: "Canberra", options: ["Canberra", "Sydney", "Melbourne", "Perth"] },
+    { q: "Which river runs through Egypt?", a: "Nile", options: ["Nile", "Tigris", "Euphrates", "Indus"] },
+    { q: "Which climate is hot and wet all year?", a: "Tropical", options: ["Tropical", "Polar", "Temperate", "Desert"] },
+    { q: "Which sea separates Europe and Africa?", a: "Mediterranean", options: ["Mediterranean", "Black Sea", "Red Sea", "Baltic Sea"] },
+    { q: "What is the capital of Kenya?", a: "Nairobi", options: ["Nairobi", "Mombasa", "Kampala", "Addis Ababa"] },
+    { q: "Which U.S. river is the longest?", a: "Missouri", options: ["Missouri", "Mississippi", "Colorado", "Columbia"] },
+    { q: "Which continent is called 'The Island Continent'?", a: "Australia", options: ["Australia", "Africa", "Asia", "Europe"] },
+    { q: "Which country is both in Europe and Asia?", a: "Turkey", options: ["Turkey", "Greece", "Spain", "Italy"] },
+    { q: "What is the capital of India?", a: "New Delhi", options: ["New Delhi", "Mumbai", "Kolkata", "Chennai"] },
+    { q: "Which country is landlocked?", a: "Nepal", options: ["Nepal", "Vietnam", "Bangladesh", "Myanmar"] },
   ],
 
   // ---------------------------------------------------------
@@ -180,12 +190,17 @@ const geographyQuestions = {
       options: ["Gulf Stream", "Canary Current", "Humboldt Current", "Kuroshio Current"],
     },
 
-    // 40 hard filler questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Geography Hard #${i + 11}: Which process shapes mountains?`,
-      a: "Tectonic activity",
-      options: ["Tectonic activity", "Erosion", "Evaporation", "Sedimentation"],
-    })),
+    // More variety: currents, biomes, geopolitics, coordinates, landforms
+    { q: "Which biome has permafrost?", a: "Tundra", options: ["Tundra", "Savanna", "Desert", "Rainforest"] },
+    { q: "Which canal connects the Med and Red Sea?", a: "Suez Canal", options: ["Suez Canal", "Panama Canal", "Kiel Canal", "Corinth Canal"] },
+    { q: "Which line is at 0° latitude?", a: "Equator", options: ["Equator", "Prime Meridian", "Tropic of Cancer", "Arctic Circle"] },
+    { q: "Which country has two capitals?", a: "Bolivia", options: ["Bolivia", "Peru", "Chile", "Ecuador"] },
+    { q: "Loess is a type of?", a: "Silt", options: ["Silt", "Basalt", "Granite", "Limestone"] },
+    { q: "Which current cools Peru's coast?", a: "Humboldt Current", options: ["Humboldt Current", "Gulf Stream", "Kuroshio", "Canary Current"] },
+    { q: "Which country encloses Lesotho?", a: "South Africa", options: ["South Africa", "Botswana", "Namibia", "Zimbabwe"] },
+    { q: "What do isohyets connect?", a: "Equal rainfall", options: ["Equal rainfall", "Equal temperature", "Equal pressure", "Equal altitude"] },
+    { q: "Which delta is at the Ganges?", a: "Sundarbans", options: ["Sundarbans", "Okavango", "Nile Delta", "Mekong Delta"] },
+    { q: "Which lake lies on the US-Canada border?", a: "Lake Superior", options: ["Lake Superior", "Lake Tahoe", "Great Salt Lake", "Lake Winnipeg"] },
   ],
 };
 

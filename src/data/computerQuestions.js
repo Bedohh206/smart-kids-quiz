@@ -59,12 +59,22 @@ const computerQuestions = {
       options: ["Programs", "Food", "Water", "Plants"],
     },
 
-    // 40 easy fillers
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Computer Easy #${i + 11}: Which device is an input device?`,
-      a: "Mouse",
-      options: ["Mouse", "Printer", "Speaker", "Monitor"],
-    })),
+    // More variety: hardware, software, internet
+    { q: "What does USB stand for?", a: "Universal Serial Bus", options: ["Universal Serial Bus", "Ultra Speed Bandwidth", "Universal System Board", "User Service Button"] },
+    { q: "What is a desktop computer?", a: "Computer designed for a desk", options: ["Computer designed for a desk", "Portable computer", "Server computer", "Mainframe"] },
+    { q: "What is a password used for?", a: "Protecting your account", options: ["Protecting your account", "Speeding up computer", "Storing files", "Playing games"] },
+    { q: "What does Wi-Fi stand for?", a: "Wireless Fidelity", options: ["Wireless Fidelity", "Wide Frequency Internet", "Wireless Facility", "Web Interface"] },
+    { q: "What is the purpose of an antivirus?", a: "Protect against malware", options: ["Protect against malware", "Speed up computer", "Store files", "Display images"] },
+    { q: "What is a smartphone?", a: "Portable computing device", options: ["Portable computing device", "Desktop computer", "Printer", "Router"] },
+    { q: "What does an app do?", a: "Performs specific tasks", options: ["Performs specific tasks", "Stores files", "Connects to internet", "Controls hardware"] },
+    { q: "What is cloud storage?", a: "Data stored on remote servers", options: ["Data stored on remote servers", "Data on hard drive", "Data on USB", "Data on CD"] },
+    { q: "What is the internet?", a: "Global network of computers", options: ["Global network of computers", "One computer", "Single program", "Local network"] },
+    { q: "What is a browser?", a: "Software to view websites", options: ["Software to view websites", "Computer hardware", "Email program", "Chat app"] },
+    { q: "What does HDD stand for?", a: "Hard Disk Drive", options: ["Hard Disk Drive", "High Definition Display", "Heavy Data Download", "High Density Device"] },
+    { q: "What is an IP address?", a: "Digital address for devices", options: ["Digital address for devices", "Internet password", "File type", "Username"] },
+    { q: "What does HTTPS mean?", a: "Secure web protocol", options: ["Secure web protocol", "High Transfer Speed", "Hypertext Transfer", "Secure Server"] },
+    { q: "What is a file extension?", a: "Letters after dot in filename", options: ["Letters after dot in filename", "Computer name", "Internet address", "Password"] },
+    { q: "What is a folder on a computer?", a: "Directory for organizing files", options: ["Directory for organizing files", "Piece of hardware", "Software program", "Internet location"] },
   ],
 
   // ---------------------------------------------------------
@@ -137,12 +147,22 @@ const computerQuestions = {
       ],
     },
 
-    // 40 medium fillers
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Computer Medium #${i + 11}: Which of these is a storage device?`,
-      a: "SSD",
-      options: ["SSD", "Monitor", "Mouse", "Keyboard"],
-    })),
+    // More variety: programming, networks, cybersecurity
+    { q: "What is HTML used for?", a: "Creating web pages", options: ["Creating web pages", "Creating images", "Creating videos", "Creating music"] },
+    { q: "What is a firewall?", a: "Security barrier for networks", options: ["Security barrier for networks", "Physical wall", "Computer case", "Monitor stand"] },
+    { q: "What does SSH stand for?", a: "Secure Shell", options: ["Secure Shell", "Super System Host", "Secure Server Host", "Simple Shell System"] },
+    { q: "What is a bug in programming?", a: "An error in code", options: ["An error in code", "An insect", "A virus", "A feature"] },
+    { q: "What is bandwidth?", a: "Amount of data transmitted", options: ["Amount of data transmitted", "Computer speed", "RAM capacity", "CPU cores"] },
+    { q: "What is JavaScript used for?", a: "Adding interactivity to websites", options: ["Adding interactivity to websites", "Creating graphics", "Sending emails", "Playing games only"] },
+    { q: "What is an API?", a: "Interface for software interaction", options: ["Interface for software interaction", "A computer program", "A storage device", "A network protocol"] },
+    { q: "What is CSS used for?", a: "Styling web pages", options: ["Styling web pages", "Creating databases", "Writing logic", "Managing servers"] },
+    { q: "What is encryption?", a: "Converting data to secret code", options: ["Converting data to secret code", "Hiding files", "Deleting files", "Copying files"] },
+    { q: "What is a database?", a: "Organized data storage", options: ["Organized data storage", "Folder system", "Website", "Email account"] },
+    { q: "What is a domain name?", a: "Website address", options: ["Website address", "Email address", "Computer name", "Server name"] },
+    { q: "What is a server?", a: "Computer serving data to clients", options: ["Computer serving data to clients", "Storage device", "Office computer", "Personal device"] },
+    { q: "What is open-source software?", a: "Code freely available for use", options: ["Code freely available for use", "Free antivirus", "Paid software", "Pirated software"] },
+    { q: "What is a backup?", a: "Copy of important data", options: ["Copy of important data", "Old computer", "Deleted files", "Cache data"] },
+    { q: "What is a proxy?", a: "Intermediate server for requests", options: ["Intermediate server for requests", "Type of malware", "Internet browser", "Storage device"] },
   ],
 
   // ---------------------------------------------------------
@@ -235,12 +255,22 @@ const computerQuestions = {
       ],
     },
 
-    // 40 hard fillers
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Computer Hard #${i + 11}: What type of cybersecurity attack steals user data?`,
-      a: "Phishing",
-      options: ["Phishing", "Debugging", "Updating", "Formatting"],
-    })),
+    // More variety: advanced concepts, security, architecture
+    { q: "What is machine learning?", a: "AI learning from data", options: ["AI learning from data", "Teaching machines", "Computer memory", "Storage system"] },
+    { q: "What is the purpose of blockchain?", a: "Secure distributed ledger", options: ["Secure distributed ledger", "Increase internet speed", "Store images", "Run websites"] },
+    { q: "What does cryptography protect?", a: "Information confidentiality", options: ["Information confidentiality", "Computer speed", "Device temperature", "Power usage"] },
+    { q: "What is a DDoS attack?", a: "Overwhelming server with requests", options: ["Overwhelming server with requests", "Stealing passwords", "Removing files", "Shutting down internet"] },
+    { q: "What is an object in OOP?", a: "Instance of a class", options: ["Instance of a class", "A function", "A variable", "A loop"] },
+    { q: "What is recursion in programming?", a: "Function calling itself", options: ["Function calling itself", "Loop that repeats", "Storing data", "Defining classes"] },
+    { q: "What does REST API stand for?", a: "Representational State Transfer", options: ["Representational State Transfer", "Remote Server Technology", "Rapid Exchange System", "Resource Server Tool"] },
+    { q: "What is containerization used for?", a: "Packaging applications", options: ["Packaging applications", "Storing data", "Sending emails", "Viewing images"] },
+    { q: "What is a microservice?", a: "Small, independent service", options: ["Small, independent service", "Large application", "Single program", "System backup"] },
+    { q: "What is version control?", a: "Tracking code changes", options: ["Tracking code changes", "Installing software", "Running programs", "Creating backups"] },
+    { q: "What is a framework?", a: "Pre-built code structure", options: ["Pre-built code structure", "Single library", "Operating system", "Hardware component"] },
+    { q: "What is a library in programming?", a: "Collection of reusable code", options: ["Collection of reusable code", "Single function", "Operating system", "Application"] },
+    { q: "What is an algorithm?", a: "Step-by-step procedure", options: ["Step-by-step procedure", "Computer hardware", "Software license", "Network protocol"] },
+    { q: "What is artificial intelligence?", a: "Machine simulating human intelligence", options: ["Machine simulating human intelligence", "Advanced calculator", "Robotics only", "Computer science"] },
+    { q: "What is quantum computing?", a: "Computing using quantum bits", options: ["Computing using quantum bits", "Very fast PC", "Parallel processing", "Cloud computing"] },
   ],
 };
 

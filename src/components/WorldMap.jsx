@@ -25,6 +25,8 @@ import computerIcon from "../assets/computer/computer.png";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import MiniGamesLauncher from "./MiniGamesLauncher";
+import LeaderboardPanel, { loadLeaderboard, saveLeaderboard } from "./LeaderboardPanel";
 
 import "./WorldMap.css";
 
@@ -37,6 +39,9 @@ export default function WorldMap() {
   const navigate = useNavigate();
   const [muted, setMuted] = useState(false);
   const musicRef = useRef(null);
+  const leaderboardRef = useRef(null);
+  const [leaderboard, setLeaderboard] = useState(() => loadLeaderboard("leaderboard:scramble"));
+  const [showMiniGames, setShowMiniGames] = useState(false);
 
   /* 🎵 MUSIC INIT */
   useEffect(() => {
@@ -65,6 +70,12 @@ export default function WorldMap() {
     snd.play().catch(() => {});
   };
 
+  const scrollToLeaderboard = () => {
+    if (leaderboardRef.current) {
+      leaderboardRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   const goToQuiz = (id) => {
     playClick();
     navigate(`/quiz/${id}`);
@@ -82,12 +93,22 @@ export default function WorldMap() {
     setUnlocked(saved);
   }, []);
 
+  // Refresh leaderboard on load
+  useEffect(() => {
+    setLeaderboard(loadLeaderboard("leaderboard:scramble"));
+  }, []);
+
   const handleContinentClick = (id) => {
     if (!unlocked.includes(id)) {
       alert("❌ This continent is locked. Complete the earlier continent to unlock it!");
       return;
     }
     goToQuiz(id);
+  };
+
+  const clearLeaderboard = () => {
+    saveLeaderboard("leaderboard:scramble", []);
+    setLeaderboard([]);
   };
 
   /* 🌍 CONTINENTS WITH X/Y POSITIONS */
@@ -167,6 +188,10 @@ export default function WorldMap() {
         <button className="music-btn" onClick={toggleMusic}>
           {muted ? "🔇 Music Off" : "🎵 Music On"}
         </button>
+        <div className="hero-actions">
+          <button className="hero-link" onClick={scrollToLeaderboard}>🏆 Leaderboard</button>
+          <button className="hero-link" onClick={() => setShowMiniGames(true)}>🎮 Mini-Games</button>
+        </div>
       </header>
 
       {/* TWO-COLUMN LAYOUT */}
@@ -226,6 +251,26 @@ export default function WorldMap() {
             </div>
           </div>
 
+          <div className="subjects-box">
+            <h2>🏆 Leaderboard</h2>
+            <LeaderboardPanel
+              title="Word Scramble"
+              entries={leaderboard}
+              onClear={clearLeaderboard}
+              ref={leaderboardRef}
+            />
+          </div>
+
+          <div className="subjects-box">
+            <h2>🎮 Mini-Games</h2>
+            <div className="mini-menu-buttons">
+              <button onClick={() => setShowMiniGames(!showMiniGames)}>
+                {showMiniGames ? "Close Mini-Games" : "Open Mini-Games"}
+              </button>
+            </div>
+            {showMiniGames && <MiniGamesLauncher />}
+          </div>
+
           <div className="ai-box">
             <h2>🤖 AI Tutor</h2>
             <ul className="ai-list">
@@ -238,6 +283,15 @@ export default function WorldMap() {
           </div>
         </section>
       </div>
+
+      {/* Mobile floating mini-games shortcut */}
+      <button
+        className="mini-fab"
+        onClick={() => setShowMiniGames((v) => !v)}
+        aria-label="Open Mini-Games"
+      >
+        🎮
+      </button>
     </div>
   );
 }

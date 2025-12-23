@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function QuizMenu({ continent, onSelectSubject, onBack }) {
+export default function QuizMenu({ continent, onSelectSubject, onBack, onPlayground }) {
   const [aiQuestion, setAiQuestion] = useState(null);
   const [aiExplanation, setAiExplanation] = useState(null);
 
@@ -134,6 +134,21 @@ export default function QuizMenu({ continent, onSelectSubject, onBack }) {
             Start {sub}
           </button>
         ))}
+        <button
+          onClick={onPlayground}
+          style={{
+            margin: "5px",
+            padding: "10px 20px",
+            borderRadius: "8px",
+            background: "#ab47bc",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
+        >
+          🎲 Word Scramble
+        </button>
         <button
           onClick={onBack}
           style={{

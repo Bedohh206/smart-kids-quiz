@@ -28,6 +28,8 @@ import {
 // Mascot
 import mascotImg from "../assets/smartquiz/smartquiz.png";
 import Spinner from "./Spinner";
+import Achievements from "./Achievements";
+import WordScramble from "./WordScramble";
 
 // 🌍 Order used for adventure unlocking
 const CONTINENT_ORDER = [
@@ -106,6 +108,7 @@ export default function QuizPage() {
   const [showResult, setShowResult] = useState(false);
 
   const [lessonMode, setLessonMode] = useState(false);
+  const [playgroundMode, setPlaygroundMode] = useState(false);
   const [lessonSteps, setLessonSteps] = useState([]);
   const [lessonIndex, setLessonIndex] = useState(0);
   const [lessonApiMode, setLessonApiMode] = useState("auto");
@@ -119,10 +122,80 @@ export default function QuizPage() {
 
   const [showConfetti, setShowConfetti] = useState(false);
 
+  // Gamification
+  const [streak, setStreak] = useState(0);
+  const [maxStreak, setMaxStreak] = useState(0);
+  const [stars, setStars] = useState(0);
+  const [feedbackAnimation, setFeedbackAnimation] = useState("");
+  const [newBadges, setNewBadges] = useState([]);
+
   // Translation
   const [language, setLanguage] = useState("en");
   const [translatedQuestion, setTranslatedQuestion] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
+
+  // Sound effects
+  const [soundEnabled, setSoundEnabled] = useState(true);
+
+  // Avoid repeats across sessions
+  const loadAvoidRepeats = () => {
+    try {
+      const v = localStorage.getItem('avoidRepeats');
+      return v ? JSON.parse(v) : false;
+    } catch { return false; }
+  };
+  const [avoidRepeats, setAvoidRepeats] = useState(loadAvoidRepeats());
+
+  const seenStorageKey = (subject, level, age) => `seenQuestions:${subject}:${level}:${age}`;
+  const loadSeenSet = (subject, level, age) => {
+    try {
+      const raw = localStorage.getItem(seenStorageKey(subject, level, age));
+      const arr = raw ? JSON.parse(raw) : [];
+      return new Set(arr);
+    } catch { return new Set(); }
+  };
+  const saveSeenSet = (subject, level, age, set) => {
+    try {
+      localStorage.setItem(seenStorageKey(subject, level, age), JSON.stringify(Array.from(set)));
+    } catch {}
+  };
+
+  // Load stats from localStorage
+  const loadStats = () => {
+    try {
+      const saved = localStorage.getItem('quizStats');
+      return saved ? JSON.parse(saved) : {
+        totalCorrect: 0,
+        quizzesCompleted: 0,
+        maxStreak: 0,
+        perfectQuizzes: 0,
+      };
+    } catch { return { totalCorrect: 0, quizzesCompleted: 0, maxStreak: 0, perfectQuizzes: 0 }; }
+  };
+
+  const [stats, setStats] = useState(loadStats());
+
+  // Save stats
+  const saveStats = (newStats) => {
+    try {
+      localStorage.setItem('quizStats', JSON.stringify(newStats));
+      setStats(newStats);
+    } catch { /* ignore */ }
+  };
+
+  const playSound = (type) => {
+    if (!soundEnabled) return;
+    try {
+      const sounds = {
+        correct: '/sounds/click.wav',
+        wrong: '/sounds/click.wav',
+        complete: '/sounds/backgroundMusic.wav'
+      };
+      const audio = new Audio(sounds[type] || sounds.correct);
+      audio.volume = type === 'complete' ? 0.3 : 0.5;
+      audio.play().catch(() => {});
+    } catch { /* ignore */ }
+  };
 
   /* ---------------------------------------------------------
      VOICE RECOGNITION
@@ -177,7 +250,7 @@ export default function QuizPage() {
     const translate = async () => {
       setIsTranslating(true);
       try {
-        const response = await fetch("http://localhost:5000/api/translate", {
+        const response = await fetch("/api/translate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -213,7 +286,48 @@ export default function QuizPage() {
     }
 
     const filtered = base.filter((q) => !q.age || q.age === ageGroup);
-    setQuestions(filtered);
+
+    const cleanPrefix = (s) =>
+      String(s)
+        .replace(/^[A-Za-z\s-]*(?:Easy|Medium|Hard)?\s*#\d+:\s*/i, "")
+        .trim()
+        .toLowerCase();
+    const shuffleArr = (arr) => [...arr].sort(() => Math.random() - 0.5);
+
+    const transform = (arr) => {
+      const seen = new Set();
+      const unique = [];
+      const sessionSeen = avoidRepeats ? loadSeenSet(finalKey, selectedLevel, ageGroup) : new Set();
+      for (const item of arr) {
+        const key = cleanPrefix(item.q);
+        if (!seen.has(key) && (!avoidRepeats || !sessionSeen.has(key))) {
+          seen.add(key);
+          const opts = Array.isArray(item.options) ? [...item.options] : [];
+          if (!opts.includes(item.a)) opts.unshift(item.a);
+          const uniqOpts = Array.from(new Set(opts));
+          const shuffledOpts = shuffleArr(uniqOpts);
+          unique.push({ ...item, options: shuffledOpts });
+        }
+      }
+      // If filtering removed too many, allow fallback by ignoring repeats to ensure we have content
+      if (unique.length < 10 && avoidRepeats) {
+        for (const item of arr) {
+          const key = cleanPrefix(item.q);
+          if (!seen.has(key)) {
+            seen.add(key);
+            const opts = Array.isArray(item.options) ? [...item.options] : [];
+            if (!opts.includes(item.a)) opts.unshift(item.a);
+            const uniqOpts = Array.from(new Set(opts));
+            const shuffledOpts = shuffleArr(uniqOpts);
+            unique.push({ ...item, options: shuffledOpts });
+          }
+          if (unique.length >= 10) break;
+        }
+      }
+      return shuffleArr(unique);
+    };
+
+    setQuestions(transform(filtered));
     setCurrent(0);
     setSelected("");
     setShowResult(false);
@@ -309,19 +423,67 @@ export default function QuizPage() {
     if (!q) return;
 
     setSelected(option);
+    const isCorrect = option === q.a;
 
-    if (option === q.a) {
+    // Mark question as seen for no-repeats mode
+    try {
+      const keyNorm = String(q.q).replace(/^[A-Za-z\s-]*(?:Easy|Medium|Hard)?\s*#\d+:\s*/i, "").trim().toLowerCase();
+      const setSeen = loadSeenSet(finalKey, selectedLevel, ageGroup);
+      setSeen.add(keyNorm);
+      saveSeenSet(finalKey, selectedLevel, ageGroup, setSeen);
+    } catch {}
+
+    if (isCorrect) {
       setScore((s) => s + 1);
-      setMascotMessage("Correct! You are amazing! 🎉");
+      const newStreak = streak + 1;
+      setStreak(newStreak);
+      if (newStreak > maxStreak) setMaxStreak(newStreak);
+      
+      playSound('correct');
+      setFeedbackAnimation('correct-pulse');
+      
+      const messages = [
+        "Correct! You are amazing! 🎉",
+        "Brilliant! Keep it up! ⭐",
+        "Perfect! You're on fire! 🔥",
+        "Awesome work! 💪",
+        "Excellent! You're a star! 🌟"
+      ];
+      setMascotMessage(messages[Math.floor(Math.random() * messages.length)]);
+      
+      // Update stats
+      const newStats = { ...stats, totalCorrect: stats.totalCorrect + 1 };
+      if (newStreak > stats.maxStreak) newStats.maxStreak = newStreak;
+      saveStats(newStats);
     } else {
+      setStreak(0);
+      playSound('wrong');
+      setFeedbackAnimation('wrong-shake');
       setMascotMessage("Oops, try again! 😊");
     }
 
     setTimeout(() => {
+      setFeedbackAnimation("");
       if (current + 1 < questions.length) {
         setCurrent((c) => c + 1);
         setSelected("");
       } else {
+        const finalScore = isCorrect ? score + 1 : score;
+        const percentage = (finalScore / questions.length) * 100;
+        const earnedStars = percentage >= 90 ? 3 : percentage >= 70 ? 2 : percentage >= 50 ? 1 : 0;
+        setStars(earnedStars);
+        
+        const isPerfect = finalScore === questions.length;
+        const updatedStats = {
+          ...stats,
+          totalCorrect: stats.totalCorrect + (isCorrect ? 1 : 0),
+          quizzesCompleted: stats.quizzesCompleted + 1,
+          perfectQuizzes: stats.perfectQuizzes + (isPerfect ? 1 : 0),
+          maxStreak: Math.max(stats.maxStreak, maxStreak)
+        };
+        saveStats(updatedStats);
+        
+        playSound('complete');
         setShowConfetti(true);
         setShowResult(true);
       }
@@ -357,7 +519,7 @@ export default function QuizPage() {
     const q = questions[current];
     if (!q) return;
 
-    const response = await fetch("http://localhost:5000/api/explain", {
+    const response = await fetch("/api/explain", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -376,7 +538,7 @@ export default function QuizPage() {
   --------------------------------------------------------- */
   const fetchAIQuestions = async () => {
     const response = await fetch(
-      "http://localhost:5000/api/generate-question",
+      "/api/generate-question",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -390,7 +552,40 @@ export default function QuizPage() {
 
     const data = await response.json();
     if (data.questions) {
-      setQuestions(data.questions);
+      const shuffleArr = (arr) => [...arr].sort(() => Math.random() - 0.5);
+      const transform = (arr) => {
+        const seen = new Set();
+        const unique = [];
+        const clean = (s) => String(s).trim().toLowerCase();
+        const sessionSeen = avoidRepeats ? loadSeenSet(finalKey, selectedLevel, ageGroup) : new Set();
+        for (const item of arr) {
+          const key = clean(item.q);
+          if (!seen.has(key) && (!avoidRepeats || !sessionSeen.has(key))) {
+            seen.add(key);
+            const opts = Array.isArray(item.options) ? [...item.options] : [];
+            if (!opts.includes(item.a)) opts.unshift(item.a);
+            const uniqOpts = Array.from(new Set(opts));
+            const shuffledOpts = shuffleArr(uniqOpts);
+            unique.push({ ...item, options: shuffledOpts });
+          }
+        }
+        if (unique.length < 10 && avoidRepeats) {
+          for (const item of arr) {
+            const key = clean(item.q);
+            if (!seen.has(key)) {
+              seen.add(key);
+              const opts = Array.isArray(item.options) ? [...item.options] : [];
+              if (!opts.includes(item.a)) opts.unshift(item.a);
+              const uniqOpts = Array.from(new Set(opts));
+              const shuffledOpts = shuffleArr(uniqOpts);
+              unique.push({ ...item, options: shuffledOpts });
+            }
+            if (unique.length >= 10) break;
+          }
+        }
+        return shuffleArr(unique);
+      };
+      setQuestions(transform(data.questions));
       setCurrent(0);
       setSelected("");
       setShowResult(false);
@@ -408,7 +603,7 @@ export default function QuizPage() {
 
     try {
       // Fetch lesson steps first (AI or static per mode)
-      const lessonResp = await fetch("http://localhost:5000/api/lesson", {
+      const lessonResp = await fetch("/api/lesson", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -430,7 +625,44 @@ export default function QuizPage() {
         const filtered = Array.isArray(base)
           ? base.filter((q) => !q.age || q.age === ageGroup)
           : [];
-        setQuestions(filtered);
+        const cleanPrefix = (s) =>
+          String(s)
+            .replace(/^[A-Za-z\s-]*(?:Easy|Medium|Hard)?\s*#\d+:\s*/i, "")
+            .trim()
+            .toLowerCase();
+        const shuffleArr = (arr) => [...arr].sort(() => Math.random() - 0.5);
+        const transform = (arr) => {
+          const seen = new Set();
+          const unique = [];
+          const sessionSeen = avoidRepeats ? loadSeenSet(finalKey, selectedLevel, ageGroup) : new Set();
+          for (const item of arr) {
+            const key = cleanPrefix(item.q);
+            if (!seen.has(key) && (!avoidRepeats || !sessionSeen.has(key))) {
+              seen.add(key);
+              const opts = Array.isArray(item.options) ? [...item.options] : [];
+              if (!opts.includes(item.a)) opts.unshift(item.a);
+              const uniqOpts = Array.from(new Set(opts));
+              const shuffledOpts = shuffleArr(uniqOpts);
+              unique.push({ ...item, options: shuffledOpts });
+            }
+          }
+          if (unique.length < 10 && avoidRepeats) {
+            for (const item of arr) {
+              const key = cleanPrefix(item.q);
+              if (!seen.has(key)) {
+                seen.add(key);
+                const opts = Array.isArray(item.options) ? [...item.options] : [];
+                if (!opts.includes(item.a)) opts.unshift(item.a);
+                const uniqOpts = Array.from(new Set(opts));
+                const shuffledOpts = shuffleArr(uniqOpts);
+                unique.push({ ...item, options: shuffledOpts });
+              }
+              if (unique.length >= 10) break;
+            }
+          }
+          return shuffleArr(unique);
+        };
+        setQuestions(transform(filtered));
         setCurrent(0);
         setSelected("");
         setShowResult(false);
@@ -479,6 +711,22 @@ export default function QuizPage() {
     { code: "ja", label: "Japanese" },
     { code: "ko", label: "Korean" },
   ];
+
+  /* ---------------------------------------------------------
+     SCREEN 1.5 — PLAYGROUND MODE
+  --------------------------------------------------------- */
+  if (playgroundMode) {
+    return (
+      <WordScramble 
+        onBack={() => setPlaygroundMode(false)}
+        onAchievement={(title, description) => {
+          setNewBadges([...newBadges, { title, description }]);
+          setTimeout(() => setNewBadges([]), 4000);
+        }}
+        language={language}
+      />
+    );
+  }
 
   /* ---------------------------------------------------------
      SCREEN 1 — AGE GROUP
@@ -547,12 +795,62 @@ export default function QuizPage() {
           </select>
         </div>
 
+        <div style={{ marginTop: 12 }}>
+          <label style={{ marginRight: 8 }}>
+            <input
+              type="checkbox"
+              checked={avoidRepeats}
+              onChange={(e) => {
+                const v = e.target.checked;
+                setAvoidRepeats(v);
+                try { localStorage.setItem('avoidRepeats', JSON.stringify(v)); } catch {}
+              }}
+            />{" "}
+            Avoid repeats across sessions
+          </label>
+          <button
+            style={{ marginLeft: 12 }}
+            onClick={() => {
+              try {
+                // Clear only for current subject
+                const keys = Object.keys(localStorage);
+                const prefix = `seenQuestions:${finalKey}:`;
+                keys.forEach((k) => { if (k.startsWith(prefix)) localStorage.removeItem(k); });
+                setMascotMessage("Seen questions reset for this subject! 🔄");
+              } catch {}
+            }}
+          >
+            Reset seen (subject)
+          </button>
+          <button
+            style={{ marginLeft: 8 }}
+            onClick={() => {
+              try {
+                // Clear ALL seen questions for all subjects
+                const keys = Object.keys(localStorage);
+                keys.forEach((k) => { if (k.startsWith('seenQuestions:')) localStorage.removeItem(k); });
+                setMascotMessage("All seen questions cleared globally! 🌍");
+              } catch {}
+            }}
+          >
+            Reset all seen (global)
+          </button>
+        </div>
+
         <button
           className="ai-btn"
           onClick={() => startLessonMode(lessonApiMode)}
           style={{ marginTop: 12 }}
         >
           📘 Start Lesson
+        </button>
+
+        <button
+          className="ai-btn"
+          onClick={() => setPlaygroundMode(true)}
+          style={{ marginTop: 12, background: "#ab47bc" }}
+        >
+          🎲 Word Scramble Playground
         </button>
 
         <button className="back-btn" onClick={goHome}>
@@ -651,14 +949,27 @@ export default function QuizPage() {
      SCREEN 5 — RESULTS
   --------------------------------------------------------- */
   if (showResult) {
+    const percentage = (score / questions.length) * 100;
+    const starDisplay = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+    
     return (
       <div className="quiz-page">
         {showConfetti && <Confetti />}
 
         <h2>🎉 Quiz Complete!</h2>
-        <p>
+        <div className="stars-display">{starDisplay}</div>
+        <p className="score-display">
           Score: <strong>{score}</strong> / {questions.length}
+          <span className="percentage"> ({percentage.toFixed(0)}%)</span>
         </p>
+        
+        {maxStreak >= 3 && (
+          <p className="streak-badge">
+            🔥 Best Streak: {maxStreak}
+          </p>
+        )}
+        
+        <Achievements stats={stats} newBadges={newBadges} />
 
         <button className="ai-btn" onClick={fetchAIQuestions}>
           ✨ Try AI Questions
@@ -682,7 +993,7 @@ export default function QuizPage() {
   const q = translatedQuestion || questions[current];
 
   return (
-    <div className={`quiz-page ${language === "ar" ? "rtl" : ""}`}>
+    <div className={`quiz-page ${language === "ar" ? "rtl" : ""} ${feedbackAnimation}`}>
       <select
         className="lang-select"
         value={language}
@@ -694,6 +1005,14 @@ export default function QuizPage() {
           </option>
         ))}
       </select>
+      
+      <button 
+        className="sound-toggle"
+        onClick={() => setSoundEnabled(!soundEnabled)}
+        title={soundEnabled ? "Sound On" : "Sound Off"}
+      >
+        {soundEnabled ? "🔊" : "🔇"}
+      </button>
 
       <h2>
         {(continent || "").toUpperCase()} — Level{" "}
@@ -703,6 +1022,12 @@ export default function QuizPage() {
         Question {current + 1} / {questions.length}
         {isTranslating && " • Translating…"}
       </p>
+      
+      {streak >= 2 && (
+        <div className="streak-indicator">
+          🔥 Streak: {streak}
+        </div>
+      )}
 
       <div className="quiz-page-inner">
         <h3>{q.q}</h3>

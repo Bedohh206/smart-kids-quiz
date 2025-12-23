@@ -54,12 +54,22 @@ const biologyQuestions = {
       options: ["Water", "Sand", "Plastic", "Smoke"],
     },
 
-    // 40 easy filler questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Biology Easy #${i + 11}: What is a baby frog called?`,
-      a: "Tadpole",
-      options: ["Tadpole", "Cub", "Chick", "Puppy"],
-    })),
+    // More variety: life cycles, habitats, organisms
+    { q: "What is a baby frog called?", a: "Tadpole", options: ["Tadpole", "Cub", "Chick", "Puppy"] },
+    { q: "What do carnivores eat?", a: "Meat", options: ["Meat", "Plants", "Both", "Insects"] },
+    { q: "Which animal can live both in water and land?", a: "Amphibian", options: ["Fish", "Amphibian", "Mammal", "Bird"] },
+    { q: "What do herbivores eat?", a: "Plants", options: ["Meat", "Plants", "Insects", "Seeds only"] },
+    { q: "How many legs does an ant have?", a: "6", options: ["4", "6", "8", "10"] },
+    { q: "What covers a bird's body?", a: "Feathers", options: ["Fur", "Scales", "Feathers", "Skin"] },
+    { q: "What do fish use to move in water?", a: "Fins", options: ["Fins", "Legs", "Flippers", "Tails only"] },
+    { q: "What is a baby dog called?", a: "Puppy", options: ["Puppy", "Pup", "Kitten", "Cub"] },
+    { q: "Which animal hibernates in winter?", a: "Bear", options: ["Squirrel", "Bear", "Deer", "Wolf"] },
+    { q: "What do decomposers break down?", a: "Dead organisms", options: ["Living animals", "Dead organisms", "Plants only", "Rocks"] },
+    { q: "What is a food chain?", a: "Transfer of energy through organisms", options: ["Transfer of energy through organisms", "Group of animals", "Plant growth", "Hunting pattern"] },
+    { q: "How many chambers does a heart have?", a: "4", options: ["2", "3", "4", "5"] },
+    { q: "What is photosynthesis?", a: "Plants making food from sunlight", options: ["Plants making food from sunlight", "Animals eating plants", "Breaking down food", "Storing energy"] },
+    { q: "What do plants need to grow?", a: "Water, sunlight, soil", options: ["Water, sunlight, soil", "Just water", "Just sunlight", "Just soil"] },
+    { q: "What is animal behavior called?", a: "Ethology", options: ["Ethology", "Ecology", "Biology", "Zoology"] },
   ],
 
   // ---------------------------------------------------------
@@ -132,12 +142,22 @@ const biologyQuestions = {
       ],
     },
 
-    // 40 medium filler questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Biology Medium #${i + 11}: What organelle produces energy in cells?`,
-      a: "Mitochondria",
-      options: ["Mitochondria", "Nucleus", "Golgi body", "Ribosome"],
-    })),
+    // More variety: genetics, ecosystems, organisms
+    { q: "What organelle produces energy in cells?", a: "Mitochondria", options: ["Mitochondria", "Nucleus", "Golgi body", "Ribosome"] },
+    { q: "What is the process of organisms changing over time?", a: "Evolution", options: ["Evolution", "Adaptation", "Hibernation", "Mutation"] },
+    { q: "Which organelle contains chlorophyll?", a: "Chloroplast", options: ["Ribosome", "Chloroplast", "Lysosome", "Centriole"] },
+    { q: "What do genes control?", a: "Traits and characteristics", options: ["Traits and characteristics", "Metabolism", "Digestion", "Movement"] },
+    { q: "What is the role of a pollinator?", a: "Transfer pollen between flowers", options: ["Transfer pollen between flowers", "Spread seeds", "Break down dead matter", "Eat plants"] },
+    { q: "What does the term adaptation mean?", a: "Feature that helps survival", options: ["Migration", "Feature that helps survival", "Hibernation", "Evolution"] },
+    { q: "Which animals are warm-blooded?", a: "Mammals and birds", options: ["Fish", "Mammals and birds", "Reptiles", "Amphibians"] },
+    { q: "What is the role of a predator?", a: "Hunt and eat prey", options: ["Eat plants", "Hunt and eat prey", "Decompose matter", "Produce food"] },
+    { q: "What are genes made of?", a: "DNA", options: ["Protein", "Lipid", "DNA", "Carbohydrate"] },
+    { q: "Which layer of the forest has the most sunlight?", a: "Canopy", options: ["Canopy", "Understory", "Forest floor", "Below ground"] },
+    { q: "What is biodiversity?", a: "Variety of species in ecosystem", options: ["Variety of species in ecosystem", "Population size", "Food chain", "Energy flow"] },
+    { q: "What do scavengers do?", a: "Eat dead animals", options: ["Eat dead animals", "Hunt living prey", "Eat plants", "Spread seeds"] },
+    { q: "Which blood type is most common?", a: "O positive", options: ["O positive", "AB negative", "A negative", "B positive"] },
+    { q: "What protects cells?", a: "Cell membrane", options: ["Cell membrane", "Nucleus", "Ribosome", "Mitochondria"] },
+    { q: "What is a mutation?", a: "Change in DNA", options: ["Change in DNA", "Evolution process", "Natural selection", "Adaptation"] },
   ],
 
   // ---------------------------------------------------------
@@ -205,12 +225,22 @@ const biologyQuestions = {
       options: ["Liver", "Kidneys", "Heart", "Pancreas"],
     },
 
-    // 40 advanced filler questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Biology Hard #${i + 11}: What is the study of ecosystems called?`,
-      a: "Ecology",
-      options: ["Ecology", "Genetics", "Biochemistry", "Microbiology"],
-    })),
+    // More variety: heredity, biotechnology, advanced concepts
+    { q: "What is the study of ecosystems called?", a: "Ecology", options: ["Ecology", "Genetics", "Biochemistry", "Microbiology"] },
+    { q: "What is CRISPR used for?", a: "Gene editing", options: ["Gene editing", "Protein synthesis", "Blood typing", "Cell imaging"] },
+    { q: "What are homologous chromosomes?", a: "Paired chromosomes from parents", options: ["Identical twins' DNA", "Paired chromosomes from parents", "Mutated genes", "Viral DNA"] },
+    { q: "What is an allele?", a: "Different form of a gene", options: ["Different form of a gene", "Entire gene", "Protein molecule", "Chromosome pair"] },
+    { q: "What do stem cells do?", a: "Differentiate into specialized cells", options: ["Differentiate into specialized cells", "Fight infections", "Transport oxygen", "Store energy"] },
+    { q: "What is genetic engineering used for?", a: "Modifying organism DNA", options: ["Modifying organism DNA", "Identifying species", "Measuring growth", "Testing immunity"] },
+    { q: "What is the Hardy-Weinberg principle?", a: "Genetic equilibrium in populations", options: ["Genetic equilibrium in populations", "Gene dominance", "Mutation rate", "Selection pressure"] },
+    { q: "What are homozygous organisms?", a: "Have identical alleles", options: ["Have identical alleles", "Have different alleles", "Are mutated", "Are sterile"] },
+    { q: "What is symbiosis?", a: "Close interaction between species", options: ["Close interaction between species", "Competition", "Predation", "Migration"] },
+    { q: "What does biodiversity increase?", a: "Ecosystem stability", options: ["Ecosystem stability", "Inbreeding", "Erosion", "Pollution"] },
+    { q: "What is natural selection?", a: "Survival of the fittest", options: ["Survival of the fittest", "Random change", "Breeding by humans", "Mutation only"] },
+    { q: "What are alleles?", a: "Alternative forms of genes", options: ["Alternative forms of genes", "Mutations only", "Dominant traits", "Recessive traits"] },
+    { q: "What is protein synthesis?", a: "Building proteins from amino acids", options: ["Building proteins from amino acids", "Breaking down DNA", "Storing energy", "Creating ATP"] },
+    { q: "What are enzymes?", a: "Proteins that speed reactions", options: ["Proteins that speed reactions", "Structural proteins", "Energy sources", "Vitamins"] },
+    { q: "What is cellular respiration?", a: "Converting glucose to ATP", options: ["Converting glucose to ATP", "Photosynthesis", "Breaking bonds", "Storing energy"] },
   ],
 };
 

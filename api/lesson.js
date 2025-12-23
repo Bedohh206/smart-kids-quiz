@@ -7,8 +7,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = typeof req.body === 'string' ? (() => { try { return JSON.parse(req.body); } catch { return {}; } })() : (req.body || {});
-    const { topic, age = 8, language = 'English', mode = 'auto' } = body;
+    const { topic, age = 8, language = 'English', mode = 'auto' } = req.body || {};
 
     const staticSteps = (t) => {
       const s = t ? String(t).replace(/[-_]/g, ' ') : 'this topic';
@@ -25,40 +24,41 @@ export default async function handler(req, res) {
       return;
     }
 
-    const prompt = `You are an AI teacher for kids.\n\nCreate EXACTLY 4 short lesson steps.\n\nTopic: ${topic}\nAge: ${age}\nLanguage: ${language}\n\nFORMAT RULES (VERY IMPORTANT):\n- Return ONLY plain text\n- Separate each step with: ||\n- Example:\nStep 1 || Step 2 || Step 3 || Step 4\n- NO markdown\n- NO JSON\n- NO explanations`;
+    const prompt = `You are an AI teacher for kids.
+
+Create EXACTLY 4 short lesson steps about: ${topic}
+Age: ${age}
+Language: ${language}
+
+FORMAT (CRITICAL):
+Return 4 sentences separated by ||
+DO NOT include "Step 1" or "Step 2" labels
+DO NOT use numbering
+DO NOT use markdown
+Just write: Sentence 1 || Sentence 2 || Sentence 3 || Sentence 4
+
+Example: Learn about planets. || See pictures of planets. || Try naming planets. || Quiz yourself.`;
 
     let text = null;
     try {
       const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-      // First try Responses API
-      const resp = await client.responses.create({
-        model: "gpt-4o",
-        input: prompt,
+      const cc = await client.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: "You format lessons for kids exactly as instructed." },
+          { role: "user", content: prompt },
+        ],
         temperature: 0.2,
-        max_output_tokens: 256,
+        max_tokens: 256,
       });
-      if (resp && typeof resp.output_text === "string" && resp.output_text.trim()) {
-        text = resp.output_text.trim();
+      const content = cc?.choices?.[0]?.message?.content;
+      if (content && String(content).trim()) {
+        text = String(content).trim();
+      } else {
+        console.warn("[lesson] OpenAI returned no content");
       }
-      // If Responses didn't yield text, fall back to Chat Completions
-      if (!text) {
-        console.warn("[lesson] Responses API returned empty; falling back to Chat Completions");
-        const cc = await client.chat.completions.create({
-          model: "gpt-4o",
-          messages: [
-            { role: "system", content: "You format lessons for kids exactly as instructed." },
-            { role: "user", content: prompt },
-          ],
-          temperature: 0.2,
-          max_tokens: 256,
-        });
-        const content = cc?.choices?.[0]?.message?.content;
-        if (content && String(content).trim()) {
-          text = String(content).trim();
-        }
-      }
-    } catch (_) {
-      // Swallow error; we'll handle fallback below
+    } catch (err) {
+      console.error("[lesson] OpenAI error:", err.message || err);
     }
 
     if (!text) {

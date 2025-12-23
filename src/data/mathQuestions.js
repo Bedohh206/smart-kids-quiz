@@ -1,61 +1,107 @@
+// Helper builders to increase variety without randomness
+const addQ = (a, b) => ({
+  q: `What is ${a} + ${b}?`,
+  a: String(a + b),
+  options: [String(a + b - 1), String(a + b), String(a + b + 1), String(a + b + 2)],
+});
+const subQ = (a, b) => ({
+  q: `What is ${a} - ${b}?`,
+  a: String(a - b),
+  options: [String(a - b - 1), String(a - b), String(a - b + 1), String(a - b + 2)],
+});
+const multQ = (a, b) => ({
+  q: `What is ${a} × ${b}?`,
+  a: String(a * b),
+  options: [String(a * b - a), String(a * b), String(a * b + a), String(a * b + b)],
+});
+const divQ = (a, b) => ({
+  q: `What is ${a} ÷ ${b}?`,
+  a: String(a / b),
+  options: [String(a / b - 1), String(a / b), String(a / b + 1), String(a / b + 2)],
+});
+const percQ = (p, n) => ({
+  q: `What is ${p}% of ${n}?`,
+  a: String((p * n) / 100),
+  options: [String((p * n) / 100 - p / 10), String((p * n) / 100), String((p * n) / 100 + p / 10), String((p * n) / 100 + p / 5)],
+});
+
 const mathQuestions = {
   // ------------------------------
   // LEVEL 1 — EASY (50 QUESTIONS)
   // ------------------------------
   level1: [
-    { q: "What is 2 + 3?", a: "5", options: ["4", "5", "6", "7"] },
-    { q: "What is 10 - 4?", a: "6", options: ["5", "6", "7", "8"] },
-    { q: "What is 5 + 5?", a: "10", options: ["8", "9", "10", "11"] },
-    { q: "What is 9 - 2?", a: "7", options: ["6", "7", "8", "5"] },
-    { q: "What is 6 + 3?", a: "9", options: ["8", "9", "10", "7"] },
-    { q: "What is 4 + 4?", a: "8", options: ["6", "7", "8", "9"] },
-    { q: "What is 7 - 3?", a: "4", options: ["3", "4", "5", "6"] },
-    { q: "What is 8 - 5?", a: "3", options: ["2", "3", "4", "5"] },
-    { q: "What is 3 + 6?", a: "9", options: ["7", "8", "9", "10"] },
-    { q: "What is 1 + 9?", a: "10", options: ["8", "9", "10", "11"] },
+    // Starter set
+    addQ(2, 3),
+    subQ(10, 4),
+    addQ(5, 5),
+    subQ(9, 2),
+    addQ(6, 3),
+    addQ(4, 4),
+    subQ(7, 3),
+    subQ(8, 5),
+    addQ(3, 6),
+    addQ(1, 9),
 
-    // more easy questions (40 more)
-    { q: "What is 7 + 2?", a: "9", options: ["8", "9", "10", "11"] },
-    { q: "What is 8 + 1?", a: "9", options: ["7", "8", "9", "10"] },
-    { q: "What is 6 - 1?", a: "5", options: ["4", "5", "6", "7"] },
-    { q: "What is 12 - 4?", a: "8", options: ["6", "7", "8", "9"] },
-    { q: "What is 3 + 4?", a: "7", options: ["6", "7", "8", "5"] },
-    { q: "What is 10 + 0?", a: "10", options: ["9", "10", "11", "8"] },
-    { q: "What is 5 - 2?", a: "3", options: ["1", "2", "3", "4"] },
-    { q: "What is 4 + 3?", a: "7", options: ["6", "7", "8", "9"] },
-    { q: "What is 2 + 7?", a: "9", options: ["7", "8", "9", "10"] },
-    { q: "What is 9 - 3?", a: "6", options: ["4", "5", "6", "7"] },
+    // Near-doubles and 10s friends
+    addQ(7, 2),
+    addQ(8, 1),
+    subQ(6, 1),
+    subQ(12, 4),
+    addQ(3, 4),
+    addQ(10, 0),
+    subQ(5, 2),
+    addQ(4, 3),
+    addQ(2, 7),
+    subQ(9, 3),
 
-    // 30 more easy questions
-    ...Array.from({ length: 30 }, (_, i) => ({
-      q: `What is ${i + 1} + 1?`,
-      a: `${i + 2}`,
-      options: [`${i}`, `${i + 1}`, `${i + 2}`, `${i + 3}`],
-    })),
+    // Mix of small sums and differences
+    ...Array.from({ length: 30 }, (_, i) => {
+      const a = 2 + (i % 9); // 2..10
+      const b = 1 + ((i * 2) % 9); // 1..9 var
+      return i % 2 === 0 ? addQ(a, b) : subQ(a + b, a);
+    }),
   ],
 
   // ------------------------------
   // LEVEL 2 — MEDIUM (50 QUESTIONS)
   // ------------------------------
   level2: [
-    { q: "What is 12 × 2?", a: "24", options: ["22", "24", "26", "28"] },
-    { q: "What is 15 ÷ 3?", a: "5", options: ["3", "4", "5", "6"] },
-    { q: "What is 18 ÷ 2?", a: "9", options: ["7", "8", "9", "10"] },
-    { q: "What is 7 × 4?", a: "28", options: ["24", "26", "28", "30"] },
-    { q: "What is 9 × 5?", a: "45", options: ["35", "40", "45", "50"] },
-    { q: "What is 14 ÷ 2?", a: "7", options: ["6", "7", "8", "9"] },
-    { q: "What is 6 × 6?", a: "36", options: ["30", "36", "42", "48"] },
-    { q: "What is 5 × 9?", a: "45", options: ["40", "42", "44", "45"] },
-    { q: "What is 8 × 3?", a: "24", options: ["22", "24", "26", "28"] },
-    { q: "What is 20 ÷ 4?", a: "5", options: ["3", "4", "5", "6"] },
+    multQ(12, 2),
+    divQ(15, 3),
+    divQ(18, 2),
+    multQ(7, 4),
+    multQ(9, 5),
+    divQ(14, 2),
+    multQ(6, 6),
+    multQ(5, 9),
+    multQ(8, 3),
+    divQ(20, 4),
 
-    // 40 more medium questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `What is ${(i + 10) * 2} ÷ 2?`,
-      a: `${i + 10}`,
-      options: [`${i + 8}`, `${i + 9}`, `${i + 10}`, `${i + 11}`],
-    })),
-  ],
+    // Times tables 3–12 and matching divisions
+    ...Array.from({ length: 20 }, (_, i) => {
+      const base = 3 + (i % 10); // 3..12
+      const m = 2 + Math.floor(i / 2); // 2..11
+      return i % 2 === 0 ? multQ(base, m) : divQ(base * m, base);
+    }),
+
+    // Two-step ops and easy percents
+    ...[
+      { a: 15, b: 8, c: 2 },
+      { a: 30, b: 6, c: 3 },
+      { a: 25, b: 5, c: 4 },
+      { a: 18, b: 2, c: 5 },
+      { a: 40, b: 4, c: 5 },
+    ].flatMap(({ a, b, c }) => [
+      { q: `Solve: ${a} + (${b} × ${c})`, a: String(a + b * c), options: [String(a + b * c - b), String(a + b * c), String(a + b * c + c), String(a + b * c + b)] },
+      { q: `Solve: (${a} - ${b}) ÷ ${c}`, a: String((a - b) / c), options: [String((a - b) / c - 1), String((a - b) / c), String((a - b) / c + 1), String((a - b) / c + 2)] },
+    ]),
+
+    percQ(10, 90),
+    percQ(20, 150),
+    percQ(25, 80),
+    percQ(50, 60),
+    percQ(30, 70),
+  ].slice(0, 50),
 
   // ------------------------------
   // LEVEL 3 — HARD (50 QUESTIONS)
@@ -72,18 +118,23 @@ const mathQuestions = {
     { q: "What is 25% of 80?", a: "20", options: ["10", "20", "30", "40"] },
     { q: "Solve: 3² + 4²", a: "25", options: ["18", "20", "25", "30"] },
 
-    // 40 more hard questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `What is ${(i + 10) * (i + 3)}?`,
-      a: `${(i + 10) * (i + 3)}`,
-      options: [
-        `${(i + 10) * (i + 3) - 5}`,
-        `${(i + 10) * (i + 3)}`,
-        `${(i + 10) * (i + 3) + 5}`,
-        `${(i + 10) * (i + 3) + 10}`,
-      ],
-    })),
-  ],
+    // Squares / roots / percentages / GCD / order of ops
+    ...[5, 6, 7, 9, 11, 13].map((n) => ({ q: `What is ${n}²?`, a: String(n * n), options: [String(n * n - n), String(n * n), String(n * n + n), String(n * n + 2 * n)] })),
+    ...[49, 64, 100, 121, 144].map((n) => ({ q: `What is √${n}?`, a: String(Math.round(Math.sqrt(n))), options: [String(Math.round(Math.sqrt(n)) - 1), String(Math.round(Math.sqrt(n))), String(Math.round(Math.sqrt(n)) + 1), String(Math.round(Math.sqrt(n)) + 2)] })),
+    percQ(15, 200),
+    percQ(12, 150),
+    percQ(40, 90),
+    percQ(60, 50),
+    percQ(75, 80),
+    { q: "Find GCD of 18 and 24", a: "6", options: ["4", "6", "8", "12"] },
+    { q: "Find GCD of 21 and 28", a: "7", options: ["3", "5", "7", "14"] },
+    { q: "Solve: (18 ÷ 3) + 4 × 2", a: "14", options: ["12", "14", "16", "18"] },
+    { q: "Solve: 50% of 120 + 3²", a: "69", options: ["60", "69", "72", "78"] },
+    { q: "Convert 1/4 to decimal", a: "0.25", options: ["0.2", "0.25", "0.3", "0.4"] },
+    { q: "Convert 3/5 to decimal", a: "0.6", options: ["0.5", "0.6", "0.65", "0.7"] },
+    { q: "What is 2³?", a: "8", options: ["6", "8", "9", "12"] },
+    { q: "What is 3³?", a: "27", options: ["24", "27", "30", "36"] },
+  ].slice(0, 50),
 };
 
 export default mathQuestions;

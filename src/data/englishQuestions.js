@@ -1,3 +1,138 @@
+// Small helper to shuffle arrays deterministically enough for variety
+const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
+
+// Easy generators: rotate through parts of speech, plurals, articles
+const makeEasyItems = (n) => {
+  const items = [];
+  const bank = [
+    {
+      q: "Which word is a noun?",
+      a: "Book",
+      options: ["Book", "Run", "Slowly", "Blue"],
+    },
+    {
+      q: "Which word is a verb?",
+      a: "Jump",
+      options: ["Happy", "Jump", "Red", "Tall"],
+    },
+    {
+      q: "Which word is an adjective?",
+      a: "Beautiful",
+      options: ["Walk", "Beautiful", "Quickly", "Teacher"],
+    },
+    {
+      q: "Which word is an adverb?",
+      a: "Quickly",
+      options: ["Quickly", "Quick", "Quicker", "Quickness"],
+    },
+    {
+      q: "Choose the correct plural of 'cat'",
+      a: "cats",
+      options: ["cats", "cates", "catz", "catt"],
+    },
+    {
+      q: "Which sentence is correct?",
+      a: "The dog is running.",
+      options: [
+        "The dog are running.",
+        "The dog is running.",
+        "Dog the running is.",
+        "Running is dog the.",
+      ],
+    },
+    {
+      q: "Choose the correct article: ___ apple",
+      a: "an",
+      options: ["a", "an", "the", "no article"],
+    },
+  ];
+  for (let i = 0; i < n; i++) {
+    const base = bank[i % bank.length];
+    // Clone to avoid mutating shared arrays
+    items.push({ q: base.q, a: base.a, options: [...base.options] });
+  }
+  return shuffle(items);
+};
+
+// Medium generators: synonyms, antonyms, punctuation, spelling, homophones
+const makeMediumItems = (n) => {
+  const items = [];
+  const bank = [
+    {
+      q: "Choose the correct synonym for 'happy'.",
+      a: "Joyful",
+      options: ["Joyful", "Sad", "Tired", "Angry"],
+    },
+    {
+      q: "Choose the correct antonym for 'cold'.",
+      a: "Hot",
+      options: ["Hot", "Cool", "Warm", "Chilly"],
+    },
+    {
+      q: "Which sentence uses correct punctuation?",
+      a: "Where are you going?",
+      options: ["Where are you going?", "Where are you going.", "Where are you going!", "Where are you going"],
+    },
+    {
+      q: "Choose the correctly spelled word:",
+      a: "Because",
+      options: ["Because", "Becaus", "Beacause", "Becauss"],
+    },
+    {
+      q: "Choose the correct homophone: I can hear/_____ you.",
+      a: "hear",
+      options: ["here", "hear", "hare", "hair"],
+    },
+    {
+      q: "Choose the correct synonym for 'big'.",
+      a: "Large",
+      options: ["Large", "Small", "Tiny", "Little"],
+    },
+  ];
+  for (let i = 0; i < n; i++) {
+    const base = bank[i % bank.length];
+    items.push({ q: base.q, a: base.a, options: [...base.options] });
+  }
+  return shuffle(items);
+};
+
+// Hard generators: tense, passive voice, figurative language, clauses
+const makeHardItems = (n) => {
+  const items = [];
+  const bank = [
+    {
+      q: "Which sentence uses the past perfect tense?",
+      a: "She had finished her work.",
+      options: ["She finishes her work.", "She had finished her work.", "She will finish her work.", "She is finishing her work."],
+    },
+    {
+      q: "Which sentence is written in passive voice?",
+      a: "The cake was eaten by John.",
+      options: ["John ate the cake.", "The cake was eaten by John.", "John is eating the cake.", "John will eat the cake."],
+    },
+    {
+      q: "Which word is an abstract noun?",
+      a: "Bravery",
+      options: ["Chair", "Bravery", "Dog", "Tree"],
+    },
+    {
+      q: "Identify the figure of speech: 'The world is a stage'.",
+      a: "Metaphor",
+      options: ["Metaphor", "Simile", "Hyperbole", "Irony"],
+    },
+    {
+      q: "Choose the correct relative clause: The boy ___ won the race is my friend.",
+      a: "who",
+      options: ["who", "which", "whose", "whom"],
+    },
+  ];
+  for (let i = 0; i < n; i++) {
+    const base = bank[i % bank.length];
+    items.push({ q: base.q, a: base.a, options: [...base.options] });
+  }
+  return shuffle(items);
+};
+
 const englishQuestions = {
   // ---------------------------------------------------------
   // LEVEL 1 — EASY (50 Questions)
@@ -33,13 +168,7 @@ const englishQuestions = {
         "Running is dog the.",
       ],
     },
-
-    // 45 additional easy questions
-    ...Array.from({ length: 45 }, (_, i) => ({
-      q: `English Easy #${i + 6}: Which word is a noun?`,
-      a: "Book",
-      options: ["Book", "Run", "Slowly", "Blue"],
-    })),
+    ...makeEasyItems(45),
   ],
 
   // ---------------------------------------------------------
@@ -76,13 +205,7 @@ const englishQuestions = {
       a: "Because",
       options: ["Becaus", "Beacause", "Because", "Becauss"],
     },
-
-    // 45 medium-level fillers
-    ...Array.from({ length: 45 }, (_, i) => ({
-      q: `English Medium #${i + 6}: Choose the correct synonym for 'big'.`,
-      a: "Large",
-      options: ["Large", "Small", "Tiny", "Little"],
-    })),
+    ...makeMediumItems(45),
   ],
 
   // ---------------------------------------------------------
@@ -124,13 +247,7 @@ const englishQuestions = {
       a: "Personification",
       options: ["Metaphor", "Simile", "Irony", "Personification"],
     },
-
-    // 45 hard fillers
-    ...Array.from({ length: 45 }, (_, i) => ({
-      q: `English Hard #${i + 6}: Identify the figure of speech in ‘The world is a stage’.`,
-      a: "Metaphor",
-      options: ["Metaphor", "Simile", "Hyperbole", "Irony"],
-    })),
+    ...makeHardItems(45),
   ],
 };
 

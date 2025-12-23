@@ -22,6 +22,8 @@
   border-radius: 18px;
   padding: 18px 20px;
   box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .hero-title {
@@ -46,6 +48,76 @@
 .music-btn:hover {
   background: #106db3;
   transform: translateY(-1px) scale(1.03);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hero-link {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+  transition: 0.25s ease;
+}
+
+.hero-link:hover {
+  transform: translateY(-1px) scale(1.03);
+}
+
+/* Floating Action Button (Mobile + Tablet) */
+.mini-fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  color: white;
+  border: none;
+  font-size: 28px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  animation: fabPulse 2s infinite ease-in-out;
+}
+
+.mini-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+.mini-fab:active {
+  transform: scale(0.95);
+}
+
+@keyframes fabPulse {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+  }
+  50% {
+    box-shadow: 0 6px 30px rgba(255, 107, 107, 0.6);
+  }
+}
+
+/* Hide on desktop (large screens) */
+@media (min-width: 1024px) {
+  .mini-fab {
+    display: none;
+  }
 }
 
 /* =========================================
@@ -105,12 +177,39 @@
   text-align: center;
   transition: 0.25s ease;
   box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  animation: floatContinent 4s ease-in-out infinite;
+}
+
+/* Float animation for all continents */
+@keyframes floatContinent {
+  0%   { transform: translate(-50%, -50%) translateY(-8px); }
+  50%  { transform: translate(-50%, -50%) translateY(8px); }
+  100% { transform: translate(-50%, -50%) translateY(-8px); }
+}
+
+/* Stagger animation delays for each continent */
+.continent-button:nth-child(2) { animation-delay: 0s; }
+.continent-button:nth-child(3) { animation-delay: 0.5s; }
+.continent-button:nth-child(4) { animation-delay: 1s; }
+.continent-button:nth-child(5) { animation-delay: 1.5s; }
+.continent-button:nth-child(6) { animation-delay: 2s; }
+.continent-button:nth-child(7) { animation-delay: 2.5s; }
+.continent-button:nth-child(8) { animation-delay: 3s; }
+
+/* Hover lift effect with scale */
+@keyframes hoverLift {
+  from { 
+    transform: translate(-50%, -50%) translateY(0) scale(1);
+  }
+  to { 
+    transform: translate(-50%, -50%) translateY(-12px) scale(1.15);
+  }
 }
 
 /* Hover for unlocked */
 .continent-button:hover:not(.locked) {
   filter: drop-shadow(0px 0px 12px rgba(255,255,255,0.9));
-  transform: translate(-50%, -50%) scale(1.1);
+  animation: floatContinent 4s ease-in-out infinite, hoverLift 0.3s ease-out forwards;
 }
 
 .continent-icon {
@@ -219,11 +318,40 @@
   border: none;
   cursor: pointer;
   transition: 0.25s ease;
+  animation: floatSubject 3.5s ease-in-out infinite;
 }
+
+/* Float animation for subject cards with staggered delays */
+@keyframes floatSubject {
+  0%   { transform: translateY(-5px); }
+  50%  { transform: translateY(5px); }
+  100% { transform: translateY(-5px); }
+}
+
+.item-card:nth-child(1) { animation-delay: 0s; }
+.item-card:nth-child(2) { animation-delay: 0.4s; }
+.item-card:nth-child(3) { animation-delay: 0.8s; }
+.item-card:nth-child(4) { animation-delay: 1.2s; }
+.item-card:nth-child(5) { animation-delay: 1.6s; }
+.item-card:nth-child(6) { animation-delay: 2s; }
+.item-card:nth-child(7) { animation-delay: 2.4s; }
+.item-card:nth-child(8) { animation-delay: 2.8s; }
+.item-card:nth-child(9) { animation-delay: 3.2s; }
 
 .item-card:hover {
   background: #e6f7ff;
   box-shadow: 0 0 12px rgba(0,200,255,0.35);
+  animation: floatSubject 3.5s ease-in-out infinite, hoverLiftSubject 0.3s ease-out forwards;
+}
+
+/* Hover lift for subject cards */
+@keyframes hoverLiftSubject {
+  from { 
+    transform: translateY(0) scale(1);
+  }
+  to { 
+    transform: translateY(-8px) scale(1.12);
+  }
 }
 
 .item-icon {

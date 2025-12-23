@@ -54,12 +54,22 @@ const healthQuestions = {
       options: ["Skipping meals", "Staying up late", "Brushing your teeth", "Eating too much candy"],
     },
 
-    // 40 easy auto-filled questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Health Easy #${i + 11}: Which food is the healthiest choice?`,
-      a: "Fruits and vegetables",
-      options: ["Candy", "Fruits and vegetables", "Chips", "Cookies"],
-    })),
+    // More variety: nutrition, safety, habits
+    { q: "Which food is the healthiest choice?", a: "Fruits and vegetables", options: ["Candy", "Fruits and vegetables", "Chips", "Cookies"] },
+    { q: "What should you do after exercise?", a: "Drink water and rest", options: ["Drink water and rest", "Eat candy", "Go to sleep", "Do more exercise"] },
+    { q: "How often should you exercise per week?", a: "3-5 times", options: ["Once a week", "3-5 times", "Every day", "Rarely"] },
+    { q: "What is a healthy breakfast?", a: "Oatmeal with fruit", options: ["Oatmeal with fruit", "Sugary cereal", "Fried food", "Candy"] },
+    { q: "Which is NOT a symptom of stress?", a: "Happiness", options: ["Happiness", "Headache", "Sleep issues", "Stomach pain"] },
+    { q: "What helps prevent cavities?", a: "Brushing teeth", options: ["Eating candy", "Brushing teeth", "Drinking soda", "Skipping meals"] },
+    { q: "Which stretches your muscles before exercise?", a: "Warm-up", options: ["Warm-up", "Cooldown", "Sleep", "Eating"] },
+    { q: "What is a healthy snack?", a: "Apple or almonds", options: ["Apple or almonds", "Chips", "Cookies", "Soda"] },
+    { q: "How much water should you drink daily?", a: "6-8 glasses", options: ["1-2 glasses", "6-8 glasses", "10-12 glasses", "Just soda"] },
+    { q: "What helps you feel less tired?", a: "Moving and exercising", options: ["Moving and exercising", "Staying still", "Eating sugar", "Watching TV"] },
+    { q: "Which meal should never be skipped?", a: "Breakfast", options: ["Breakfast", "Lunch", "Snacks", "Dinner"] },
+    { q: "What is sunscreen used for?", a: "Protect skin from UV rays", options: ["Protect skin from UV rays", "Keep you cool", "Hydrate skin", "Remove spots"] },
+    { q: "How long should you brush teeth?", a: "2 minutes", options: ["30 seconds", "1 minute", "2 minutes", "5 minutes"] },
+    { q: "What does stretching improve?", a: "Flexibility", options: ["Flexibility", "Speed", "Strength", "Energy"] },
+    { q: "Which posture is correct for studying?", a: "Straight back and shoulders", options: ["Slouching", "Straight back and shoulders", "Leaning to one side", "Lying down"] },
   ],
 
   // ---------------------------------------------------------
@@ -117,12 +127,22 @@ const healthQuestions = {
       options: ["Ignore it", "Apply pressure", "Give water", "Tell them to walk it off"],
     },
 
-    // 40 medium auto-filled questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Health Medium #${i + 11}: What organ filters waste from the blood?`,
-      a: "Kidneys",
-      options: ["Kidneys", "Heart", "Lungs", "Stomach"],
-    })),
+    // More variety: anatomy, diseases, prevention
+    { q: "What organ filters waste from the blood?", a: "Kidneys", options: ["Kidneys", "Heart", "Lungs", "Stomach"] },
+    { q: "What is the result of poor diet and lack of exercise?", a: "Obesity", options: ["Obesity", "Dehydration", "Fatigue", "Anemia"] },
+    { q: "Which disease affects the lungs?", a: "Asthma", options: ["Asthma", "Diabetes", "Arthritis", "Hemophilia"] },
+    { q: "What type of exercise strengthens bones?", a: "Weight-bearing exercise", options: ["Weight-bearing exercise", "Swimming", "Reading", "Meditation"] },
+    { q: "What causes common cold?", a: "Virus", options: ["Bacteria", "Virus", "Dust", "Cold air"] },
+    { q: "How long does hand-washing prevent germs?", a: "Several hours", options: ["5 minutes", "30 minutes", "Several hours", "Permanently"] },
+    { q: "What does the immune system fight?", a: "Infections and pathogens", options: ["Infections and pathogens", "Exercise", "Water", "Food"] },
+    { q: "Which vitamin is made by the body in sunlight?", a: "Vitamin D", options: ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"] },
+    { q: "What is healthy cholesterol called?", a: "HDL", options: ["LDL", "HDL", "Triglyceride", "Glucose"] },
+    { q: "What is balanced diet?", a: "All food groups in right amounts", options: ["All food groups in right amounts", "Eating fruits only", "No carbs", "Protein only"] },
+    { q: "What organ digests food?", a: "Stomach", options: ["Lungs", "Heart", "Stomach", "Brain"] },
+    { q: "Which vitamin boosts immunity?", a: "Vitamin C", options: ["Vitamin A", "Vitamin C", "Vitamin E", "Vitamin K"] },
+    { q: "What is dehydration?", a: "Lack of water in body", options: ["Lack of water in body", "Too much water", "Excess salt", "Low sugar"] },
+    { q: "Which mineral helps bones?", a: "Calcium", options: ["Iron", "Calcium", "Zinc", "Magnesium"] },
+    { q: "What helps fight infections?", a: "Good hygiene", options: ["Good hygiene", "Staying dirty", "No sleep", "No exercise"] },
   ],
 
   // ---------------------------------------------------------
@@ -180,12 +200,22 @@ const healthQuestions = {
       options: ["AIDS", "Tuberculosis", "Malaria", "Ebola"],
     },
 
-    // 40 hard auto-filled questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Health Hard #${i + 11}: Which system regulates hormones in the body?`,
-      a: "Endocrine system",
-      options: ["Endocrine system", "Respiratory system", "Skeletal system", "Urinary system"],
-    })),
+    // More variety: systems, medical concepts, health conditions
+    { q: "Which system regulates hormones in the body?", a: "Endocrine system", options: ["Endocrine system", "Respiratory system", "Skeletal system", "Urinary system"] },
+    { q: "What is the normal body temperature?", a: "98.6°F (37°C)", options: ["96°F", "98.6°F (37°C)", "100°F", "102°F"] },
+    { q: "Which blood type is universal donor?", a: "O negative", options: ["O negative", "A positive", "AB positive", "B positive"] },
+    { q: "What does BMI measure?", a: "Body mass relative to height", options: ["Heart rate", "Body mass relative to height", "Lung capacity", "Bone density"] },
+    { q: "Which gland produces insulin?", a: "Pancreas", options: ["Pancreas", "Liver", "Thyroid", "Pituitary"] },
+    { q: "What is the effect of anemia?", a: "Reduced oxygen in blood", options: ["Reduced oxygen in blood", "High blood sugar", "Weak bones", "Weak immunity"] },
+    { q: "Which vitamin prevents scurvy?", a: "Vitamin C", options: ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin K"] },
+    { q: "What is hypertension?", a: "High blood pressure", options: ["High cholesterol", "Low blood sugar", "High blood pressure", "Low oxygen"] },
+    { q: "Which mineral strengthens teeth and bones?", a: "Calcium", options: ["Iron", "Calcium", "Zinc", "Magnesium"] },
+    { q: "What is a resting heart rate?", a: "60-100 beats per minute", options: ["40-50 bpm", "60-100 bpm", "120-150 bpm", "200+ bpm"] },
+    { q: "What is metabolism?", a: "Chemical processes in body", options: ["Chemical processes in body", "Muscle growth", "Fat storage", "Energy loss"] },
+    { q: "Which protein helps carry oxygen?", a: "Hemoglobin", options: ["Hemoglobin", "Collagen", "Insulin", "Antibodies"] },
+    { q: "What is inflammation?", a: "Body's response to injury", options: ["Body's response to injury", "Loss of heat", "Muscle fatigue", "Bone loss"] },
+    { q: "What reduces risk of heart disease?", a: "Regular exercise", options: ["Regular exercise", "High stress", "Smoking", "Poor diet"] },
+    { q: "Which organ filters blood?", a: "Kidneys", options: ["Lungs", "Liver", "Kidneys", "Heart"] },
   ],
 };
 

@@ -54,12 +54,29 @@ const scienceQuestions = {
       options: ["4", "6", "8", "10"],
     },
 
-    // 40 easy filler questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Science Easy #${i + 11}: What do plants need for photosynthesis?`,
-      a: "Sunlight",
-      options: ["Sunlight", "Plastic", "Iron", "Sand"],
-    })),
+    // More variety (animals, senses, weather, materials, states of matter)
+    { q: "Which animal says 'Moo'?", a: "Cow", options: ["Cow", "Cat", "Dog", "Sheep"] },
+    { q: "Which sense helps you see?", a: "Sight", options: ["Sight", "Smell", "Taste", "Touch"] },
+    { q: "What do we wear when it rains?", a: "Raincoat", options: ["Raincoat", "Sunglasses", "Scarf", "Helmet"] },
+    { q: "What is ice?", a: "Solid", options: ["Gas", "Liquid", "Solid", "Plasma"] },
+    { q: "What is steam?", a: "Gas", options: ["Gas", "Liquid", "Solid", "Rock"] },
+    { q: "What part of a plant is usually green?", a: "Leaf", options: ["Leaf", "Root", "Flower", "Seed"] },
+    { q: "Which star is closest to Earth?", a: "The Sun", options: ["The Sun", "Sirius", "Polaris", "Betelgeuse"] },
+    { q: "What do bees collect from flowers?", a: "Nectar", options: ["Nectar", "Water", "Leaves", "Bark"] },
+    { q: "What protects your head?", a: "Skull", options: ["Skull", "Heart", "Lungs", "Stomach"] },
+    { q: "What do we call baby frogs?", a: "Tadpoles", options: ["Tadpoles", "Puppies", "Chicks", "Kittens"] },
+    ...[
+      { q: "Which organ helps you think?", a: "Brain", options: ["Brain", "Lungs", "Kidneys", "Skin"] },
+      { q: "What do we use to smell?", a: "Nose", options: ["Nose", "Ears", "Eyes", "Mouth"] },
+      { q: "Which animal can fly?", a: "Bird", options: ["Bird", "Fish", "Worm", "Snail"] },
+      { q: "What do fish use to breathe?", a: "Gills", options: ["Gills", "Lungs", "Skin", "Leaves"] },
+      { q: "What makes a rainbow?", a: "Light", options: ["Light", "Sound", "Wind", "Heat"] },
+      { q: "What do you call young plants?", a: "Seedlings", options: ["Seedlings", "Eggs", "Pebbles", "Clouds"] },
+      { q: "Where do penguins live mostly?", a: "Antarctica", options: ["Antarctica", "Sahara", "Amazon", "Arctic"] },
+      { q: "Which is a source of light?", a: "Lamp", options: ["Lamp", "Chair", "Spoon", "Book"] },
+      { q: "What is milk?", a: "Liquid", options: ["Solid", "Liquid", "Gas", "Metal"] },
+      { q: "What do we breathe out?", a: "Carbon dioxide", options: ["Carbon dioxide", "Oxygen", "Hydrogen", "Helium"] },
+    ],
   ],
 
   // ---------------------------------------------------------
@@ -132,12 +149,27 @@ const scienceQuestions = {
       options: ["Gravity", "Friction", "Magnetism", "Momentum"],
     },
 
-    // 40 medium filler questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Science Medium #${i + 11}: What is the main source of Earth’s energy?`,
-      a: "The Sun",
-      options: ["The Sun", "The Moon", "The Wind", "The Stars"],
-    })),
+    // Variety: energy, life cycles, ecosystems, body systems, earth science
+    { q: "What gas is needed for burning?", a: "Oxygen", options: ["Oxygen", "Nitrogen", "Helium", "Neon"] },
+    { q: "What are producers in a food chain?", a: "Plants", options: ["Plants", "Herbivores", "Carnivores", "Decomposers"] },
+    { q: "Water cycle: vapor to clouds is?", a: "Condensation", options: ["Evaporation", "Condensation", "Precipitation", "Runoff"] },
+    { q: "Which carries blood away from heart?", a: "Arteries", options: ["Arteries", "Veins", "Capillaries", "Nerves"] },
+    { q: "What type of energy is stored in food?", a: "Chemical", options: ["Chemical", "Solar", "Thermal", "Nuclear"] },
+    { q: "What do magnets attract strongly?", a: "Iron", options: ["Iron", "Wood", "Plastic", "Glass"] },
+    { q: "Which organ filters blood?", a: "Kidneys", options: ["Kidneys", "Liver", "Stomach", "Lungs"] },
+    { q: "What are clouds made of?", a: "Water droplets", options: ["Water droplets", "Smoke", "Dust", "Ice only"] },
+    { q: "Energy that travels in waves?", a: "Light", options: ["Light", "Friction", "Gravity", "Mass"] },
+    { q: "Which is NOT a renewable source?", a: "Coal", options: ["Solar", "Wind", "Coal", "Hydro"] },
+    { q: "What animal group lays eggs and has feathers?", a: "Birds", options: ["Mammals", "Birds", "Reptiles", "Amphibians"] },
+    { q: "What is Earth's outermost layer?", a: "Crust", options: ["Core", "Mantle", "Crust", "Atmosphere"] },
+    { q: "What do decomposers do?", a: "Break down dead matter", options: ["Make food", "Break down dead matter", "Hunt", "Store water"] },
+    { q: "Heat moves from?", a: "Hot to cold", options: ["Cold to hot", "Hot to cold", "Both", "Neither"] },
+    { q: "Which simple machine is a see-saw?", a: "Lever", options: ["Lever", "Pulley", "Wedge", "Screw"] },
+    { q: "Earth spins around its?", a: "Axis", options: ["Axis", "Equator", "Orbit", "Pole"] },
+    { q: "Which is a vertebrate?", a: "Frog", options: ["Frog", "Earthworm", "Jellyfish", "Starfish"] },
+    { q: "Which vitamin do we get from sunlight?", a: "Vitamin D", options: ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"] },
+    { q: "What is measured by a thermometer?", a: "Temperature", options: ["Temperature", "Mass", "Length", "Speed"] },
+    { q: "What causes seasons?", a: "Tilt of Earth's axis", options: ["Tilt of Earth's axis", "Distance to Sun", "Moon's phases", "Clouds"] },
   ],
 
   // ---------------------------------------------------------
@@ -210,12 +242,22 @@ const scienceQuestions = {
       options: ["Fluorine", "Iron", "Fermium", "Francium"],
     },
 
-    // 40 hard filler questions
-    ...Array.from({ length: 40 }, (_, i) => ({
-      q: `Science Hard #${i + 11}: What branch of science studies motion and forces?`,
-      a: "Physics",
-      options: ["Physics", "Biology", "Chemistry", "Geology"],
-    })),
+    // More advanced concepts: genetics, chemistry, physics, astronomy, ecology
+    { q: "What carries genetic information?", a: "DNA", options: ["DNA", "RNA", "Lipid", "Protein"] },
+    { q: "pH less than 7 indicates?", a: "Acid", options: ["Acid", "Base", "Neutral", "Salt"] },
+    { q: "Force equals mass times?", a: "Acceleration", options: ["Speed", "Velocity", "Acceleration", "Momentum"] },
+    { q: "What is the SI unit of force?", a: "Newton", options: ["Joule", "Newton", "Watt", "Pascal"] },
+    { q: "The process of cell division for growth?", a: "Mitosis", options: ["Meiosis", "Mitosis", "Fusion", "Fission"] },
+    { q: "Which planet has the most moons?", a: "Saturn", options: ["Mars", "Jupiter", "Saturn", "Earth"] },
+    { q: "What is the hardest natural substance?", a: "Diamond", options: ["Gold", "Iron", "Diamond", "Quartz"] },
+    { q: "What gas makes up most of air?", a: "Nitrogen", options: ["Oxygen", "Carbon dioxide", "Nitrogen", "Argon"] },
+    { q: "Energy of motion is called?", a: "Kinetic", options: ["Potential", "Kinetic", "Thermal", "Chemical"] },
+    { q: "Which organelle packages proteins?", a: "Golgi body", options: ["Ribosome", "Golgi body", "Nucleus", "Lysosome"] },
+    { q: "What type of bond transfers electrons?", a: "Ionic", options: ["Ionic", "Covalent", "Metallic", "Hydrogen"] },
+    { q: "What is the unit of electric current?", a: "Ampere", options: ["Volt", "Ohm", "Ampere", "Watt"] },
+    { q: "Which wave needs a medium to travel?", a: "Sound", options: ["Light", "Radio", "Sound", "X-ray"] },
+    { q: "What is biodiversity?", a: "Variety of life", options: ["Variety of life", "Plant growth", "Soil type", "Climate"] },
+    { q: "What causes tides?", a: "Moon's gravity", options: ["Sunlight", "Moon's gravity", "Wind", "Earthquakes"] },
   ],
 };
 

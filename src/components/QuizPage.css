@@ -10,6 +10,112 @@
   flex-direction: column;
   align-items: center;
   font-family: "Poppins", sans-serif;
+  position: relative;
+}
+
+/* Feedback animations */
+.quiz-page.correct-pulse {
+  animation: correctPulse 0.5s ease;
+}
+
+.quiz-page.wrong-shake {
+  animation: wrongShake 0.5s ease;
+}
+
+@keyframes correctPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); background: radial-gradient(circle at top, #d4f4dd 0%, #ffffff 60%); }
+}
+
+@keyframes wrongShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+/* Streak indicator */
+.streak-indicator {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+  animation: streakPulse 1s infinite;
+  z-index: 100;
+}
+
+@keyframes streakPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Sound toggle button */
+.sound-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #0b3b64;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.sound-toggle:hover {
+  transform: scale(1.1);
+  background: #0b3b64;
+}
+
+/* Stars display */
+.stars-display {
+  font-size: 2.5rem;
+  text-align: center;
+  margin: 12px 0;
+  animation: starShine 1s ease;
+}
+
+@keyframes starShine {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.2); }
+}
+
+.score-display {
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 12px 0;
+}
+
+.score-display .percentage {
+  color: #667eea;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.streak-badge {
+  background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-align: center;
+  font-weight: bold;
+  margin: 12px auto;
+  max-width: 200px;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 /* Content container */
