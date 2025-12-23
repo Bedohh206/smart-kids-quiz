@@ -1,0 +1,67 @@
+// Word banks for Word Scramble playground across all subjects
+// Each subject has easy (3-4 letters), medium (5-6 letters), and hard (7+ letters) words
+
+export const wordBanks = {
+  english: {
+    easy: ["CAT", "DOG", "RUN", "SIT", "EAT", "FLY", "HOP", "JOY", "SUN", "RAIN", "BOOK", "BIKE", "TREE", "BIRD", "FROG"],
+    medium: ["QUICK", "SMILE", "LAUGH", "DANCE", "SLEEP", "DREAM", "THINK", "WRITE", "MUSIC", "HAPPY", "FRIEND", "SCHOOL", "PUZZLE", "JUMBLE", "LETTER"],
+    hard: ["BUTTERFLY", "EXTRAORDINARY", "WONDERFUL", "ADVENTURE", "INVISIBLE", "CELEBRATE", "IMAGINATION", "DELICIOUS", "DANGEROUS", "MYSTERIOUS", "VOCABULARY", "COMMUNICATION", "CELEBRATION", "EXPRESSION", "DISCOVERY"]
+  },
+  math: {
+    easy: ["ADD", "SUM", "ODD", "EVEN", "HALF", "ZERO", "TEN", "DIVIDE", "ANGLE", "AREA", "LINE", "DOT", "UNIT", "GRID", "SHAPE"],
+    medium: ["SQUARE", "CIRCLE", "NUMBER", "TRIANGLE", "GEOMETRY", "ALGEBRA", "MULTIPLY", "FACTOR", "PRIME", "EQUAL", "RADIUS", "VECTOR", "MATRIX", "AVERAGE", "DECIMAL"],
+    hard: ["POLYNOMIAL", "DERIVATIVE", "FRACTION", "PROPORTION", "LOGARITHM", "EXPONENT", "SYMMETRY", "CIRCUMFERENCE", "HYPERBOLA", "ARITHMETIC", "INTEGRAL", "DIAGONAL", "PARABOLA", "GEOMETRIC", "TRIGONOMETRY"]
+  },
+  science: {
+    easy: ["ATOM", "CELL", "DNA", "ACID", "BASE", "HEAT", "LIGHT", "MAGNET", "ENERGY", "FORCE", "ROCK", "STAR", "SEED", "BONE", "SKIN"],
+    medium: ["PLANET", "ELEMENT", "GRAVITY", "SYSTEM", "OXYGEN", "CARBON", "CHEMICAL", "REACTION", "WAVE", "PHYSICS", "NEURON", "TISSUE", "SOLAR", "ECLIPSE", "GALAXY"],
+    hard: ["PHOTOSYNTHESIS", "MITOCHONDRIA", "MOLECULE", "CATALYST", "ELECTRON", "ISOTOPE", "QUANTUM", "VELOCITY", "WAVELENGTH", "ORGANISM", "CONDENSATION", "EVAPORATION", "ACCELERATION", "ENTROPY", "MAGNETISM"]
+  },
+  geography: {
+    easy: ["ASIA", "RIVER", "LAKE", "OCEAN", "DESERT", "MOUNTAIN", "FOREST", "VALLEY", "BEACH", "ISLAND", "MAP", "ROAD", "CITY", "VILLAGE", "PLAIN"],
+    medium: ["EUROPE", "AFRICA", "COUNTRY", "CAPITAL", "CONTINENT", "CLIMATE", "WEATHER", "EQUATOR", "COMPASS", "TROPIC", "REGION", "BORDER", "COASTAL", "HARBOR", "SAVANNA"],
+    hard: ["ANTARCTICA", "HEMISPHERE", "LATITUDE", "LONGITUDE", "ATMOSPHERE", "TOPOGRAPHY", "VOLCANO", "GEOTHERMAL", "MIGRATION", "ARCHIPELAGO", "BIOME", "ESTUARY", "OROGRAPHY", "PLATEAU", "PENINSULA"]
+  },
+  history: {
+    easy: ["KING", "QUEEN", "ARMY", "BATTLE", "PEACE", "WAR", "PAST", "EMPIRE", "CASTLE", "CROWN", "RULE", "LAWS", "COIN", "TOWN", "FARM"],
+    medium: ["ANCIENT", "EXPLORER", "CENTURY", "GOVERNMENT", "REVOLUTION", "DISCOVERY", "CULTURE", "CIVILIZATION", "LEADER", "TREATY", "DYNASTY", "REPUBLIC", "EMPEROR", "FOUNDING", "HOMELAND"],
+    hard: ["RENAISSANCE", "REVOLUTION", "COLONIZATION", "INDUSTRIAL", "DEMOCRACY", "MONARCHY", "CRUSADE", "IMPERIALISM", "ARCHAEOLOGIST", "FEDERATION", "CONSTITUTION", "REFORMATION", "ANNEXATION", "ABOLITION"]
+  },
+  health: {
+    easy: ["DIET", "FOOD", "SLEEP", "EXERCISE", "BODY", "HEALTH", "MEDICINE", "DOCTOR", "SICK", "CURE", "TEETH", "BONES", "MOUTH", "HANDS", "WATER"],
+    medium: ["MUSCLE", "NUTRITION", "VITAMIN", "IMMUNE", "HYGIENE", "OXYGEN", "HEART", "BRAIN", "BREATH", "HEALTHY", "CALORIE", "PROTEIN", "MINERAL", "HYDRATE", "POSTURE"],
+    hard: ["METABOLISM", "CARBOHYDRATE", "VACCINATION", "ANTIBODY", "HORMONE", "CIRCULATION", "DIGESTION", "PREVENTIVE", "CARDIOVASCULAR", "INFECTION", "RESPIRATORY", "NEUROLOGICAL", "ENDOCRINE", "IMMUNITY", "PATHOGEN"]
+  },
+  biology: {
+    easy: ["ANIMAL", "PLANT", "FLOWER", "TREE", "BEE", "BIRD", "FISH", "LEAF", "ROOT", "SEED", "STEM", "FRUIT", "BLOOM", "GRASS", "MOSS"],
+    medium: ["SPECIES", "HABITAT", "ECOSYSTEM", "ORGANISM", "EVOLUTION", "FOSSIL", "EXTINCT", "ADAPT", "NATURE", "SURVIVAL", "PREY", "NESTING", "MIGRATE", "CAMOUFLAGE", "POLLEN"],
+    hard: ["PHOTOSYNTHESIS", "PREDATOR", "SYMBIOSIS", "BIODIVERSITY", "HEREDITARY", "MICROORGANISM", "METAMORPHOSIS", "ADAPTATION", "GENETICS", "CHROMOSOME", "HOMEOSTASIS", "ECOLOGY", "METAGENOME", "NUCLEOTIDE", "ALLELE"]
+  },
+  chemistry: {
+    easy: ["ACID", "BASE", "GAS", "LIQUID", "SOLID", "FLAME", "ICE", "HEAT", "SALT", "WATER", "ATOM", "FUEL", "STEAM", "SODA", "SUGAR"],
+    medium: ["ELEMENT", "MOLECULE", "COMPOUND", "REACTION", "OXYGEN", "HYDROGEN", "CARBON", "FORMULA", "PERIODIC", "MIXTURE", "SOLUTION", "SOLVENT", "SOLUTE", "CRYSTAL", "ACETIC"],
+    hard: ["OXIDATION", "CATALYST", "ISOTOPE", "EQUILIBRIUM", "ELECTROLYTE", "POLYMER", "THERMODYNAMIC", "ELECTRONEGATIVITY", "VALENCE", "RADIOACTIVE", "EXOTHERMIC", "ENDOTHERMIC", "SOLUBILITY", "STOICHIOMETRY", "CHEMILUMINESCENCE"]
+  },
+  computer: {
+    easy: ["CODE", "DATA", "PROGRAM", "COMPUTER", "KEYBOARD", "MOUSE", "SCREEN", "FILE", "SAVE", "OPEN", "CLICK", "PRINT", "TYPER", "INPUT", "OUTPUT"],
+    medium: ["SOFTWARE", "HARDWARE", "ALGORITHM", "DATABASE", "INTERNET", "PASSWORD", "NETWORK", "BINARY", "SYSTEM", "STORAGE", "PACKAGE", "LIBRARY", "CLOUD", "SERVER", "CLIENT"],
+    hard: ["ENCRYPTION", "ALGORITHM", "ARTIFICIAL", "BLOCKCHAIN", "CYBERSECURITY", "PROGRAMMING", "JAVASCRIPT", "RECURSION", "DEBUGGING", "MACHINE", "AUTHENTICATION", "SERIALIZATION", "MICROSERVICE", "CONCURRENCY", "VIRTUALIZATION"]
+  }
+};
+
+// Helper function to scramble a word
+export const scrambleWord = (word) => {
+  const arr = word.split("");
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.join("");
+};
+
+// Helper function to get random word from a bank
+export const getRandomWord = (subject, difficulty) => {
+  const bank = wordBanks[subject]?.[difficulty];
+  if (!bank || bank.length === 0) return null;
+  return bank[Math.floor(Math.random() * bank.length)];
+};

@@ -1,7 +1,31 @@
-node_modules
-node_modules
-node_modules
-/.env
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Environment variables
 .env
-.vercel
+.env.local
 .env*.local
+
+# Production builds
+/build
+/dist
+
+# IDE
+.idea/
+.vscode/
+
+# Vercel
+.vercel/
+
+# Android
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+*.log
