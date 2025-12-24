@@ -27,6 +27,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import MiniGamesLauncher from "./MiniGamesLauncher";
 import LeaderboardPanel, { loadLeaderboard, saveLeaderboard } from "./LeaderboardPanel";
+import VideoExplorer from "./VideoExplorer";
+import { continentVideos } from "../data/continentVideos";
 
 import "./WorldMap.css";
 
@@ -42,6 +44,8 @@ export default function WorldMap() {
   const leaderboardRef = useRef(null);
   const [leaderboard, setLeaderboard] = useState(() => loadLeaderboard("leaderboard:scramble"));
   const [showMiniGames, setShowMiniGames] = useState(false);
+  const [showVideos, setShowVideos] = useState(false);
+  const [selectedContinent, setSelectedContinent] = useState(null);
 
   /* 🎵 MUSIC INIT */
   useEffect(() => {
@@ -81,6 +85,12 @@ export default function WorldMap() {
     navigate(`/quiz/${id}`);
   };
 
+  const openVideos = (continentId) => {
+    playClick();
+    setSelectedContinent(continentId);
+    setShowVideos(true);
+  };
+
   /* 🎮 GAME MODE: UNLOCKED CONTINENTS */
   const [unlocked, setUnlocked] = useState(() => {
     return JSON.parse(localStorage.getItem("unlockedContinents")) || ["africa"];
@@ -103,7 +113,13 @@ export default function WorldMap() {
       alert("❌ This continent is locked. Complete the earlier continent to unlock it!");
       return;
     }
-    goToQuiz(id);
+    // Show options: Take Quiz or Watch Videos
+    const choice = confirm(`🌍 ${id.toUpperCase()}\n\nOK = 📝 Take Quiz\nCancel = 🎥 Watch Videos`);
+    if (choice) {
+      goToQuiz(id);
+    } else {
+      openVideos(id);
+    }
   };
 
   const clearLeaderboard = () => {
@@ -175,6 +191,8 @@ export default function WorldMap() {
     { id: "health", name: "Health Education", icon: healthIcon },
     { id: "history", name: "History", icon: historyIcon },
     { id: "computer", name: "Computer Science", icon: computerIcon },
+    { id: "algebra", name: "Algebra 1", icon: mathIcon },
+    { id: "geometry", name: "Geometry", icon: mathIcon },
   ];
 
   /* ======================================================
@@ -292,6 +310,15 @@ export default function WorldMap() {
       >
         🎮
       </button>
+
+      {/* Video Explorer Modal */}
+      {showVideos && selectedContinent && (
+        <VideoExplorer
+          continent={selectedContinent}
+          videos={continentVideos[selectedContinent]}
+          onClose={() => setShowVideos(false)}
+        />
+      )}
     </div>
   );
 }

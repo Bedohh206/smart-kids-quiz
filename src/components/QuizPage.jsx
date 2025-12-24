@@ -23,6 +23,8 @@ import {
   healthQuestions,
   historyQuestions,
   computerQuestions,
+  algebraQuestions,
+  geometryQuestions,
 } from "../data/index.js";
 
 // Mascot
@@ -90,6 +92,8 @@ export default function QuizPage() {
     health: healthQuestions,
     history: historyQuestions,
     computer: computerQuestions,
+    algebra: algebraQuestions,
+    geometry: geometryQuestions,
   };
 
   const selectedSet = questionSets[finalKey] || null;

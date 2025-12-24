@@ -13,6 +13,10 @@ import historyQuestions from "./historyQuestions.js";
 import mathQuestions from "./mathQuestions.js";
 import scienceQuestions from "./scienceQuestions.js";
 
+// Higher level math
+import { algebraQuestions } from "./algebraQuestions.js";
+import { geometryQuestions } from "./geometryQuestions.js";
+
 import northAmericaQuestions from "./northAmericaQuestions.js";
 import southAmericaQuestions from "./southAmericaQuestions.js";
 import europeQuestions from "./europeQuestions.js";
@@ -32,6 +36,9 @@ export {
   historyQuestions,
   mathQuestions,
   scienceQuestions,
+
+  algebraQuestions,
+  geometryQuestions,
 
   northAmericaQuestions,
   southAmericaQuestions,
