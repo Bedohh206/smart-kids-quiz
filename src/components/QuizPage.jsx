@@ -235,9 +235,31 @@ export default function QuizPage() {
 
   const speak = (text) => {
     if (!text) return;
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = voices[language] || "en-US";
-    window.speechSynthesis.speak(u);
+    
+    try {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+      
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = voices[language] || "en-US";
+      u.rate = 0.9; // Slightly slower for better clarity
+      u.pitch = 1.0;
+      u.volume = 1.0;
+      
+      u.onstart = () => {
+        console.log("Speech started");
+      };
+      
+      u.onerror = (event) => {
+        console.error("Speech error:", event);
+        alert("Voice feature not available. Please check your browser settings.");
+      };
+      
+      window.speechSynthesis.speak(u);
+    } catch (error) {
+      console.error("Speech synthesis error:", error);
+      alert("Text-to-speech is not supported in this browser.");
+    }
   };
 
   /* ---------------------------------------------------------
@@ -523,18 +545,35 @@ export default function QuizPage() {
     const q = questions[current];
     if (!q) return;
 
-    const response = await fetch("/api/explain", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        question: q.q,
-        answer: q.a,
-        language,
-      }),
-    });
+    try {
+      setMascotMessage("Thinking... 🤔");
+      
+      const response = await fetch("/api/explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: q.q,
+          answer: q.a,
+          language,
+        }),
+      });
 
-    const data = await response.json();
-    setMascotMessage(data.explanation || "I can't explain right now 😅");
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const explanation = data.explanation || "I can't explain right now 😅";
+      setMascotMessage(explanation);
+      
+      // Automatically read the explanation aloud
+      speak(explanation);
+    } catch (error) {
+      console.error("Explain error:", error);
+      const fallback = `The correct answer is "${q.a}". This is an important fact to remember.`;
+      setMascotMessage(fallback);
+      speak(fallback);
+    }
   };
 
   /* ---------------------------------------------------------
