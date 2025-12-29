@@ -814,8 +814,6 @@ export default function QuizPage() {
   /* ---------------------------------------------------------
      SCREEN 1.5 — MODE SELECT (FOR DUAL-MODE SUBJECTS)
   --------------------------------------------------------- */
-  const dualModeSubjects = ["algebra", "math", "geometry", "science", "english", "computer"];
-  
   if (dualModeSubjects.includes(finalKey) && !subjectMode && !lessonMode) {
     const subjectNames = {
       algebra: "ALGEBRA",
