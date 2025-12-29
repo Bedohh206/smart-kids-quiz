@@ -98,11 +98,15 @@ export default function QuizPage() {
 
   const selectedSet = questionSets[finalKey] || null;
 
+  // Subjects that support dual-mode (kids/advanced)
+  const dualModeSubjects = ["algebra", "math", "geometry", "science", "english", "computer"];
+
   /* ---------------------------------------------------------
      STATE
   --------------------------------------------------------- */
   const [ageGroup, setAgeGroup] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("");
+  const [subjectMode, setSubjectMode] = useState(""); // "kids" or "advanced" for subjects that support it
 
   const [questions, setQuestions] = useState([]);
   const [current, setCurrent] = useState(0);
@@ -304,7 +308,13 @@ export default function QuizPage() {
   useEffect(() => {
     if (!selectedSet || !selectedLevel || !ageGroup) return;
 
-    const base = selectedSet[selectedLevel];
+    // For dual-mode subjects, prefix the level with the mode (kids_level1 or advanced_level1)
+    let levelKey = selectedLevel;
+    if (dualModeSubjects.includes(finalKey) && subjectMode) {
+      levelKey = `${subjectMode}_${selectedLevel}`;
+    }
+
+    const base = selectedSet[levelKey];
 
     if (!Array.isArray(base)) {
       setQuestions([]);
@@ -359,7 +369,7 @@ export default function QuizPage() {
     setShowResult(false);
     setShowConfetti(false);
     setScore(0);
-  }, [selectedLevel, ageGroup, selectedSet]);
+  }, [selectedLevel, ageGroup, selectedSet, subjectMode, finalKey]);
 
   /* ---------------------------------------------------------
      ADVENTURE PROGRESS (XP, LEVELS, BADGES, UNLOCKS)
@@ -664,7 +674,12 @@ export default function QuizPage() {
       // Prepare questions depending on mode
       if (mode === "static") {
         // Use built-in question bank for static mode
-        const base = selectedSet && selectedSet[selectedLevel];
+        // For dual-mode subjects, use the prefixed level key
+        let levelKey = selectedLevel;
+        if (dualModeSubjects.includes(finalKey) && subjectMode) {
+          levelKey = `${subjectMode}_${selectedLevel}`;
+        }
+        const base = selectedSet && selectedSet[levelKey];
         const filtered = Array.isArray(base)
           ? base.filter((q) => !q.age || q.age === ageGroup)
           : [];
@@ -797,6 +812,57 @@ export default function QuizPage() {
   }
 
   /* ---------------------------------------------------------
+     SCREEN 1.5 — MODE SELECT (FOR DUAL-MODE SUBJECTS)
+  --------------------------------------------------------- */
+  const dualModeSubjects = ["algebra", "math", "geometry", "science", "english", "computer"];
+  
+  if (dualModeSubjects.includes(finalKey) && !subjectMode && !lessonMode) {
+    const subjectNames = {
+      algebra: "ALGEBRA",
+      math: "MATHEMATICS",
+      geometry: "GEOMETRY",
+      science: "SCIENCE",
+      english: "ENGLISH",
+      computer: "COMPUTER SCIENCE"
+    };
+    
+    return (
+      <div className="quiz-page">
+        <h2>{subjectNames[finalKey] || finalKey.toUpperCase()}</h2>
+        <p>Select Your Mode:</p>
+        
+        <div className="levels">
+          <button 
+            onClick={() => setSubjectMode("kids")}
+            style={{ padding: "20px 40px", margin: "10px", fontSize: "18px" }}
+          >
+            👶 KIDS MODE
+            <div style={{ fontSize: "14px", marginTop: "8px" }}>
+              Early Elementary<br/>
+              Ages 6-8
+            </div>
+          </button>
+          
+          <button 
+            onClick={() => setSubjectMode("advanced")}
+            style={{ padding: "20px 40px", margin: "10px", fontSize: "18px" }}
+          >
+            🎓 ADVANCED MODE
+            <div style={{ fontSize: "14px", marginTop: "8px" }}>
+              Early High School<br/>
+              Ages 13-14
+            </div>
+          </button>
+        </div>
+        
+        <button onClick={() => navigate(-1)} style={{ marginTop: "20px" }}>
+          ← Back
+        </button>
+      </div>
+    );
+  }
+
+  /* ---------------------------------------------------------
      SCREEN 2 — LEVEL SELECT
   --------------------------------------------------------- */
   if (!selectedLevel && !lessonMode) {
@@ -814,16 +880,38 @@ export default function QuizPage() {
           ))}
         </select>
 
-        <h2>{(continent || "").toUpperCase()}</h2>
+        <h2>
+          {(continent || "").toUpperCase()}
+          {dualModeSubjects.includes(finalKey) && subjectMode && (
+            <span style={{ fontSize: "16px", marginLeft: "10px" }}>
+              ({subjectMode === "kids" ? "👶 Kids Mode" : "🎓 Advanced Mode"})
+            </span>
+          )}
+        </h2>
         <p>Select Level:</p>
 
         <div className="levels">
           {selectedSet &&
-            Object.keys(selectedSet).map((lvl) => (
-              <button key={lvl} onClick={() => setSelectedLevel(lvl)}>
-                {lvl.toUpperCase()}
-              </button>
-            ))}
+            Object.keys(selectedSet)
+              .filter((lvl) => {
+                // For dual-mode subjects, only show levels matching the selected mode
+                if (dualModeSubjects.includes(finalKey) && subjectMode) {
+                  return lvl.startsWith(`${subjectMode}_`);
+                }
+                return true;
+              })
+              .map((lvl) => {
+                // Display name: remove mode prefix for dual-mode subjects
+                let displayName = lvl;
+                if (dualModeSubjects.includes(finalKey) && subjectMode) {
+                  displayName = lvl.replace(`${subjectMode}_`, "");
+                }
+                return (
+                  <button key={lvl} onClick={() => setSelectedLevel(displayName)}>
+                    {displayName.toUpperCase()}
+                  </button>
+                );
+              })}
         </div>
 
         <div style={{ marginTop: 12 }}>
@@ -895,6 +983,18 @@ export default function QuizPage() {
         >
           🎲 Word Scramble Playground
         </button>
+
+        {dualModeSubjects.includes(finalKey) && subjectMode && (
+          <button 
+            onClick={() => {
+              setSubjectMode("");
+              setSelectedLevel("");
+            }}
+            style={{ marginTop: 12, background: "#ff9800" }}
+          >
+            ← Change Mode
+          </button>
+        )}
 
         <button className="back-btn" onClick={goHome}>
           Back

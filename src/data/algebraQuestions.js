@@ -1,12 +1,792 @@
-// Algebra 1 Questions - High School Level
-// Covers: Linear equations, inequalities, polynomials, factoring, quadratic equations, exponents, radicals
+// Algebra Questions - Two Modes: Kids & Advanced
+// Kids Mode: Early Elementary (ages 6-8)
+// Advanced Mode: Early High School (ages 13-14)
 
 const algebraQuestions = {
+  // =========================================
+  // KIDS MODE - Elementary Algebra
+  // =========================================
+  
   // ------------------------------
-  // LEVEL 1 — EASY (50 QUESTIONS)
+  // KIDS LEVEL 1 — EASY (50 QUESTIONS)
+  // Basic patterns, simple missing numbers, and intro to variables
+  // ------------------------------
+  kids_level1: [
+    {
+      q: "What number comes next? 2, 4, 6, 8, __",
+      a: "10",
+      options: ["9", "10", "12", "7"],
+    },
+    {
+      q: "Find the missing number: 5 + __ = 12",
+      a: "7",
+      options: ["5", "6", "7", "8"],
+    },
+    {
+      q: "What is 3 × 4?",
+      a: "12",
+      options: ["7", "10", "12", "15"],
+    },
+    {
+      q: "Complete the pattern: 10, 20, 30, __",
+      a: "40",
+      options: ["35", "40", "50", "60"],
+    },
+    {
+      q: "Find the missing number: __ - 3 = 7",
+      a: "10",
+      options: ["4", "9", "10", "11"],
+    },
+    {
+      q: "What is double of 6?",
+      a: "12",
+      options: ["8", "10", "12", "14"],
+    },
+    {
+      q: "Complete: 1, 3, 5, 7, __",
+      a: "9",
+      options: ["8", "9", "10", "11"],
+    },
+    {
+      q: "Find the missing number: 15 - __ = 8",
+      a: "7",
+      options: ["5", "7", "9", "23"],
+    },
+    {
+      q: "What is half of 20?",
+      a: "10",
+      options: ["5", "10", "15", "40"],
+    },
+    {
+      q: "Complete the pattern: 5, 10, 15, 20, __",
+      a: "25",
+      options: ["22", "24", "25", "30"],
+    },
+    {
+      q: "Find the missing number: 4 + 4 + __ = 12",
+      a: "4",
+      options: ["2", "3", "4", "8"],
+    },
+    {
+      q: "What comes next? 100, 90, 80, 70, __",
+      a: "60",
+      options: ["50", "55", "60", "65"],
+    },
+    {
+      q: "Find the missing number: __ × 2 = 16",
+      a: "8",
+      options: ["6", "7", "8", "14"],
+    },
+    {
+      q: "Complete: 2, 4, 8, 16, __",
+      a: "32",
+      options: ["18", "20", "24", "32"],
+    },
+    {
+      q: "What is triple of 5?",
+      a: "15",
+      options: ["10", "12", "15", "20"],
+    },
+    {
+      q: "Find the missing number: 20 ÷ __ = 5",
+      a: "4",
+      options: ["2", "4", "5", "15"],
+    },
+    {
+      q: "Complete: 11, 22, 33, 44, __",
+      a: "55",
+      options: ["45", "50", "55", "66"],
+    },
+    {
+      q: "Find the missing number: 6 + __ = 14",
+      a: "8",
+      options: ["6", "7", "8", "9"],
+    },
+    {
+      q: "What is 7 × 2?",
+      a: "14",
+      options: ["9", "12", "14", "21"],
+    },
+    {
+      q: "Complete the pattern: 3, 6, 9, 12, __",
+      a: "15",
+      options: ["13", "14", "15", "18"],
+    },
+    {
+      q: "Find the missing number: 18 - __ = 10",
+      a: "8",
+      options: ["6", "7", "8", "28"],
+    },
+    {
+      q: "What is 5 × 5?",
+      a: "25",
+      options: ["10", "20", "25", "30"],
+    },
+    {
+      q: "Complete: 50, 45, 40, 35, __",
+      a: "30",
+      options: ["25", "28", "30", "32"],
+    },
+    {
+      q: "Find the missing number: __ + 9 = 15",
+      a: "6",
+      options: ["5", "6", "7", "24"],
+    },
+    {
+      q: "What is 12 ÷ 3?",
+      a: "4",
+      options: ["3", "4", "6", "9"],
+    },
+    {
+      q: "Complete the pattern: 4, 8, 12, 16, __",
+      a: "20",
+      options: ["18", "20", "22", "24"],
+    },
+    {
+      q: "Find the missing number: 30 - __ = 15",
+      a: "15",
+      options: ["10", "12", "15", "45"],
+    },
+    {
+      q: "What is 6 × 3?",
+      a: "18",
+      options: ["9", "15", "18", "21"],
+    },
+    {
+      q: "Complete: 7, 14, 21, 28, __",
+      a: "35",
+      options: ["30", "32", "35", "42"],
+    },
+    {
+      q: "Find the missing number: __ × 5 = 25",
+      a: "5",
+      options: ["3", "4", "5", "20"],
+    },
+    {
+      q: "What is 20 ÷ 4?",
+      a: "5",
+      options: ["4", "5", "6", "16"],
+    },
+    {
+      q: "Complete the pattern: 12, 24, 36, 48, __",
+      a: "60",
+      options: ["50", "55", "60", "72"],
+    },
+    {
+      q: "Find the missing number: 8 + 8 + __ = 20",
+      a: "4",
+      options: ["2", "4", "6", "8"],
+    },
+    {
+      q: "What is 9 × 2?",
+      a: "18",
+      options: ["11", "16", "18", "20"],
+    },
+    {
+      q: "Complete: 15, 30, 45, 60, __",
+      a: "75",
+      options: ["65", "70", "75", "90"],
+    },
+    {
+      q: "Find the missing number: 25 - __ = 20",
+      a: "5",
+      options: ["3", "5", "10", "45"],
+    },
+    {
+      q: "What is 4 × 6?",
+      a: "24",
+      options: ["10", "20", "24", "28"],
+    },
+    {
+      q: "Complete the pattern: 9, 18, 27, 36, __",
+      a: "45",
+      options: ["40", "42", "45", "54"],
+    },
+    {
+      q: "Find the missing number: __ + 12 = 20",
+      a: "8",
+      options: ["6", "7", "8", "32"],
+    },
+    {
+      q: "What is 16 ÷ 2?",
+      a: "8",
+      options: ["4", "6", "8", "14"],
+    },
+    {
+      q: "Complete: 6, 12, 18, 24, __",
+      a: "30",
+      options: ["26", "28", "30", "36"],
+    },
+    {
+      q: "Find the missing number: 40 - __ = 25",
+      a: "15",
+      options: ["10", "12", "15", "65"],
+    },
+    {
+      q: "What is 8 × 3?",
+      a: "24",
+      options: ["11", "21", "24", "32"],
+    },
+    {
+      q: "Complete the pattern: 25, 50, 75, 100, __",
+      a: "125",
+      options: ["110", "120", "125", "150"],
+    },
+    {
+      q: "Find the missing number: __ × 4 = 20",
+      a: "5",
+      options: ["4", "5", "6", "16"],
+    },
+    {
+      q: "What is 18 ÷ 3?",
+      a: "6",
+      options: ["3", "5", "6", "15"],
+    },
+    {
+      q: "Complete: 13, 26, 39, 52, __",
+      a: "65",
+      options: ["60", "63", "65", "78"],
+    },
+    {
+      q: "Find the missing number: 10 + 10 + __ = 30",
+      a: "10",
+      options: ["5", "10", "15", "20"],
+    },
+    {
+      q: "What is 7 × 5?",
+      a: "35",
+      options: ["12", "30", "35", "42"],
+    },
+    {
+      q: "Complete the pattern: 8, 16, 24, 32, __",
+      a: "40",
+      options: ["36", "38", "40", "48"],
+    },
+  ],
+
+  // ------------------------------
+  // KIDS LEVEL 2 — MEDIUM (50 QUESTIONS)
+  // Simple equations with variables, basic order of operations
+  // ------------------------------
+  kids_level2: [
+    {
+      q: "If x + 5 = 12, what is x?",
+      a: "7",
+      options: ["5", "7", "8", "17"],
+    },
+    {
+      q: "Solve: 2 × n = 14",
+      a: "7",
+      options: ["6", "7", "12", "16"],
+    },
+    {
+      q: "If a - 6 = 10, what is a?",
+      a: "16",
+      options: ["4", "14", "16", "60"],
+    },
+    {
+      q: "What is 3 + 4 × 2?",
+      a: "11",
+      options: ["10", "11", "14", "24"],
+    },
+    {
+      q: "If y ÷ 3 = 6, what is y?",
+      a: "18",
+      options: ["2", "3", "9", "18"],
+    },
+    {
+      q: "Solve: x + x = 18",
+      a: "9",
+      options: ["6", "9", "18", "36"],
+    },
+    {
+      q: "What is 10 - 2 × 3?",
+      a: "4",
+      options: ["4", "6", "8", "24"],
+    },
+    {
+      q: "If 3n = 21, what is n?",
+      a: "7",
+      options: ["3", "6", "7", "24"],
+    },
+    {
+      q: "Solve: m + 8 = 20",
+      a: "12",
+      options: ["10", "12", "14", "28"],
+    },
+    {
+      q: "What is (6 + 4) × 2?",
+      a: "20",
+      options: ["12", "14", "16", "20"],
+    },
+    {
+      q: "If b - 9 = 15, what is b?",
+      a: "24",
+      options: ["6", "15", "24", "135"],
+    },
+    {
+      q: "Solve: 4 × k = 28",
+      a: "7",
+      options: ["4", "7", "24", "32"],
+    },
+    {
+      q: "What is 20 ÷ 4 + 3?",
+      a: "8",
+      options: ["5", "6", "8", "23"],
+    },
+    {
+      q: "If x + 10 = 25, what is x?",
+      a: "15",
+      options: ["10", "15", "20", "35"],
+    },
+    {
+      q: "Solve: p ÷ 5 = 8",
+      a: "40",
+      options: ["3", "13", "40", "45"],
+    },
+    {
+      q: "What is 15 - (6 + 2)?",
+      a: "7",
+      options: ["5", "7", "9", "11"],
+    },
+    {
+      q: "If 2t = 30, what is t?",
+      a: "15",
+      options: ["12", "15", "28", "32"],
+    },
+    {
+      q: "Solve: d + d + d = 27",
+      a: "9",
+      options: ["3", "8", "9", "27"],
+    },
+    {
+      q: "What is 5 × 3 + 10?",
+      a: "25",
+      options: ["18", "20", "25", "65"],
+    },
+    {
+      q: "If w - 12 = 8, what is w?",
+      a: "20",
+      options: ["4", "16", "20", "96"],
+    },
+    {
+      q: "Solve: 6 × j = 36",
+      a: "6",
+      options: ["5", "6", "30", "42"],
+    },
+    {
+      q: "What is 18 ÷ 3 + 4?",
+      a: "10",
+      options: ["6", "8", "10", "22"],
+    },
+    {
+      q: "If q + 7 = 19, what is q?",
+      a: "12",
+      options: ["10", "12", "14", "26"],
+    },
+    {
+      q: "Solve: r ÷ 4 = 9",
+      a: "36",
+      options: ["5", "13", "36", "45"],
+    },
+    {
+      q: "What is (12 - 4) × 3?",
+      a: "24",
+      options: ["12", "20", "24", "36"],
+    },
+    {
+      q: "If 5s = 45, what is s?",
+      a: "9",
+      options: ["8", "9", "40", "50"],
+    },
+    {
+      q: "Solve: v + 15 = 30",
+      a: "15",
+      options: ["10", "12", "15", "45"],
+    },
+    {
+      q: "What is 24 ÷ 6 + 8?",
+      a: "12",
+      options: ["4", "10", "12", "32"],
+    },
+    {
+      q: "If c - 20 = 15, what is c?",
+      a: "35",
+      options: ["5", "25", "35", "300"],
+    },
+    {
+      q: "Solve: 7 × h = 49",
+      a: "7",
+      options: ["6", "7", "42", "56"],
+    },
+    {
+      q: "What is 30 - 3 × 5?",
+      a: "15",
+      options: ["15", "25", "45", "135"],
+    },
+    {
+      q: "If g + g = 24, what is g?",
+      a: "12",
+      options: ["6", "12", "24", "48"],
+    },
+    {
+      q: "Solve: z ÷ 6 = 7",
+      a: "42",
+      options: ["1", "13", "36", "42"],
+    },
+    {
+      q: "What is (8 + 2) × 5?",
+      a: "50",
+      options: ["18", "40", "50", "100"],
+    },
+    {
+      q: "If 4f = 32, what is f?",
+      a: "8",
+      options: ["6", "8", "28", "36"],
+    },
+    {
+      q: "Solve: e + 18 = 40",
+      a: "22",
+      options: ["18", "20", "22", "58"],
+    },
+    {
+      q: "What is 36 ÷ 4 - 3?",
+      a: "6",
+      options: ["5", "6", "9", "12"],
+    },
+    {
+      q: "If i - 25 = 10, what is i?",
+      a: "35",
+      options: ["15", "25", "35", "250"],
+    },
+    {
+      q: "Solve: 8 × l = 64",
+      a: "8",
+      options: ["7", "8", "56", "72"],
+    },
+    {
+      q: "What is 40 - (10 + 5)?",
+      a: "25",
+      options: ["15", "20", "25", "35"],
+    },
+    {
+      q: "If u + u + u = 36, what is u?",
+      a: "12",
+      options: ["9", "12", "18", "36"],
+    },
+    {
+      q: "Solve: o ÷ 8 = 6",
+      a: "48",
+      options: ["2", "14", "42", "48"],
+    },
+    {
+      q: "What is 7 × 4 - 8?",
+      a: "20",
+      options: ["16", "20", "24", "36"],
+    },
+    {
+      q: "If 9x = 72, what is x?",
+      a: "8",
+      options: ["7", "8", "63", "81"],
+    },
+    {
+      q: "Solve: n + 22 = 50",
+      a: "28",
+      options: ["22", "26", "28", "72"],
+    },
+    {
+      q: "What is 45 ÷ 5 + 6?",
+      a: "15",
+      options: ["9", "12", "15", "51"],
+    },
+    {
+      q: "If y - 30 = 20, what is y?",
+      a: "50",
+      options: ["10", "40", "50", "600"],
+    },
+    {
+      q: "Solve: 5 × a + 5 = 30",
+      a: "5",
+      options: ["5", "6", "7", "25"],
+    },
+    {
+      q: "What is (15 - 5) × 4?",
+      a: "40",
+      options: ["20", "30", "40", "60"],
+    },
+    {
+      q: "If b + b = 34, what is b?",
+      a: "17",
+      options: ["14", "16", "17", "34"],
+    },
+  ],
+
+  // ------------------------------
+  // KIDS LEVEL 3 — HARD (50 QUESTIONS)
+  // More complex equations, fractions, negative numbers intro
+  // ------------------------------
+  kids_level3: [
+    {
+      q: "If 2x + 3 = 11, what is x?",
+      a: "4",
+      options: ["3", "4", "7", "8"],
+    },
+    {
+      q: "Solve: 3n - 5 = 10",
+      a: "5",
+      options: ["3", "5", "7", "15"],
+    },
+    {
+      q: "What is x if 4x = 20 + 4?",
+      a: "6",
+      options: ["5", "6", "16", "24"],
+    },
+    {
+      q: "If a + a + a = 45, what is 2a?",
+      a: "30",
+      options: ["15", "22", "30", "45"],
+    },
+    {
+      q: "Solve: y ÷ 2 + 5 = 12",
+      a: "14",
+      options: ["7", "10", "14", "24"],
+    },
+    {
+      q: "What is 10 - (-2)?",
+      a: "12",
+      options: ["8", "10", "12", "-8"],
+    },
+    {
+      q: "If 5m - 10 = 15, what is m?",
+      a: "5",
+      options: ["1", "3", "5", "25"],
+    },
+    {
+      q: "Solve: 6 + 2x = 18",
+      a: "6",
+      options: ["4", "5", "6", "12"],
+    },
+    {
+      q: "What is half of (20 + 10)?",
+      a: "15",
+      options: ["10", "12", "15", "30"],
+    },
+    {
+      q: "If 3p + 6 = 21, what is p?",
+      a: "5",
+      options: ["3", "5", "7", "9"],
+    },
+    {
+      q: "Solve: 2(x + 4) = 20",
+      a: "6",
+      options: ["4", "6", "8", "10"],
+    },
+    {
+      q: "What is -3 + 8?",
+      a: "5",
+      options: ["5", "11", "-5", "-11"],
+    },
+    {
+      q: "If 4t - 8 = 20, what is t?",
+      a: "7",
+      options: ["3", "5", "7", "28"],
+    },
+    {
+      q: "Solve: x/3 = 8",
+      a: "24",
+      options: ["3", "8", "11", "24"],
+    },
+    {
+      q: "What is 15 × 2 ÷ 3?",
+      a: "10",
+      options: ["5", "10", "15", "30"],
+    },
+    {
+      q: "If 7w + 7 = 35, what is w?",
+      a: "4",
+      options: ["4", "5", "6", "28"],
+    },
+    {
+      q: "Solve: 20 - 3k = 5",
+      a: "5",
+      options: ["3", "5", "15", "25"],
+    },
+    {
+      q: "What is -5 + (-3)?",
+      a: "-8",
+      options: ["-8", "-2", "2", "8"],
+    },
+    {
+      q: "If 2d + 10 = 30, what is d?",
+      a: "10",
+      options: ["5", "10", "15", "20"],
+    },
+    {
+      q: "Solve: 5(n - 2) = 15",
+      a: "5",
+      options: ["3", "5", "7", "13"],
+    },
+    {
+      q: "What is 24 ÷ 4 × 3?",
+      a: "18",
+      options: ["2", "6", "18", "72"],
+    },
+    {
+      q: "If 6r - 12 = 18, what is r?",
+      a: "5",
+      options: ["1", "3", "5", "30"],
+    },
+    {
+      q: "Solve: x/4 + 3 = 8",
+      a: "20",
+      options: ["5", "11", "20", "32"],
+    },
+    {
+      q: "What is 7 - 10?",
+      a: "-3",
+      options: ["-3", "3", "-17", "17"],
+    },
+    {
+      q: "If 3s + 9 = 30, what is s?",
+      a: "7",
+      options: ["3", "7", "13", "21"],
+    },
+    {
+      q: "Solve: 4(y + 3) = 28",
+      a: "4",
+      options: ["4", "7", "10", "25"],
+    },
+    {
+      q: "What is 30 ÷ 5 + 4 × 2?",
+      a: "14",
+      options: ["10", "12", "14", "20"],
+    },
+    {
+      q: "If 5c - 15 = 10, what is c?",
+      a: "5",
+      options: ["1", "3", "5", "25"],
+    },
+    {
+      q: "Solve: 2x + 2x = 24",
+      a: "6",
+      options: ["4", "6", "12", "24"],
+    },
+    {
+      q: "What is -4 × 3?",
+      a: "-12",
+      options: ["-12", "-7", "7", "12"],
+    },
+    {
+      q: "If 8h + 8 = 40, what is h?",
+      a: "4",
+      options: ["3", "4", "5", "32"],
+    },
+    {
+      q: "Solve: 30 - 2g = 10",
+      a: "10",
+      options: ["5", "10", "15", "20"],
+    },
+    {
+      q: "What is (12 + 8) ÷ 4?",
+      a: "5",
+      options: ["4", "5", "10", "20"],
+    },
+    {
+      q: "If 3f + 12 = 30, what is f?",
+      a: "6",
+      options: ["3", "6", "10", "18"],
+    },
+    {
+      q: "Solve: 6(z - 1) = 24",
+      a: "5",
+      options: ["3", "4", "5", "25"],
+    },
+    {
+      q: "What is -2 × (-4)?",
+      a: "8",
+      options: ["-8", "-6", "6", "8"],
+    },
+    {
+      q: "If 4v - 20 = 0, what is v?",
+      a: "5",
+      options: ["4", "5", "16", "20"],
+    },
+    {
+      q: "Solve: x/5 = 9",
+      a: "45",
+      options: ["4", "14", "45", "50"],
+    },
+    {
+      q: "What is 18 ÷ 3 + 5 × 2?",
+      a: "16",
+      options: ["10", "13", "16", "28"],
+    },
+    {
+      q: "If 7j + 14 = 49, what is j?",
+      a: "5",
+      options: ["5", "7", "9", "35"],
+    },
+    {
+      q: "Solve: 3(b + 5) = 30",
+      a: "5",
+      options: ["5", "10", "15", "25"],
+    },
+    {
+      q: "What is -6 ÷ 2?",
+      a: "-3",
+      options: ["-4", "-3", "3", "4"],
+    },
+    {
+      q: "If 2k + 8 = 22, what is k?",
+      a: "7",
+      options: ["5", "6", "7", "14"],
+    },
+    {
+      q: "Solve: 5m - 5 = 20",
+      a: "5",
+      options: ["3", "5", "15", "25"],
+    },
+    {
+      q: "What is 4 × (9 - 3)?",
+      a: "24",
+      options: ["12", "18", "24", "36"],
+    },
+    {
+      q: "If 9i - 18 = 27, what is i?",
+      a: "5",
+      options: ["1", "3", "5", "45"],
+    },
+    {
+      q: "Solve: x/6 + 2 = 7",
+      a: "30",
+      options: ["5", "9", "30", "42"],
+    },
+    {
+      q: "What is (-3) × (-5)?",
+      a: "15",
+      options: ["-15", "-8", "8", "15"],
+    },
+    {
+      q: "If 4q + 16 = 40, what is q?",
+      a: "6",
+      options: ["4", "6", "10", "24"],
+    },
+    {
+      q: "Solve: 7(e - 3) = 28",
+      a: "7",
+      options: ["4", "5", "7", "31"],
+    },
+  ],
+
+  // =========================================
+  // ADVANCED MODE - High School Algebra 1
+  // =========================================
+  
+  // ------------------------------
+  // ADVANCED LEVEL 1 — EASY (50 QUESTIONS)
   // Linear equations, basic expressions, and simple operations
   // ------------------------------
-  level1: [
+  advanced_level1: [
     {
       q: "Solve for x: x + 5 = 12",
       a: "7",
@@ -260,10 +1040,10 @@ const algebraQuestions = {
   ],
 
   // ------------------------------
-  // LEVEL 2 — MEDIUM (50 QUESTIONS)
+  // ADVANCED LEVEL 2 — MEDIUM (50 QUESTIONS)
   // Inequalities, systems, quadratics, polynomials
   // ------------------------------
-  level2: [
+  advanced_level2: [
     {
       q: "Solve: x² - 9 = 0",
       a: "x = ±3",
@@ -517,10 +1297,10 @@ const algebraQuestions = {
   ],
 
   // ------------------------------
-  // LEVEL 3 — HARD (50 QUESTIONS)
+  // ADVANCED LEVEL 3 — HARD (50 QUESTIONS)
   // Complex quadratics, rational expressions, radicals, advanced concepts
   // ------------------------------
-  level3: [
+  advanced_level3: [
     {
       q: "Use quadratic formula: x² + 4x - 5 = 0",
       a: "x = 1 or x = -5",

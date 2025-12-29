@@ -7,7 +7,7 @@
  * @param {string} language - Language code (e.g., "en")
  * @returns {string} Explanation text
  */
-export async function explain(question, answer, language = "English") {
+export async function explain(question: string, answer: string, language: string = "English") {
   try {
     const res = await fetch("/api/explain", {
       method: "POST",

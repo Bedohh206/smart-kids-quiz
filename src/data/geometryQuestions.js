@@ -1,12 +1,11 @@
-// Geometry Questions - High School Level
-// Covers: Angles, triangles, circles, area, volume, coordinate geometry, transformations
+// Geometry Questions - Two Modes: Kids & Advanced\r\n// Kids Mode: Early Elementary (ages 6-8) - Basic shapes and concepts\r\n// Advanced Mode: Early High School (ages 13-14) - Formal geometry
 
 const geometryQuestions = {
   // ------------------------------
   // LEVEL 1 — EASY (50 QUESTIONS)
   // Basic shapes, angles, perimeter, area
   // ------------------------------
-  level1: [
+  kids_level1: [
     {
       q: "What is the sum of angles in a triangle?",
       a: "180°",
@@ -263,7 +262,7 @@ const geometryQuestions = {
   // LEVEL 2 — MEDIUM (50 QUESTIONS)
   // Pythagorean theorem, circle properties, 3D shapes, coordinate geometry
   // ------------------------------
-  level2: [
+  kids_level2: [
     {
       q: "In a right triangle, if legs are 3 and 4, what is hypotenuse?",
       a: "5",
@@ -520,7 +519,7 @@ const geometryQuestions = {
   // LEVEL 3 — HARD (50 QUESTIONS)
   // Advanced theorems, proofs, coordinate geometry, transformations, circles
   // ------------------------------
-  level3: [
+  kids_level3: [
     {
       q: "In 30-60-90 triangle, if short leg = 5, what is long leg?",
       a: "5√3",
@@ -775,3 +774,5 @@ const geometryQuestions = {
 };
 
 export { geometryQuestions };
+
+
