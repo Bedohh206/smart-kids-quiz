@@ -17,6 +17,11 @@ import scienceQuestions from "./scienceQuestions.js";
 import { algebraQuestions } from "./algebraQuestions.js";
 import { geometryQuestions } from "./geometryQuestions.js";
 
+// Creative subjects
+import musicQuestions from "./musicQuestions.js";
+import artQuestions from "./artQuestions.js";
+import codingQuestions from "./codingQuestions.js";
+
 import northAmericaQuestions from "./northAmericaQuestions.js";
 import southAmericaQuestions from "./southAmericaQuestions.js";
 import europeQuestions from "./europeQuestions.js";
@@ -39,6 +44,10 @@ export {
 
   algebraQuestions,
   geometryQuestions,
+
+  musicQuestions,
+  artQuestions,
+  codingQuestions,
 
   northAmericaQuestions,
   southAmericaQuestions,

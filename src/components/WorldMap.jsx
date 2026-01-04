@@ -193,6 +193,9 @@ export default function WorldMap() {
     { id: "computer", name: "Computer Science", icon: computerIcon },
     { id: "algebra", name: "Algebra 1", icon: mathIcon },
     { id: "geometry", name: "Geometry", icon: mathIcon },
+    { id: "music", name: "Music", icon: englishIcon },
+    { id: "art", name: "Art & Art History", icon: geographyIcon },
+    { id: "coding", name: "Coding & Programming", icon: computerIcon },
   ];
 
   /* ======================================================

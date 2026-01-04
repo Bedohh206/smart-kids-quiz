@@ -25,6 +25,9 @@ import {
   computerQuestions,
   algebraQuestions,
   geometryQuestions,
+  musicQuestions,
+  artQuestions,
+  codingQuestions,
 } from "../data/index.js";
 
 // Mascot
@@ -94,12 +97,15 @@ export default function QuizPage() {
     computer: computerQuestions,
     algebra: algebraQuestions,
     geometry: geometryQuestions,
+    music: musicQuestions,
+    art: artQuestions,
+    coding: codingQuestions,
   };
 
   const selectedSet = questionSets[finalKey] || null;
 
   // Subjects that support dual-mode (kids/advanced)
-  const dualModeSubjects = ["algebra", "math", "geometry", "science", "english", "computer"];
+  const dualModeSubjects = ["algebra", "math", "geometry", "science", "english", "computer", "music", "art", "coding"];
 
   /* ---------------------------------------------------------
      STATE
@@ -821,7 +827,10 @@ export default function QuizPage() {
       geometry: "GEOMETRY",
       science: "SCIENCE",
       english: "ENGLISH",
-      computer: "COMPUTER SCIENCE"
+      computer: "COMPUTER SCIENCE",
+      music: "MUSIC",
+      art: "ART & ART HISTORY",
+      coding: "CODING & PROGRAMMING"
     };
     
     return (
