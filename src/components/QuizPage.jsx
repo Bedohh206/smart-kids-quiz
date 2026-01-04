@@ -5,6 +5,9 @@ import Confetti from "react-confetti";
 // Styles
 import "./QuizPage.css";
 
+// Analytics
+import { trackQuizStart, trackQuizCompletion, trackAILesson, trackLanguageChange } from "../utils/analytics";
+
 // Question banks
 import {
   africaQuestions,
@@ -375,6 +378,11 @@ export default function QuizPage() {
     setShowResult(false);
     setShowConfetti(false);
     setScore(0);
+    
+    // Track quiz start
+    if (filtered.length > 0) {
+      trackQuizStart(finalKey, selectedLevel);
+    }
   }, [selectedLevel, ageGroup, selectedSet, subjectMode, finalKey]);
 
   /* ---------------------------------------------------------
@@ -524,6 +532,9 @@ export default function QuizPage() {
           maxStreak: Math.max(stats.maxStreak, maxStreak)
         };
         saveStats(updatedStats);
+        
+        // Track quiz completion
+        trackQuizCompletion(finalKey, selectedLevel, finalScore, questions.length);
         
         playSound('complete');
         setShowConfetti(true);
@@ -878,7 +889,11 @@ export default function QuizPage() {
         <select
           className="lang-select"
           value={language}
-          onChange={(e) => setLanguage(e.target.value)}
+          onChange={(e) => {
+            const newLang = e.target.value;
+            setLanguage(newLang);
+            trackLanguageChange(newLang);
+          }}
         >
           {languageOptions.map((l) => (
             <option key={l.code} value={l.code}>
@@ -1147,7 +1162,11 @@ export default function QuizPage() {
       <select
         className="lang-select"
         value={language}
-        onChange={(e) => setLanguage(e.target.value)}
+        onChange={(e) => {
+          const newLang = e.target.value;
+          setLanguage(newLang);
+          trackLanguageChange(newLang);
+        }}
       >
         {languageOptions.map((l) => (
           <option key={l.code} value={l.code}>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './InstallPrompt.css';
+import { trackPWAInstall } from '../utils/analytics';
 
 const InstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -39,6 +40,11 @@ const InstallPrompt = () => {
     const { outcome } = await deferredPrompt.userChoice;
     
     console.log(`User response to the install prompt: ${outcome}`);
+
+    // Track PWA installation if user accepted
+    if (outcome === 'accepted') {
+      trackPWAInstall();
+    }
 
     // Clear the deferredPrompt
     setDeferredPrompt(null);

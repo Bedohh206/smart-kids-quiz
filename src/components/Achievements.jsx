@@ -1,4 +1,5 @@
 import React from 'react';
+import { trackAchievement } from '../utils/analytics';
 import './Achievements.css';
 
 const BADGES = [
@@ -12,6 +13,18 @@ const BADGES = [
 
 export default function Achievements({ stats, newBadges = [] }) {
   const unlockedIds = BADGES.filter(b => b.req(stats)).map(b => b.id);
+  
+  // Track new achievement unlocks
+  React.useEffect(() => {
+    if (newBadges && newBadges.length > 0) {
+      newBadges.forEach(badgeId => {
+        const badge = BADGES.find(b => b.id === badgeId);
+        if (badge) {
+          trackAchievement(badge.title);
+        }
+      });
+    }
+  }, [newBadges]);
   
   return (
     <div className="achievements">

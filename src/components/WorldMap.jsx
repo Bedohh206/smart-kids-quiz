@@ -28,6 +28,9 @@ import { motion } from "framer-motion";
 import MiniGamesLauncher from "./MiniGamesLauncher";
 import LeaderboardPanel, { loadLeaderboard, saveLeaderboard } from "./LeaderboardPanel";
 import VideoExplorer from "./VideoExplorer";
+
+// Analytics
+import { trackContinentSelect, trackPageView, trackLeaderboardView, trackMiniGamePlay } from "../utils/analytics";
 import { continentVideos } from "../data/continentVideos";
 
 import "./WorldMap.css";
@@ -75,6 +78,7 @@ export default function WorldMap() {
   };
 
   const scrollToLeaderboard = () => {
+    trackLeaderboardView();
     if (leaderboardRef.current) {
       leaderboardRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -101,6 +105,9 @@ export default function WorldMap() {
     const saved =
       JSON.parse(localStorage.getItem("unlockedContinents")) || ["africa"];
     setUnlocked(saved);
+    
+    // Track page view
+    trackPageView('/', 'Smart Kids Quiz - Home');
   }, []);
 
   // Refresh leaderboard on load
@@ -113,6 +120,10 @@ export default function WorldMap() {
       alert("❌ This continent is locked. Complete the earlier continent to unlock it!");
       return;
     }
+    
+    // Track continent selection
+    trackContinentSelect(id);
+    
     // Show options: Take Quiz or Watch Videos
     const choice = confirm(`🌍 ${id.toUpperCase()}\n\nOK = 📝 Take Quiz\nCancel = 🎥 Watch Videos`);
     if (choice) {
