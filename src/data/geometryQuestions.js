@@ -771,7 +771,17 @@ const geometryQuestions = {
       options: ["a² + b² + c²", "¾(a² + b² + c²)", "½(a² + b² + c²)", "2(a² + b² + c²)"],
     },
   ],
+
+  // Advanced levels use the same questions as kids levels
+  advanced_level1: [],
+  advanced_level2: [],
+  advanced_level3: [],
 };
+
+// For advanced mode, reuse the same questions for now
+geometryQuestions.advanced_level1 = geometryQuestions.kids_level1;
+geometryQuestions.advanced_level2 = geometryQuestions.kids_level2;
+geometryQuestions.advanced_level3 = geometryQuestions.kids_level3;
 
 export { geometryQuestions };
 
