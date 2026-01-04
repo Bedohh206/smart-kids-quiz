@@ -1,6 +1,6 @@
 // Algebra Questions - Two Modes: Kids & Advanced
-// Kids Mode: Early Elementary (ages 6-8)
-// Advanced Mode: Early High School (ages 13-14)
+// Kids Mode: Beginner Level
+// Advanced Mode: Advanced Level
 
 const algebraQuestions = {
   // =========================================

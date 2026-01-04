@@ -1,6 +1,6 @@
 // Coding Questions - Two Modes: Kids & Advanced
-// Kids Mode: Elementary (ages 6-8) - Basic computer concepts, simple logic
-// Advanced Mode: Middle/High School (ages 13-14) - Programming concepts, algorithms, coding basics
+// Kids Mode: Beginner Level - Basic computer concepts, simple logic
+// Advanced Mode: Advanced Level - Programming concepts, algorithms, coding basics
 
 const codingQuestions = {
   // =========================================

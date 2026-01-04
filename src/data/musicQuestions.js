@@ -1,6 +1,6 @@
 // Music Questions - Two Modes: Kids & Advanced
-// Kids Mode: Elementary (ages 6-8) - Basic instruments, notes, rhythm
-// Advanced Mode: Middle/High School (ages 13-14) - Theory, composers, music history
+// Kids Mode: Beginner Level - Basic instruments, notes, rhythm
+// Advanced Mode: Advanced Level - Theory, composers, music history
 
 const musicQuestions = {
   // =========================================

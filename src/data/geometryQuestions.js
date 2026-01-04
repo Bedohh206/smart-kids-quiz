@@ -1,4 +1,6 @@
-// Geometry Questions - Two Modes: Kids & Advanced\r\n// Kids Mode: Early Elementary (ages 6-8) - Basic shapes and concepts\r\n// Advanced Mode: Early High School (ages 13-14) - Formal geometry
+// Geometry Questions - Two Modes: Kids & Advanced
+// Kids Mode: Beginner Level - Basic shapes and concepts
+// Advanced Mode: Advanced Level - Formal geometry
 
 const geometryQuestions = {
   // ------------------------------

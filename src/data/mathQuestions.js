@@ -1,6 +1,6 @@
 // Mathematics Questions - Two Modes: Kids & Advanced
-// Kids Mode: Early Elementary (ages 6-8) - Basic arithmetic
-// Advanced Mode: Early High School (ages 13-14) - Pre-algebra & advanced concepts
+// Kids Mode: Beginner Level - Basic arithmetic
+// Advanced Mode: Advanced Level - Pre-algebra & advanced concepts
 
 // Helper builders to increase variety without randomness
 const addQ = (a, b) => ({
@@ -31,7 +31,7 @@ const percQ = (p, n) => ({
 
 const mathQuestions = {
   // =========================================
-  // KIDS MODE - Early Elementary (Ages 6-8)
+  // KIDS MODE - Beginner Level
   // =========================================
   
   // ------------------------------
@@ -145,7 +145,7 @@ const mathQuestions = {
   ].slice(0, 50),
 
   // =========================================
-  // ADVANCED MODE - Early High School (Ages 13-14)
+  // ADVANCED MODE - Advanced Level
   // =========================================
   
   // ------------------------------

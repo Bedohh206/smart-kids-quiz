@@ -1,6 +1,6 @@
 // Art Questions - Two Modes: Kids & Advanced
-// Kids Mode: Elementary (ages 6-8) - Basic art concepts, colors, shapes
-// Advanced Mode: Middle/High School (ages 13-14) - Art history, famous artists, movements
+// Kids Mode: Beginner Level - Basic art concepts, colors, shapes
+// Advanced Mode: Advanced Level - Art history, famous artists, movements
 
 const artQuestions = {
   // =========================================

@@ -793,16 +793,16 @@ export default function QuizPage() {
   }
 
   /* ---------------------------------------------------------
-     SCREEN 1 — AGE GROUP
+     SCREEN 1 — DIFFICULTY LEVEL
   --------------------------------------------------------- */
   if (!ageGroup) {
     return (
       <div className="quiz-page">
-        <h2>Select Your Age Group</h2>
+        <h2>Select Difficulty Level</h2>
         <div className="levels">
-          <button onClick={() => setAgeGroup("5-7")}>Ages 5–7</button>
-          <button onClick={() => setAgeGroup("8-10")}>Ages 8–10</button>
-          <button onClick={() => setAgeGroup("11-14")}>Ages 11–14</button>
+          <button onClick={() => setAgeGroup("5-7")}>Level 1</button>
+          <button onClick={() => setAgeGroup("8-10")}>Level 2</button>
+          <button onClick={() => setAgeGroup("11-14")}>Level 3</button>
         </div>
 
         <button className="back-btn" onClick={goHome}>
@@ -845,8 +845,8 @@ export default function QuizPage() {
           >
             👶 KIDS MODE
             <div style={{ fontSize: "14px", marginTop: "8px" }}>
-              Early Elementary<br/>
-              Ages 6-8
+              Beginner Level<br/>
+              Easy to Medium
             </div>
           </button>
           
@@ -856,8 +856,8 @@ export default function QuizPage() {
           >
             🎓 ADVANCED MODE
             <div style={{ fontSize: "14px", marginTop: "8px" }}>
-              Early High School<br/>
-              Ages 13-14
+              Advanced Level<br/>
+              Medium to Hard
             </div>
           </button>
         </div>
