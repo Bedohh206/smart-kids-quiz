@@ -2,10 +2,12 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import WorldMap from "./components/WorldMap";
 import QuizPage from "./components/QuizPage";
+import InstallPrompt from "./components/InstallPrompt";
 
 function App() {
   return (
     <BrowserRouter>
+      <InstallPrompt />
       <Routes>
         <Route path="/" element={<WorldMap />} />
         <Route path="/quiz/:continent" element={<QuizPage />} />
