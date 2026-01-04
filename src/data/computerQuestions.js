@@ -1,8 +1,8 @@
 const computerQuestions = {
   // ---------------------------------------------------------
-  // LEVEL 1 — EASY (50 QUESTIONS)
+  // KIDS MODE - LEVEL 1 — EASY (50 QUESTIONS)
   // ---------------------------------------------------------
-  level1: [
+  kids_level1: [
     {
       q: "What does a computer use to store information?",
       a: "Memory",
@@ -78,9 +78,9 @@ const computerQuestions = {
   ],
 
   // ---------------------------------------------------------
-  // LEVEL 2 — MEDIUM (50 QUESTIONS)
+  // KIDS MODE - LEVEL 2 — MEDIUM (50 QUESTIONS)
   // ---------------------------------------------------------
-  level2: [
+  kids_level2: [
     {
       q: "What is the permanent storage of a computer?",
       a: "Hard drive",
@@ -166,9 +166,9 @@ const computerQuestions = {
   ],
 
   // ---------------------------------------------------------
-  // LEVEL 3 — HARD (50 QUESTIONS)
+  // KIDS MODE - LEVEL 3 — HARD (50 QUESTIONS)
   // ---------------------------------------------------------
-  level3: [
+  kids_level3: [
     {
       q: "Which part of the CPU performs arithmetic and logic operations?",
       a: "ALU",
@@ -272,6 +272,18 @@ const computerQuestions = {
     { q: "What is artificial intelligence?", a: "Machine simulating human intelligence", options: ["Machine simulating human intelligence", "Advanced calculator", "Robotics only", "Computer science"] },
     { q: "What is quantum computing?", a: "Computing using quantum bits", options: ["Computing using quantum bits", "Very fast PC", "Parallel processing", "Cloud computing"] },
   ],
+
+  // ---------------------------------------------------------
+  // ADVANCED MODE - Same questions for now
+  // ---------------------------------------------------------
+  advanced_level1: [],
+  advanced_level2: [],
+  advanced_level3: [],
 };
+
+// For advanced mode, reuse the same questions for now
+computerQuestions.advanced_level1 = computerQuestions.kids_level1;
+computerQuestions.advanced_level2 = computerQuestions.kids_level2;
+computerQuestions.advanced_level3 = computerQuestions.kids_level3;
 
 export default computerQuestions;

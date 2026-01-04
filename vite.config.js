@@ -7,6 +7,11 @@ export default defineConfig({
   build: {
     outDir: "dist",
     chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      }
+    }
   },
   server: {
     port: 3005,
@@ -17,5 +22,6 @@ export default defineConfig({
         changeOrigin: true,
       }
     }
-  }
+  },
+  cacheDir: './.vite'
 });

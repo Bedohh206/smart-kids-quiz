@@ -1,5 +1,8 @@
 {
   "appId": "com.smartkidsquiz.app",
   "appName": "Smart Kids Quiz",
-  "webDir": "build"
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
 }

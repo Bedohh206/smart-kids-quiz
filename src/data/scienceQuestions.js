@@ -1,8 +1,8 @@
 const scienceQuestions = {
   // ---------------------------------------------------------
-  // LEVEL 1 — EASY (50 QUESTIONS)
+  // KIDS MODE - LEVEL 1 — EASY (50 QUESTIONS)
   // ---------------------------------------------------------
-  level1: [
+  kids_level1: [
     {
       q: "What planet do we live on?",
       a: "Earth",
@@ -80,9 +80,9 @@ const scienceQuestions = {
   ],
 
   // ---------------------------------------------------------
-  // LEVEL 2 — MEDIUM (50 QUESTIONS)
+  // KIDS MODE - LEVEL 2 — MEDIUM (50 QUESTIONS)
   // ---------------------------------------------------------
-  level2: [
+  kids_level2: [
     {
       q: "What part of the cell contains the genetic material?",
       a: "Nucleus",
@@ -173,9 +173,9 @@ const scienceQuestions = {
   ],
 
   // ---------------------------------------------------------
-  // LEVEL 3 — HARD (50 QUESTIONS)
+  // KIDS MODE - LEVEL 3 — HARD (50 QUESTIONS)
   // ---------------------------------------------------------
-  level3: [
+  kids_level3: [
     {
       q: "What is the powerhouse of the cell?",
       a: "Mitochondria",
@@ -259,6 +259,24 @@ const scienceQuestions = {
     { q: "What is biodiversity?", a: "Variety of life", options: ["Variety of life", "Plant growth", "Soil type", "Climate"] },
     { q: "What causes tides?", a: "Moon's gravity", options: ["Sunlight", "Moon's gravity", "Wind", "Earthquakes"] },
   ],
+
+  // ---------------------------------------------------------
+  // ADVANCED MODE - Same questions for now
+  // ---------------------------------------------------------
+  advanced_level1: [
+    // Will reference kids_level1 questions
+  ],
+  advanced_level2: [
+    // Will reference kids_level2 questions  
+  ],
+  advanced_level3: [
+    // Will reference kids_level3 questions
+  ],
 };
+
+// For advanced mode, reuse the same questions for now
+scienceQuestions.advanced_level1 = scienceQuestions.kids_level1;
+scienceQuestions.advanced_level2 = scienceQuestions.kids_level2;
+scienceQuestions.advanced_level3 = scienceQuestions.kids_level3;
 
 export default scienceQuestions;

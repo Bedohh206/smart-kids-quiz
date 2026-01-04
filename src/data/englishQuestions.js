@@ -135,9 +135,9 @@ const makeHardItems = (n) => {
 
 const englishQuestions = {
   // ---------------------------------------------------------
-  // LEVEL 1 — EASY (50 Questions)
+  // KIDS MODE - LEVEL 1 — EASY (50 Questions)
   // ---------------------------------------------------------
-  level1: [
+  kids_level1: [
     {
       q: "Which word is a noun?",
       a: "Dog",
@@ -172,9 +172,9 @@ const englishQuestions = {
   ],
 
   // ---------------------------------------------------------
-  // LEVEL 2 — MEDIUM (50 Questions)
+  // KIDS MODE - LEVEL 2 — MEDIUM (50 Questions)
   // ---------------------------------------------------------
-  level2: [
+  kids_level2: [
     {
       q: "Which sentence uses correct punctuation?",
       a: "Where are you going?",
@@ -209,9 +209,9 @@ const englishQuestions = {
   ],
 
   // ---------------------------------------------------------
-  // LEVEL 3 — HARD (50 Questions)
+  // KIDS MODE - LEVEL 3 — HARD (50 Questions)
   // ---------------------------------------------------------
-  level3: [
+  kids_level3: [
     {
       q: "Which sentence uses the past perfect tense?",
       a: "She had finished her work.",
@@ -249,6 +249,18 @@ const englishQuestions = {
     },
     ...makeHardItems(45),
   ],
+
+  // ---------------------------------------------------------
+  // ADVANCED MODE - Same questions for now
+  // ---------------------------------------------------------
+  advanced_level1: [],
+  advanced_level2: [],
+  advanced_level3: [],
 };
+
+// For advanced mode, reuse the same questions for now
+englishQuestions.advanced_level1 = englishQuestions.kids_level1;
+englishQuestions.advanced_level2 = englishQuestions.kids_level2;
+englishQuestions.advanced_level3 = englishQuestions.kids_level3;
 
 export default englishQuestions;

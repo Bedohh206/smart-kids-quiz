@@ -7,7 +7,7 @@ const data = JSON.stringify({
 });
 
 const options = {
-  hostname: 'smart-kids-quiz-qq0jdyztq-bedohh206s-projects.vercel.app',
+  hostname: 'smart-kids-quiz-jynrvlqlm-bedohh206s-projects.vercel.app',
   path: '/api/lesson',
   method: 'POST',
   headers: {
@@ -15,6 +15,9 @@ const options = {
     'Content-Length': data.length
   }
 };
+
+console.log(`Testing: https://${options.hostname}${options.path}`);
+console.log('');
 
 const req = https.request(options, (res) => {
   let body = '';
