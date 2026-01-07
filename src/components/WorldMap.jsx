@@ -334,18 +334,40 @@ export default function WorldMap() {
         />
       )}
 
+      {/* About Section */}
+      <section style={{
+        maxWidth: '900px',
+        margin: '40px auto 20px',
+        padding: '30px',
+        background: 'rgba(255,255,255,0.95)',
+        borderRadius: '15px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+        textAlign: 'center'
+      }}>
+        <h2 style={{ color: '#667eea', marginBottom: '15px', fontSize: '1.8em' }}>Welcome to Smart Kids Quiz! 🎓</h2>
+        <p style={{ color: '#555', lineHeight: '1.8', marginBottom: '15px', fontSize: '1.1em' }}>
+          Smart Kids Quiz is a fun, interactive learning app designed to help children build confidence in reading, math, shapes, and early problem‑solving. Our mission is to make learning joyful, accessible, and safe for kids everywhere.
+        </p>
+        <p style={{ color: '#555', lineHeight: '1.8', fontSize: '1.05em' }}>
+          If you have questions, feedback, or suggestions, we'd love to hear from you. You can reach us anytime at{' '}
+          <a href="mailto:smartkidsquiz@mail.com" style={{ color: '#667eea', fontWeight: 'bold', textDecoration: 'none' }}>
+            smartkidsquiz@mail.com
+          </a>
+        </p>
+      </section>
+
       {/* Footer with contact */}
       <footer style={{
         textAlign: 'center',
         padding: '20px',
-        marginTop: '40px',
+        marginTop: '20px',
         borderTop: '2px solid rgba(255,255,255,0.2)',
         color: 'rgba(255,255,255,0.9)',
         fontSize: '14px'
       }}>
         <p style={{ margin: '5px 0' }}>© 2026 Smart Kids Quiz - Educational Learning Platform</p>
         <p style={{ margin: '5px 0' }}>
-          Contact: <a href="mailto:alphabay@email.com" style={{ color: '#FFD700', textDecoration: 'none' }}>alphabay@email.com</a>
+          Contact: <a href="mailto:smartkidsquiz@mail.com" style={{ color: '#FFD700', textDecoration: 'none' }}>smartkidsquiz@mail.com</a>
         </p>
         <p style={{ margin: '5px 0', fontSize: '12px', opacity: 0.8 }}>
           <a href="/privacy-policy.html" style={{ color: '#FFF', marginRight: '15px' }}>Privacy Policy</a>

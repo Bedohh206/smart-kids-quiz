@@ -1296,7 +1296,7 @@ export default function QuizPage() {
         color: 'rgba(255,255,255,0.8)',
         fontSize: '12px'
       }}>
-        <p style={{ margin: '3px 0' }}>Contact: <a href="mailto:alphabay@email.com" style={{ color: '#FFD700', textDecoration: 'none' }}>alphabay@email.com</a></p>
+        <p style={{ margin: '3px 0' }}>Contact: <a href="mailto:smartkidsquiz@mail.com" style={{ color: '#FFD700', textDecoration: 'none' }}>smartkidsquiz@mail.com</a></p>
       </footer>
     </div>
   );
