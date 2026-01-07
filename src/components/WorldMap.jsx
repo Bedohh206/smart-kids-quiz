@@ -333,6 +333,25 @@ export default function WorldMap() {
           onClose={() => setShowVideos(false)}
         />
       )}
+
+      {/* Footer with contact */}
+      <footer style={{
+        textAlign: 'center',
+        padding: '20px',
+        marginTop: '40px',
+        borderTop: '2px solid rgba(255,255,255,0.2)',
+        color: 'rgba(255,255,255,0.9)',
+        fontSize: '14px'
+      }}>
+        <p style={{ margin: '5px 0' }}>© 2026 Smart Kids Quiz - Educational Learning Platform</p>
+        <p style={{ margin: '5px 0' }}>
+          Contact: <a href="mailto:alphabay@email.com" style={{ color: '#FFD700', textDecoration: 'none' }}>alphabay@email.com</a>
+        </p>
+        <p style={{ margin: '5px 0', fontSize: '12px', opacity: 0.8 }}>
+          <a href="/privacy-policy.html" style={{ color: '#FFF', marginRight: '15px' }}>Privacy Policy</a>
+          <a href="/terms.html" style={{ color: '#FFF' }}>Terms of Service</a>
+        </p>
+      </footer>
     </div>
   );
 }

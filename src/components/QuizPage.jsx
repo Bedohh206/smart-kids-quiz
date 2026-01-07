@@ -1286,6 +1286,18 @@ export default function QuizPage() {
           onClose={() => setShowSimulation(false)}
         />
       )}
+
+      {/* Footer with contact */}
+      <footer style={{
+        textAlign: 'center',
+        padding: '15px',
+        marginTop: '30px',
+        borderTop: '1px solid rgba(255,255,255,0.1)',
+        color: 'rgba(255,255,255,0.8)',
+        fontSize: '12px'
+      }}>
+        <p style={{ margin: '3px 0' }}>Contact: <a href="mailto:alphabay@email.com" style={{ color: '#FFD700', textDecoration: 'none' }}>alphabay@email.com</a></p>
+      </footer>
     </div>
   );
 }
