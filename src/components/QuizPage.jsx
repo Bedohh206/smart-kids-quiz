@@ -39,6 +39,12 @@ import Spinner from "./Spinner";
 import Achievements from "./Achievements";
 import WordScramble from "./WordScramble";
 
+// New Interactive Features
+import ResourcesPanel from "./ResourcesPanel";
+import DragDropMatch from "./DragDropMatch";
+import SimulationLab from "./SimulationLab";
+import { educationalResources } from "../data/educationalResources";
+
 // 🌍 Order used for adventure unlocking
 const CONTINENT_ORDER = [
   "africa",
@@ -191,6 +197,11 @@ export default function QuizPage() {
   };
 
   const [stats, setStats] = useState(loadStats());
+
+  // New feature states
+  const [showResources, setShowResources] = useState(false);
+  const [showDragDrop, setShowDragDrop] = useState(false);
+  const [showSimulation, setShowSimulation] = useState(false);
 
   // Save stats
   const saveStats = (newStats) => {
@@ -912,6 +923,19 @@ export default function QuizPage() {
         </h2>
         <p>Select Level:</p>
 
+        {/* New Interactive Features Menu */}
+        <div className="interactive-features">
+          <button className="feature-btn resources-btn" onClick={() => setShowResources(true)}>
+            📚 Resources
+          </button>
+          <button className="feature-btn dragdrop-btn" onClick={() => setShowDragDrop(true)}>
+            🎯 Drag & Drop
+          </button>
+          <button className="feature-btn simulation-btn" onClick={() => setShowSimulation(true)}>
+            🔬 Simulations
+          </button>
+        </div>
+
         <div className="levels">
           {selectedSet &&
             Object.keys(selectedSet)
@@ -1239,6 +1263,29 @@ export default function QuizPage() {
         <img src={mascotImg} alt="RoboTutor mascot" />
         <p>{mascotMessage}</p>
       </div>
+
+      {/* New Interactive Feature Modals */}
+      {showResources && (
+        <ResourcesPanel
+          subject={(continent || "").toUpperCase()}
+          resources={educationalResources[finalKey] || []}
+          onClose={() => setShowResources(false)}
+        />
+      )}
+
+      {showDragDrop && (
+        <DragDropMatch
+          subject={finalKey}
+          onClose={() => setShowDragDrop(false)}
+        />
+      )}
+
+      {showSimulation && (
+        <SimulationLab
+          subject={finalKey}
+          onClose={() => setShowSimulation(false)}
+        />
+      )}
     </div>
   );
 }

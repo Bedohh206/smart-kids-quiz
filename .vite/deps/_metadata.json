@@ -1,64 +1,70 @@
 {
-  "hash": "eff2ff8b",
-  "configHash": "f9e999c3",
-  "lockfileHash": "7fe0a67f",
-  "browserHash": "644892ca",
+  "hash": "6fb4e214",
+  "configHash": "f52b37c9",
+  "lockfileHash": "d9e17526",
+  "browserHash": "ea30c23a",
   "optimized": {
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "4d3ed78b",
+      "fileHash": "677ec277",
       "needsInterop": true
     },
     "react-dom": {
       "src": "../../node_modules/react-dom/index.js",
       "file": "react-dom.js",
-      "fileHash": "b41113b0",
+      "fileHash": "9e82eb1f",
       "needsInterop": true
     },
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "38241023",
+      "fileHash": "f02854ce",
       "needsInterop": true
     },
     "react/jsx-runtime": {
       "src": "../../node_modules/react/jsx-runtime.js",
       "file": "react_jsx-runtime.js",
-      "fileHash": "48c53ffe",
+      "fileHash": "c534f77a",
       "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "006dd779",
+      "needsInterop": true
+    },
+    "@vercel/analytics/react": {
+      "src": "../../node_modules/@vercel/analytics/dist/react/index.mjs",
+      "file": "@vercel_analytics_react.js",
+      "fileHash": "0abe514f",
+      "needsInterop": false
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "f2be81c5",
+      "needsInterop": false
     },
     "framer-motion": {
       "src": "../../node_modules/framer-motion/dist/es/index.mjs",
       "file": "framer-motion.js",
-      "fileHash": "1c065103",
+      "fileHash": "0f9a0605",
       "needsInterop": false
     },
     "react-confetti": {
       "src": "../../node_modules/react-confetti/dist/react-confetti.mjs",
       "file": "react-confetti.js",
-      "fileHash": "5e8a94a0",
-      "needsInterop": false
-    },
-    "react-dom/client": {
-      "src": "../../node_modules/react-dom/client.js",
-      "file": "react-dom_client.js",
-      "fileHash": "155dd613",
-      "needsInterop": true
-    },
-    "react-router-dom": {
-      "src": "../../node_modules/react-router-dom/dist/index.mjs",
-      "file": "react-router-dom.js",
-      "fileHash": "44dc2718",
+      "fileHash": "3ed0d2c2",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-A2GRCYGS": {
-      "file": "chunk-A2GRCYGS.js"
-    },
     "chunk-4XODZXSK": {
       "file": "chunk-4XODZXSK.js"
+    },
+    "chunk-A2GRCYGS": {
+      "file": "chunk-A2GRCYGS.js"
     },
     "chunk-ZZLEEZYP": {
       "file": "chunk-ZZLEEZYP.js"
