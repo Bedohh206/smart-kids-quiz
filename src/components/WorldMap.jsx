@@ -360,7 +360,7 @@ export default function WorldMap() {
       </section>
 
       {/* Ad at bottom of main content page */}
-      <AdSense slot="9408631164" format="horizontal" style={{ marginBottom: '20px' }} />
+      <AdSense slot="6782467825" format="auto" style={{ marginBottom: '20px' }} />
 
       {/* Footer with contact */}
       <footer style={{
