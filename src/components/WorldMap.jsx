@@ -1,6 +1,9 @@
 // 🌍 CONTINENT ICONS
 import smartQuizLogo from "../assets/smartquiz/smartquiz.png";
 
+// AdSense
+import AdSense from "./AdSense";
+
 import africaIcon from "../assets/africa/africa.png";
 import asiaIcon from "../assets/asia/asia.png";
 import europeIcon from "../assets/europe/europe.png";
@@ -355,6 +358,9 @@ export default function WorldMap() {
           </a>
         </p>
       </section>
+
+      {/* Ad at bottom of main content page */}
+      <AdSense slot="1234567890" format="horizontal" style={{ marginBottom: '20px' }} />
 
       {/* Footer with contact */}
       <footer style={{

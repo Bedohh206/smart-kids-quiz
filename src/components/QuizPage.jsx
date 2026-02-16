@@ -5,6 +5,9 @@ import Confetti from "react-confetti";
 // Styles
 import "./QuizPage.css";
 
+// AdSense
+import AdSense from "./AdSense";
+
 // Analytics
 import { trackQuizStart, trackQuizCompletion, trackAILesson, trackLanguageChange } from "../utils/analytics";
 
@@ -1159,6 +1162,9 @@ export default function QuizPage() {
         )}
         
         <Achievements stats={stats} newBadges={newBadges} />
+
+        {/* Ad on results page - substantial content */}
+        <AdSense slot="1234567890" format="auto" />
 
         <button className="ai-btn" onClick={fetchAIQuestions}>
           ✨ Try AI Questions
