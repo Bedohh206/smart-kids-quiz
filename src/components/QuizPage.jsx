@@ -1164,7 +1164,7 @@ export default function QuizPage() {
         <Achievements stats={stats} newBadges={newBadges} />
 
         {/* Ad on results page - substantial content */}
-        <AdSense slot="1234567890" format="auto" />
+        <AdSense slot="9408631164" format="auto" />
 
         <button className="ai-btn" onClick={fetchAIQuestions}>
           ✨ Try AI Questions
