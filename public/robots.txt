@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /play/
+Disallow: /rewards/
+Disallow: /loading
 
 Sitemap: https://smart-kids-quiz.vercel.app/sitemap.xml

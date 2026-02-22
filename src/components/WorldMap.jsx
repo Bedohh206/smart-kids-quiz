@@ -1,9 +1,6 @@
 // 🌍 CONTINENT ICONS
 import smartQuizLogo from "../assets/smartquiz/smartquiz.png";
 
-// AdSense
-import AdSense from "./AdSense";
-
 import africaIcon from "../assets/africa/africa.png";
 import asiaIcon from "../assets/asia/asia.png";
 import europeIcon from "../assets/europe/europe.png";
@@ -26,7 +23,7 @@ import computerIcon from "../assets/computer/computer.png";
 
 // React + Framer Motion
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import MiniGamesLauncher from "./MiniGamesLauncher";
 import LeaderboardPanel, { loadLeaderboard, saveLeaderboard } from "./LeaderboardPanel";
@@ -359,9 +356,6 @@ export default function WorldMap() {
         </p>
       </section>
 
-      {/* Ad at bottom of main content page */}
-      <AdSense slot="6782467825" format="auto" style={{ marginBottom: '20px' }} />
-
       {/* Footer with contact */}
       <footer style={{
         textAlign: 'center',
@@ -376,8 +370,12 @@ export default function WorldMap() {
           Contact: <a href="mailto:smartkidsquiz@mail.com" style={{ color: '#FFD700', textDecoration: 'none' }}>smartkidsquiz@mail.com</a>
         </p>
         <p style={{ margin: '5px 0', fontSize: '12px', opacity: 0.8 }}>
-          <a href="/privacy-policy.html" style={{ color: '#FFF', marginRight: '15px' }}>Privacy Policy</a>
-          <a href="/terms.html" style={{ color: '#FFF' }}>Terms of Service</a>
+          <Link to="/learn/math-for-kids" style={{ color: '#FFF', marginRight: '15px' }}>Learn Math</Link>
+          <Link to="/learn/english-for-kids" style={{ color: '#FFF', marginRight: '15px' }}>Learn English</Link>
+          <Link to="/learn/science-for-kids" style={{ color: '#FFF', marginRight: '15px' }}>Learn Science</Link>
+          <Link to="/about" style={{ color: '#FFF', marginRight: '15px' }}>About</Link>
+          <Link to="/contact" style={{ color: '#FFF', marginRight: '15px' }}>Contact</Link>
+          <Link to="/privacy" style={{ color: '#FFF' }}>Privacy Policy</Link>
         </p>
       </footer>
     </div>

@@ -16,14 +16,27 @@ const AdSense = ({
   style = {}
 }) => {
   useEffect(() => {
-    try {
-      // Push ad after component mounts
-      if (window.adsbygoogle && window.adsbygoogle.loaded !== true) {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
+    let cancelled = false;
+
+    const tryPush = () => {
+      if (cancelled) return;
+      try {
+        if (window.adsbygoogle) {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          return;
+        }
+      } catch (error) {
+        console.error('AdSense error:', error);
+        return;
       }
-    } catch (error) {
-      console.error('AdSense error:', error);
-    }
+      setTimeout(tryPush, 300);
+    };
+
+    tryPush();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
