@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Dependencies
 node_modules/
 /.pnp
@@ -30,11 +29,8 @@ android/local.properties
 npm-debug.log*
 yarn-debug.log*
 *.log
-=======
-node_modules/
-dist/
-build/
-.vscode/
-.env
-.vercel
->>>>>>> ef5b9374f057458b367c8e53e155a7ebe4383463
+
+# Local helper docs/scripts
+ADSENSE_FIX.md
+SETUP_NODEJS.md
+quick-build-deploy.ps1
