@@ -11,13 +11,43 @@ export default function ContactPage() {
         canonicalPath="/contact"
       />
       <h1>Contact</h1>
-      <p>If you have questions, suggestions, or feedback, please contact our team:</p>
       <p>
-        Email: <a href="mailto:smartkidsquiz@mail.com">smartkidsquiz@mail.com</a>
+        If you have questions, suggestions, or feedback about lessons, quizzes, accessibility, or
+        child safety features, please contact our team.
       </p>
-      <p>
-        For policy details, see our <Link to="/privacy">Privacy Policy</Link>.
-      </p>
+
+      <section style={{ marginTop: 18 }}>
+        <h2>Support Email</h2>
+        <p>
+          Email: <a href="mailto:smartkidsquiz@mail.com">smartkidsquiz@mail.com</a>
+        </p>
+        <p>We aim to respond to most support requests within 2 to 5 business days.</p>
+      </section>
+
+      <section style={{ marginTop: 18 }}>
+        <h2>What to Include in Your Message</h2>
+        <ul>
+          <li>Topic or page where the issue happened</li>
+          <li>Device and browser (for example, Chrome on Android)</li>
+          <li>Short description of the problem or suggestion</li>
+          <li>Screenshot if available (optional, but helpful)</li>
+        </ul>
+      </section>
+
+      <section style={{ marginTop: 18 }}>
+        <h2>Parents and Teachers</h2>
+        <p>
+          We welcome requests from schools and families for age-level recommendations, topic
+          prioritization, and classroom-friendly study flows.
+        </p>
+      </section>
+
+      <section style={{ marginTop: 18 }}>
+        <h2>Policy Links</h2>
+        <p>
+          For legal and privacy details, read our <Link to="/privacy">Privacy Policy</Link> and <Link to="/terms">Terms of Service</Link>.
+        </p>
+      </section>
       <p><Link to="/">Back to Home</Link></p>
     </main>
   );

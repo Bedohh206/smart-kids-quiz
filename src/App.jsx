@@ -9,6 +9,7 @@ import LearnHubPage from "./components/LearnHubPage";
 import AboutPage from "./components/AboutPage";
 import ContactPage from "./components/ContactPage";
 import PrivacyPage from "./components/PrivacyPage";
+import TermsPage from "./components/TermsPage";
 import AdFreeRoutePage from "./components/AdFreeRoutePage";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
         <Route
           path="/play/*"
           element={

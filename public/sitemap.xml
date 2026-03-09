@@ -16,6 +16,24 @@
     <loc>https://smart-kids-quiz.vercel.app/learn/science-for-kids</loc>
   </url>
   <url>
+    <loc>https://smart-kids-quiz.vercel.app/learn/algebra-for-kids</loc>
+  </url>
+  <url>
+    <loc>https://smart-kids-quiz.vercel.app/learn/geometry-for-kids</loc>
+  </url>
+  <url>
+    <loc>https://smart-kids-quiz.vercel.app/learn/coding-for-kids</loc>
+  </url>
+  <url>
+    <loc>https://smart-kids-quiz.vercel.app/learn/health-for-kids</loc>
+  </url>
+  <url>
+    <loc>https://smart-kids-quiz.vercel.app/learn/history-for-kids</loc>
+  </url>
+  <url>
+    <loc>https://smart-kids-quiz.vercel.app/learn/geography-for-kids</loc>
+  </url>
+  <url>
     <loc>https://smart-kids-quiz.vercel.app/about</loc>
   </url>
   <url>
@@ -23,5 +41,8 @@
   </url>
   <url>
     <loc>https://smart-kids-quiz.vercel.app/privacy</loc>
+  </url>
+  <url>
+    <loc>https://smart-kids-quiz.vercel.app/terms</loc>
   </url>
 </urlset>

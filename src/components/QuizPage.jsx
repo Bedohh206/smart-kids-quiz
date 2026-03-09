@@ -1297,6 +1297,10 @@ export default function QuizPage() {
         fontSize: '12px'
       }}>
         <p style={{ margin: '3px 0' }}>Contact: <a href="mailto:smartkidsquiz@mail.com" style={{ color: '#FFD700', textDecoration: 'none' }}>smartkidsquiz@mail.com</a></p>
+        <p style={{ margin: '3px 0' }}>
+          <a href="/privacy" style={{ color: '#FFD700', textDecoration: 'none', marginRight: '12px' }}>Privacy Policy</a>
+          <a href="/terms" style={{ color: '#FFD700', textDecoration: 'none' }}>Terms of Service</a>
+        </p>
       </footer>
     </div>
   );

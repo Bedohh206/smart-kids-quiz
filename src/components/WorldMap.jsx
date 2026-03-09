@@ -370,12 +370,16 @@ export default function WorldMap() {
           Contact: <a href="mailto:smartkidsquiz@mail.com" style={{ color: '#FFD700', textDecoration: 'none' }}>smartkidsquiz@mail.com</a>
         </p>
         <p style={{ margin: '5px 0', fontSize: '12px', opacity: 0.8 }}>
-          <Link to="/learn/math-for-kids" style={{ color: '#FFF', marginRight: '15px' }}>Learn Math</Link>
-          <Link to="/learn/english-for-kids" style={{ color: '#FFF', marginRight: '15px' }}>Learn English</Link>
-          <Link to="/learn/science-for-kids" style={{ color: '#FFF', marginRight: '15px' }}>Learn Science</Link>
+          <Link to="/learn/math-for-kids" style={{ color: '#FFF', marginRight: '6px' }}>Learn Math</Link>
+          <span style={{ marginRight: '15px', opacity: 0.9 }}>(Updated: March 2026)</span>
+          <Link to="/learn/english-for-kids" style={{ color: '#FFF', marginRight: '6px' }}>Learn English</Link>
+          <span style={{ marginRight: '15px', opacity: 0.9 }}>(Updated: March 2026)</span>
+          <Link to="/learn/science-for-kids" style={{ color: '#FFF', marginRight: '6px' }}>Learn Science</Link>
+          <span style={{ marginRight: '15px', opacity: 0.9 }}>(Updated: March 2026)</span>
           <Link to="/about" style={{ color: '#FFF', marginRight: '15px' }}>About</Link>
           <Link to="/contact" style={{ color: '#FFF', marginRight: '15px' }}>Contact</Link>
-          <Link to="/privacy" style={{ color: '#FFF' }}>Privacy Policy</Link>
+          <Link to="/privacy" style={{ color: '#FFF', marginRight: '15px' }}>Privacy Policy</Link>
+          <Link to="/terms" style={{ color: '#FFF' }}>Terms</Link>
         </p>
       </footer>
     </div>
