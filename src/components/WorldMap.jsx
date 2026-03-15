@@ -355,7 +355,7 @@ export default function WorldMap() {
   const [showMiniGames, setShowMiniGames] = useState(false);
   const [showVideos, setShowVideos] = useState(false);
   const [selectedContinent, setSelectedContinent] = useState(null);
-  const [selectedLearningContinent, setSelectedLearningContinent] = useState("africa");
+  const learningContent = continentLearningModules.africa;
 
   /* 🎵 MUSIC INIT */
   useEffect(() => {
@@ -643,114 +643,52 @@ export default function WorldMap() {
 
       {/* Continent Learning Content */}
       <section style={{
-        maxWidth: '1000px',
+        maxWidth: '900px',
         margin: '30px auto 20px',
-        padding: '28px',
-        background: 'rgba(255,255,255,0.96)',
+        padding: '30px',
+        background: 'rgba(255,255,255,0.95)',
         borderRadius: '15px',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+        boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+        textAlign: 'left'
       }}>
         <h2 style={{ color: '#667eea', marginBottom: '10px', fontSize: '1.8em' }}>Continent Learning Journey 🌍</h2>
         <p style={{ color: '#555', lineHeight: '1.8', marginBottom: '16px' }}>
-          Read the sectioned learning guide, explore related school subjects, then take a quiz. This helps children connect reading, science, history, and math in one learning flow.
+          Read this educational guide below the continent map, then use the linked subject quizzes. This keeps the home page simple while adding rich publisher content for learners.
         </p>
+        <article>
+          <h3 style={{ color: '#333', marginBottom: '8px' }}>{learningContent.name}</h3>
+          <p style={{ color: '#555', lineHeight: '1.75', marginBottom: '14px' }}>{learningContent.intro}</p>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '18px' }}>
-          {continents.map((continent) => {
-            const isActive = selectedLearningContinent === continent.id;
-            return (
-              <button
-                key={`learn-${continent.id}`}
-                onClick={() => setSelectedLearningContinent(continent.id)}
-                style={{
-                  border: 'none',
-                  borderRadius: '999px',
-                  padding: '8px 14px',
-                  cursor: 'pointer',
-                  background: isActive ? '#667eea' : '#eef2ff',
-                  color: isActive ? '#fff' : '#334',
-                  fontWeight: 600
-                }}
-              >
-                {continent.name}
-              </button>
-            );
-          })}
-        </div>
+          {learningContent.sections.map((section) => (
+            <section key={section.title} style={{ marginTop: '14px' }}>
+              <h4 style={{ marginBottom: '6px', color: '#3b4a9f' }}>{section.emoji} {section.title}</h4>
+              <p style={{ marginBottom: '6px', color: '#444' }}>
+                <strong>Purpose:</strong> {section.purpose}
+              </p>
+              <p style={{ marginBottom: '8px', color: '#555', lineHeight: '1.7' }}>{section.text}</p>
+              <p style={{ margin: 0, color: '#444' }}>
+                <strong>Subject links:</strong>{' '}
+                {section.subjectLinks.map((subjectId, index) => (
+                  <React.Fragment key={`${section.title}-${subjectId}`}>
+                    <Link to={`/quiz/${subjectId}`} style={{ color: '#667eea', textDecoration: 'none', fontWeight: 600 }}>
+                      {subjectRouteLabels[subjectId] || subjectId}
+                    </Link>
+                    {index < section.subjectLinks.length - 1 ? ', ' : ''}
+                  </React.Fragment>
+                ))}
+              </p>
+            </section>
+          ))}
 
-        {continentLearningModules[selectedLearningContinent] && (
-          <article>
-            <h3 style={{ color: '#333', marginBottom: '8px' }}>
-              {continentLearningModules[selectedLearningContinent].name}
-            </h3>
-            <p style={{ color: '#555', lineHeight: '1.75', marginBottom: '14px' }}>
-              {continentLearningModules[selectedLearningContinent].intro}
-            </p>
-
-            {continentLearningModules[selectedLearningContinent].sections.map((section) => (
-              <section
-                key={`${selectedLearningContinent}-${section.title}`}
-                style={{
-                  marginTop: '12px',
-                  padding: '14px 14px 10px',
-                  border: '1px solid #e8ebff',
-                  borderRadius: '12px',
-                  background: '#fafbff'
-                }}
-              >
-                <h4 style={{ marginBottom: '6px', color: '#3b4a9f' }}>
-                  {section.emoji} {section.title}
-                </h4>
-                <p style={{ marginBottom: '6px', color: '#444' }}>
-                  <strong>Purpose:</strong> {section.purpose}
-                </p>
-                <p style={{ marginBottom: '8px', color: '#555', lineHeight: '1.7' }}>
-                  {section.text}
-                </p>
-                <p style={{ margin: 0, color: '#444' }}>
-                  <strong>Subject links:</strong>{' '}
-                  {section.subjectLinks.map((subjectId, index) => (
-                    <React.Fragment key={`${section.title}-${subjectId}`}>
-                      <Link to={`/quiz/${subjectId}`} style={{ color: '#667eea', textDecoration: 'none', fontWeight: 600 }}>
-                        {subjectRouteLabels[subjectId] || subjectId}
-                      </Link>
-                      {index < section.subjectLinks.length - 1 ? ', ' : ''}
-                    </React.Fragment>
-                  ))}
-                </p>
-              </section>
-            ))}
-
-            <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-              <Link
-                to={`/quiz/${selectedLearningContinent}`}
-                style={{
-                  background: '#667eea',
-                  color: '#fff',
-                  textDecoration: 'none',
-                  borderRadius: '10px',
-                  padding: '10px 14px',
-                  fontWeight: 700
-                }}
-              >
-                Take {continentLearningModules[selectedLearningContinent].name} Quiz
-              </Link>
-              <Link
-                to="/learn"
-                style={{
-                  background: '#eef2ff',
-                  color: '#3b4a9f',
-                  textDecoration: 'none',
-                  borderRadius: '10px',
-                  padding: '10px 14px',
-                  fontWeight: 700
-                }}
-              >
-                Explore More Learning Guides
-              </Link>
-            </div>
-          </article>
-        )}
+          <p style={{ marginTop: '14px' }}>
+            <Link to="/quiz/africa" style={{ color: '#667eea', fontWeight: 700, textDecoration: 'none', marginRight: '14px' }}>
+              Take Africa Quiz
+            </Link>
+            <Link to="/learn" style={{ color: '#667eea', fontWeight: 700, textDecoration: 'none' }}>
+              Explore More Learning Guides
+            </Link>
+          </p>
+        </article>
       </section>
 
       {/* About Section */}
