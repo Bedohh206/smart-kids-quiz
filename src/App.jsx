@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import WorldMap from "./components/WorldMap";
 import QuizPage from "./components/QuizPage";
 import InstallPrompt from "./components/InstallPrompt";
-import AdsenseGate from "./components/AdsenseGate";
 import LearnPage from "./components/LearnPage";
 import LearnHubPage from "./components/LearnHubPage";
 import AboutPage from "./components/AboutPage";
@@ -15,7 +14,6 @@ import AdFreeRoutePage from "./components/AdFreeRoutePage";
 function App() {
   return (
     <BrowserRouter>
-      <AdsenseGate />
       <InstallPrompt />
       <Routes>
         <Route path="/" element={<WorldMap />} />

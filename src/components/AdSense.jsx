@@ -1,5 +1,19 @@
 import React, { useEffect } from 'react';
 
+const ADSENSE_CLIENT = 'ca-pub-5589341753091612';
+
+function loadAdsenseScriptOnce() {
+  if (typeof document === 'undefined') return;
+  if (document.querySelector('script[data-adsense="true"]')) return;
+
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+  script.crossOrigin = 'anonymous';
+  script.setAttribute('data-adsense', 'true');
+  document.head.appendChild(script);
+}
+
 /**
  * AdSense Component for manual ad placement
  * Only use on pages with substantial content (not on alerts, loading screens, or navigation)
@@ -17,6 +31,9 @@ const AdSense = ({
 }) => {
   useEffect(() => {
     let cancelled = false;
+    let retryTimer = null;
+
+    loadAdsenseScriptOnce();
 
     const tryPush = () => {
       if (cancelled) return;
@@ -29,13 +46,14 @@ const AdSense = ({
         console.error('AdSense error:', error);
         return;
       }
-      setTimeout(tryPush, 300);
+      retryTimer = setTimeout(tryPush, 300);
     };
 
     tryPush();
 
     return () => {
       cancelled = true;
+      if (retryTimer) clearTimeout(retryTimer);
     };
   }, []);
 
@@ -49,7 +67,7 @@ const AdSense = ({
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
-        data-ad-client="ca-pub-5589341753091612"
+        data-ad-client={ADSENSE_CLIENT}
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive.toString()}
