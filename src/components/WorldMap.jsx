@@ -40,6 +40,312 @@ const BASE = import.meta.env.BASE_URL;
 const backgroundMusic = `${BASE}sounds/background.mp3`;
 const clickSound = `${BASE}sounds/click.wav`;
 
+const continentLearningModules = {
+  africa: {
+    name: "Africa",
+    intro:
+      "Africa is the second-largest continent and home to rich landscapes, wildlife, and cultures. This learning path helps children read, observe, compare, and solve.",
+    sections: [
+      {
+        emoji: "🧩",
+        title: "Section 1 — Introduction to the Continent",
+        purpose: "Warm-up, build curiosity, and set the scene.",
+        text: "Africa includes deserts, rainforests, mountains, and savannas. Learners can discover animals, places, and communities while practicing key reading skills.",
+        subjectLinks: ["geography", "english"]
+      },
+      {
+        emoji: "🐾",
+        title: "Section 2 — Animals and Nature",
+        purpose: "Teach science and geography through fun facts.",
+        text: "From the Sahara Desert to the Congo Rainforest, children explore habitats and how animals adapt to climate, food, and movement.",
+        subjectLinks: ["science", "geography"]
+      },
+      {
+        emoji: "🏛️",
+        title: "Section 3 — People, Culture, and History",
+        purpose: "Introduce diversity, traditions, and historical learning.",
+        text: "Africa has thousands of languages and many cultural traditions in music, art, and storytelling. Learners can also explore ancient and modern achievements.",
+        subjectLinks: ["history", "english"]
+      },
+      {
+        emoji: "🧮",
+        title: "Section 4 — Numbers, Patterns, and Fun Facts",
+        purpose: "Add math and logic in a playful way.",
+        text: "Children can compare distances, count countries, and use real facts to practice number sense, estimation, and pattern spotting.",
+        subjectLinks: ["math", "science"]
+      },
+      {
+        emoji: "🌟",
+        title: "Section 5 — Everyday Life and Learning Connections",
+        purpose: "Connect continent learning to school and real life.",
+        text: "This section helps children connect school topics to everyday routines, communication, health, and community life across Africa.",
+        subjectLinks: ["english", "health", "history"]
+      }
+    ]
+  },
+  asia: {
+    name: "Asia",
+    intro:
+      "Asia is the largest continent, with many climates, languages, and inventions. Kids can connect map skills with science, history, and daily life.",
+    sections: [
+      {
+        emoji: "🧩",
+        title: "Section 1 — Introduction to the Continent",
+        purpose: "Warm-up with key location and scale ideas.",
+        text: "Learners explore how Asia stretches from snowy mountains to tropical islands and includes many countries and cultures.",
+        subjectLinks: ["geography", "english"]
+      },
+      {
+        emoji: "🐾",
+        title: "Section 2 — Animals and Nature",
+        purpose: "Build science understanding through habitats.",
+        text: "Children can compare monsoon forests, deserts, and mountain ecosystems while learning how species adapt to their environments.",
+        subjectLinks: ["science", "geography"]
+      },
+      {
+        emoji: "🏛️",
+        title: "Section 3 — People, Culture, and History",
+        purpose: "Learn traditions, civilizations, and innovation.",
+        text: "Asia includes long historical timelines, major civilizations, and modern technology hubs that support cross-subject learning.",
+        subjectLinks: ["history", "english"]
+      },
+      {
+        emoji: "🧮",
+        title: "Section 4 — Numbers, Patterns, and Fun Facts",
+        purpose: "Practice measurement, comparison, and logic.",
+        text: "Kids can compare population sizes, mountain heights, and travel distances to build numeracy in meaningful contexts.",
+        subjectLinks: ["math", "science"]
+      },
+      {
+        emoji: "🌟",
+        title: "Section 5 — Everyday Life and Learning Connections",
+        purpose: "Connect home life, schooling, and global citizenship.",
+        text: "Learners explore food, festivals, languages, and school routines while building respect for diverse communities.",
+        subjectLinks: ["english", "health", "history"]
+      }
+    ]
+  },
+  europe: {
+    name: "Europe",
+    intro:
+      "Europe includes varied landscapes, historical cities, and modern innovation. Children can connect history, geography, language, and science learning.",
+    sections: [
+      {
+        emoji: "🧩",
+        title: "Section 1 — Introduction to the Continent",
+        purpose: "Build context and map awareness.",
+        text: "Children locate Europe on the world map and compare regions such as coastal areas, plains, and mountain zones.",
+        subjectLinks: ["geography", "english"]
+      },
+      {
+        emoji: "🐾",
+        title: "Section 2 — Animals and Nature",
+        purpose: "Teach climate and habitat patterns.",
+        text: "Learners compare forests, rivers, and alpine ecosystems to understand weather, adaptation, and environmental care.",
+        subjectLinks: ["science", "geography"]
+      },
+      {
+        emoji: "🏛️",
+        title: "Section 3 — People, Culture, and History",
+        purpose: "Explore culture and historical change.",
+        text: "This section introduces art, architecture, languages, and important historical periods that shaped societies.",
+        subjectLinks: ["history", "english"]
+      },
+      {
+        emoji: "🧮",
+        title: "Section 4 — Numbers, Patterns, and Fun Facts",
+        purpose: "Practice analytical and numerical thinking.",
+        text: "Children use real data such as distances, temperatures, and travel times to apply number operations.",
+        subjectLinks: ["math", "science"]
+      },
+      {
+        emoji: "🌟",
+        title: "Section 5 — Everyday Life and Learning Connections",
+        purpose: "Bridge school subjects with real communities.",
+        text: "Learners connect daily routines, transportation, health, and communication to classroom topics.",
+        subjectLinks: ["english", "health", "history"]
+      }
+    ]
+  },
+  northamerica: {
+    name: "North America",
+    intro:
+      "North America features arctic zones, deserts, forests, and major cities. It offers strong cross-curricular learning opportunities for kids.",
+    sections: [
+      {
+        emoji: "🧩",
+        title: "Section 1 — Introduction to the Continent",
+        purpose: "Set learning goals and map orientation.",
+        text: "Children identify countries and regions while practicing direction words and location reading.",
+        subjectLinks: ["geography", "english"]
+      },
+      {
+        emoji: "🐾",
+        title: "Section 2 — Animals and Nature",
+        purpose: "Use ecosystems to build science skills.",
+        text: "Learners compare wildlife in forests, grasslands, and polar areas to understand adaptation and food chains.",
+        subjectLinks: ["science", "geography"]
+      },
+      {
+        emoji: "🏛️",
+        title: "Section 3 — People, Culture, and History",
+        purpose: "Highlight communities, heritage, and change over time.",
+        text: "Children explore Indigenous histories, migration stories, and cultural traditions through age-appropriate examples.",
+        subjectLinks: ["history", "english"]
+      },
+      {
+        emoji: "🧮",
+        title: "Section 4 — Numbers, Patterns, and Fun Facts",
+        purpose: "Apply math to real-world comparisons.",
+        text: "Kids analyze distances, temperatures, and population patterns to practice operations and reasoning.",
+        subjectLinks: ["math", "science"]
+      },
+      {
+        emoji: "🌟",
+        title: "Section 5 — Everyday Life and Learning Connections",
+        purpose: "Relate content to daily life and school learning.",
+        text: "This section links language use, sports, health habits, and social routines to classroom topics.",
+        subjectLinks: ["english", "health", "history"]
+      }
+    ]
+  },
+  southamerica: {
+    name: "South America",
+    intro:
+      "South America includes the Amazon rainforest, Andes mountains, and vibrant cultures. Children can build strong reading and inquiry skills through regional studies.",
+    sections: [
+      {
+        emoji: "🧩",
+        title: "Section 1 — Introduction to the Continent",
+        purpose: "Create context with place and environment.",
+        text: "Learners identify major regions and discuss how geography affects climate and life patterns.",
+        subjectLinks: ["geography", "english"]
+      },
+      {
+        emoji: "🐾",
+        title: "Section 2 — Animals and Nature",
+        purpose: "Use biodiversity for science exploration.",
+        text: "Children learn about rainforest ecosystems, river systems, and adaptation in different habitats.",
+        subjectLinks: ["science", "geography"]
+      },
+      {
+        emoji: "🏛️",
+        title: "Section 3 — People, Culture, and History",
+        purpose: "Understand diversity and historical development.",
+        text: "This section covers languages, traditions, and important historical milestones in accessible language.",
+        subjectLinks: ["history", "english"]
+      },
+      {
+        emoji: "🧮",
+        title: "Section 4 — Numbers, Patterns, and Fun Facts",
+        purpose: "Build numeracy using authentic facts.",
+        text: "Learners compare river lengths, mountain heights, and country counts while practicing data reading.",
+        subjectLinks: ["math", "science"]
+      },
+      {
+        emoji: "🌟",
+        title: "Section 5 — Everyday Life and Learning Connections",
+        purpose: "Connect school learning to real communities.",
+        text: "Children connect food, transport, schooling, and communication habits to what they study in class.",
+        subjectLinks: ["english", "health", "history"]
+      }
+    ]
+  },
+  australia: {
+    name: "Australia",
+    intro:
+      "Australia combines unique wildlife, deserts, reefs, and modern cities. Kids can connect nature studies with math, language, and history.",
+    sections: [
+      {
+        emoji: "🧩",
+        title: "Section 1 — Introduction to the Continent",
+        purpose: "Orient learners with map and region basics.",
+        text: "Children explore where Australia is located and how coastlines, outback regions, and cities differ.",
+        subjectLinks: ["geography", "english"]
+      },
+      {
+        emoji: "🐾",
+        title: "Section 2 — Animals and Nature",
+        purpose: "Build scientific curiosity with habitat facts.",
+        text: "Learners study species adaptation, reef ecosystems, and dry-environment survival strategies.",
+        subjectLinks: ["science", "geography"]
+      },
+      {
+        emoji: "🏛️",
+        title: "Section 3 — People, Culture, and History",
+        purpose: "Introduce traditions and historical perspectives.",
+        text: "Children learn about Aboriginal and Torres Strait Islander heritage and modern multicultural communities.",
+        subjectLinks: ["history", "english"]
+      },
+      {
+        emoji: "🧮",
+        title: "Section 4 — Numbers, Patterns, and Fun Facts",
+        purpose: "Use real data for math thinking.",
+        text: "Kids compare distances between regions, temperature ranges, and simple population data for practice.",
+        subjectLinks: ["math", "science"]
+      },
+      {
+        emoji: "🌟",
+        title: "Section 5 — Everyday Life and Learning Connections",
+        purpose: "Link global learning to personal experiences.",
+        text: "This section connects school routines, sports, language, and health habits with classroom subjects.",
+        subjectLinks: ["english", "health", "history"]
+      }
+    ]
+  },
+  antarctica: {
+    name: "Antarctica",
+    intro:
+      "Antarctica is the coldest continent and a unique place for science discovery. It helps children learn observation, data use, and environmental care.",
+    sections: [
+      {
+        emoji: "🧩",
+        title: "Section 1 — Introduction to the Continent",
+        purpose: "Set context with location and extreme conditions.",
+        text: "Learners discover why Antarctica is mostly ice-covered and how it differs from other continents.",
+        subjectLinks: ["geography", "english"]
+      },
+      {
+        emoji: "🐾",
+        title: "Section 2 — Animals and Nature",
+        purpose: "Use polar habitats to teach science concepts.",
+        text: "Children study penguins, seals, and food chains while exploring adaptation in cold ecosystems.",
+        subjectLinks: ["science", "geography"]
+      },
+      {
+        emoji: "🏛️",
+        title: "Section 3 — People, Culture, and History",
+        purpose: "Introduce exploration and research history.",
+        text: "This section covers scientific missions, cooperation, and how researchers study climate and ice data.",
+        subjectLinks: ["history", "english"]
+      },
+      {
+        emoji: "🧮",
+        title: "Section 4 — Numbers, Patterns, and Fun Facts",
+        purpose: "Apply math to weather and measurement.",
+        text: "Learners compare temperatures, daylight hours, and ice measurements using child-friendly number tasks.",
+        subjectLinks: ["math", "science"]
+      },
+      {
+        emoji: "🌟",
+        title: "Section 5 — Everyday Life and Learning Connections",
+        purpose: "Connect science learning with responsibility.",
+        text: "Children reflect on conservation, teamwork, and healthy habits needed for exploration and research work.",
+        subjectLinks: ["english", "health", "history"]
+      }
+    ]
+  }
+};
+
+const subjectRouteLabels = {
+  geography: "Geography",
+  english: "English",
+  science: "Science",
+  history: "History",
+  math: "Math",
+  health: "Health Education"
+};
+
 export default function WorldMap() {
   const navigate = useNavigate();
   const [muted, setMuted] = useState(false);
@@ -49,6 +355,7 @@ export default function WorldMap() {
   const [showMiniGames, setShowMiniGames] = useState(false);
   const [showVideos, setShowVideos] = useState(false);
   const [selectedContinent, setSelectedContinent] = useState(null);
+  const [selectedLearningContinent, setSelectedLearningContinent] = useState("africa");
 
   /* 🎵 MUSIC INIT */
   useEffect(() => {
@@ -333,6 +640,118 @@ export default function WorldMap() {
           onClose={() => setShowVideos(false)}
         />
       )}
+
+      {/* Continent Learning Content */}
+      <section style={{
+        maxWidth: '1000px',
+        margin: '30px auto 20px',
+        padding: '28px',
+        background: 'rgba(255,255,255,0.96)',
+        borderRadius: '15px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+      }}>
+        <h2 style={{ color: '#667eea', marginBottom: '10px', fontSize: '1.8em' }}>Continent Learning Journey 🌍</h2>
+        <p style={{ color: '#555', lineHeight: '1.8', marginBottom: '16px' }}>
+          Read the sectioned learning guide, explore related school subjects, then take a quiz. This helps children connect reading, science, history, and math in one learning flow.
+        </p>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '18px' }}>
+          {continents.map((continent) => {
+            const isActive = selectedLearningContinent === continent.id;
+            return (
+              <button
+                key={`learn-${continent.id}`}
+                onClick={() => setSelectedLearningContinent(continent.id)}
+                style={{
+                  border: 'none',
+                  borderRadius: '999px',
+                  padding: '8px 14px',
+                  cursor: 'pointer',
+                  background: isActive ? '#667eea' : '#eef2ff',
+                  color: isActive ? '#fff' : '#334',
+                  fontWeight: 600
+                }}
+              >
+                {continent.name}
+              </button>
+            );
+          })}
+        </div>
+
+        {continentLearningModules[selectedLearningContinent] && (
+          <article>
+            <h3 style={{ color: '#333', marginBottom: '8px' }}>
+              {continentLearningModules[selectedLearningContinent].name}
+            </h3>
+            <p style={{ color: '#555', lineHeight: '1.75', marginBottom: '14px' }}>
+              {continentLearningModules[selectedLearningContinent].intro}
+            </p>
+
+            {continentLearningModules[selectedLearningContinent].sections.map((section) => (
+              <section
+                key={`${selectedLearningContinent}-${section.title}`}
+                style={{
+                  marginTop: '12px',
+                  padding: '14px 14px 10px',
+                  border: '1px solid #e8ebff',
+                  borderRadius: '12px',
+                  background: '#fafbff'
+                }}
+              >
+                <h4 style={{ marginBottom: '6px', color: '#3b4a9f' }}>
+                  {section.emoji} {section.title}
+                </h4>
+                <p style={{ marginBottom: '6px', color: '#444' }}>
+                  <strong>Purpose:</strong> {section.purpose}
+                </p>
+                <p style={{ marginBottom: '8px', color: '#555', lineHeight: '1.7' }}>
+                  {section.text}
+                </p>
+                <p style={{ margin: 0, color: '#444' }}>
+                  <strong>Subject links:</strong>{' '}
+                  {section.subjectLinks.map((subjectId, index) => (
+                    <React.Fragment key={`${section.title}-${subjectId}`}>
+                      <Link to={`/quiz/${subjectId}`} style={{ color: '#667eea', textDecoration: 'none', fontWeight: 600 }}>
+                        {subjectRouteLabels[subjectId] || subjectId}
+                      </Link>
+                      {index < section.subjectLinks.length - 1 ? ', ' : ''}
+                    </React.Fragment>
+                  ))}
+                </p>
+              </section>
+            ))}
+
+            <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+              <Link
+                to={`/quiz/${selectedLearningContinent}`}
+                style={{
+                  background: '#667eea',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  borderRadius: '10px',
+                  padding: '10px 14px',
+                  fontWeight: 700
+                }}
+              >
+                Take {continentLearningModules[selectedLearningContinent].name} Quiz
+              </Link>
+              <Link
+                to="/learn"
+                style={{
+                  background: '#eef2ff',
+                  color: '#3b4a9f',
+                  textDecoration: 'none',
+                  borderRadius: '10px',
+                  padding: '10px 14px',
+                  fontWeight: 700
+                }}
+              >
+                Explore More Learning Guides
+              </Link>
+            </div>
+          </article>
+        )}
+      </section>
 
       {/* About Section */}
       <section style={{
