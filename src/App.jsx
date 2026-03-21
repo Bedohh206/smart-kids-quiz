@@ -10,10 +10,12 @@ import ContactPage from "./components/ContactPage";
 import PrivacyPage from "./components/PrivacyPage";
 import TermsPage from "./components/TermsPage";
 import AdFreeRoutePage from "./components/AdFreeRoutePage";
+import AdsenseGate from "./components/AdsenseGate";
 
 function App() {
   return (
     <BrowserRouter>
+      <AdsenseGate />
       <InstallPrompt />
       <Routes>
         <Route path="/" element={<WorldMap />} />

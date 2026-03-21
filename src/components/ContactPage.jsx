@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SeoMeta from "./SeoMeta";
+import AdSense from "./AdSense";
 
 export default function ContactPage() {
   return (
@@ -48,6 +49,8 @@ export default function ContactPage() {
           For legal and privacy details, read our <Link to="/privacy">Privacy Policy</Link> and <Link to="/terms">Terms of Service</Link>.
         </p>
       </section>
+      <AdSense slot="9408631164" format="auto" style={{ marginTop: 32, marginBottom: 8 }} />
+
       <p><Link to="/">Back to Home</Link></p>
     </main>
   );

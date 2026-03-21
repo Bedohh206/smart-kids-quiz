@@ -820,6 +820,24 @@ export default function QuizPage() {
   if (!ageGroup) {
     return (
       <div className="quiz-page">
+        <div style={{
+          background: 'linear-gradient(135deg, #e8f4fd 0%, #f0f9ff 100%)',
+          border: '1px solid #b3d9f7',
+          borderRadius: '10px',
+          padding: '16px 20px',
+          maxWidth: '520px',
+          margin: '0 auto 22px',
+          textAlign: 'left',
+        }}>
+          <h3 style={{ margin: '0 0 8px', color: '#1565c0', fontSize: '1.1em' }}>
+            📚 What You'll Learn in This Quiz
+          </h3>
+          <p style={{ margin: 0, color: '#444', lineHeight: 1.65, fontSize: '0.97em' }}>
+            This quiz helps kids practice important early-learning skills through fun, simple
+            questions. Children will improve their memory, attention, and problem-solving
+            abilities while exploring new topics.
+          </p>
+        </div>
         <h2>Select Difficulty Level</h2>
         <div className="levels">
           <button onClick={() => setAgeGroup("5-7")}>Level 1</button>

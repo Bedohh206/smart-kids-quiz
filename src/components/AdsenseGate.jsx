@@ -1,11 +1,16 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-const AD_ROUTES = [/^\/learn(\/|$)/];
+// Pages where AdSense is permitted: must have real educational/informational content.
+// Quiz gameplay, mini-games, leaderboard, loading, and navigation-only pages are excluded.
+const AD_ALLOWED_EXACT = new Set(["/", "/about", "/contact", "/privacy", "/terms"]);
+const AD_ALLOWED_PREFIX = [/^\/learn(\/|$)/];
+
 const ADSENSE_CLIENT = "ca-pub-5589341753091612";
 
 function isAdAllowed(pathname) {
-  return AD_ROUTES.some((rx) => rx.test(pathname));
+  if (AD_ALLOWED_EXACT.has(pathname)) return true;
+  return AD_ALLOWED_PREFIX.some((rx) => rx.test(pathname));
 }
 
 function loadAdsenseOnce() {

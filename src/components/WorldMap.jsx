@@ -691,52 +691,118 @@ export default function WorldMap() {
         </article>
       </section>
 
-      {/* About Section */}
+      {/* Welcome / Intro Section */}
       <section style={{
         maxWidth: '900px',
         margin: '40px auto 20px',
         padding: '30px',
-        background: 'rgba(255,255,255,0.95)',
+        background: 'rgba(255,255,255,0.97)',
         borderRadius: '15px',
         boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
         textAlign: 'center'
       }}>
         <h2 style={{ color: '#667eea', marginBottom: '15px', fontSize: '1.8em' }}>Welcome to Smart Kids Quiz! 🎓</h2>
-        <p style={{ color: '#555', lineHeight: '1.8', marginBottom: '15px', fontSize: '1.1em' }}>
-          Smart Kids Quiz is a fun, interactive learning app designed to help children build confidence in reading, math, shapes, and early problem‑solving. Our mission is to make learning joyful, accessible, and safe for kids everywhere.
+        <p style={{ color: '#555', lineHeight: '1.8', marginBottom: '12px', fontSize: '1.1em' }}>
+          Smart Kids Quiz is a fun, interactive learning world designed for children ages 4–10.
+          Our quizzes help kids build confidence in:
         </p>
-        <p style={{ color: '#555', lineHeight: '1.8', fontSize: '1.05em' }}>
-          If you have questions, feedback, or suggestions, we'd love to hear from you. You can reach us anytime at{' '}
+        <ul style={{ listStyle: 'none', padding: 0, margin: '0 auto 16px', maxWidth: 480, textAlign: 'left', display: 'inline-block' }}>
+          {[
+            '📖 Early reading',
+            '🔢 Math and counting',
+            '🔷 Shapes and colors',
+            '🐾 Animals and nature',
+            '🧩 Problem-solving',
+            '🧠 Memory and logic',
+          ].map((item) => (
+            <li key={item} style={{ color: '#444', fontSize: '1.05em', padding: '4px 0' }}>{item}</li>
+          ))}
+        </ul>
+        <p style={{ color: '#555', lineHeight: '1.8', fontSize: '1.05em', marginBottom: '12px' }}>
+          Every quiz is crafted to be simple, colorful, and engaging — perfect for young learners.
+          Kids learn while having fun, and parents get peace of mind knowing the content is safe,
+          educational, and ad-free during gameplay.
+        </p>
+        <p style={{ color: '#555', lineHeight: '1.8', fontSize: '1.0em' }}>
+          Questions or feedback? Reach us at{' '}
           <a href="mailto:smartkidsquiz@mail.com" style={{ color: '#667eea', fontWeight: 'bold', textDecoration: 'none' }}>
             smartkidsquiz@mail.com
           </a>
         </p>
       </section>
 
-      {/* Footer with contact */}
+      {/* Learning Categories Section */}
+      <section style={{
+        maxWidth: '900px',
+        margin: '0 auto 30px',
+        padding: '30px',
+        background: 'rgba(255,255,255,0.97)',
+        borderRadius: '15px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+        textAlign: 'left'
+      }}>
+        <h2 style={{ color: '#667eea', marginBottom: '8px', fontSize: '1.6em', textAlign: 'center' }}>Learning Categories 📚</h2>
+        <p style={{ color: '#555', textAlign: 'center', marginBottom: '20px', fontSize: '1.05em' }}>
+          Choose a topic and start learning:
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '14px' }}>
+          {[
+            { emoji: '🔢', label: 'Math Skills', desc: 'Counting, shapes, patterns', path: '/quiz/math' },
+            { emoji: '📖', label: 'Reading Skills', desc: 'Letters, simple words, phonics', path: '/quiz/english' },
+            { emoji: '🐾', label: 'Animals & Nature', desc: 'Habitats, sounds, fun facts', path: '/quiz/science' },
+            { emoji: '🔷', label: 'Colors & Shapes', desc: 'Early visual learning', path: '/quiz/geometry' },
+            { emoji: '🧠', label: 'Memory Games', desc: 'Matching, recall, attention', path: '/quiz/africa' },
+            { emoji: '🌍', label: 'General Knowledge', desc: 'Everyday learning for kids', path: '/quiz/geography' },
+          ].map((cat) => (
+            <Link
+              key={cat.label}
+              to={cat.path}
+              style={{
+                display: 'block',
+                background: 'linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%)',
+                borderRadius: '10px',
+                padding: '16px 18px',
+                textDecoration: 'none',
+                border: '1px solid #c7d7fb',
+                transition: 'transform 0.15s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+            >
+              <div style={{ fontSize: '1.5em', marginBottom: '4px' }}>{cat.emoji} <strong style={{ color: '#3b4a9f' }}>{cat.label}</strong></div>
+              <div style={{ color: '#666', fontSize: '0.95em' }}>{cat.desc}</div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer */}
       <footer style={{
         textAlign: 'center',
-        padding: '20px',
+        padding: '28px 20px',
         marginTop: '20px',
         borderTop: '2px solid rgba(255,255,255,0.2)',
         color: 'rgba(255,255,255,0.9)',
         fontSize: '14px'
       }}>
-        <p style={{ margin: '5px 0' }}>© 2026 Smart Kids Quiz - Educational Learning Platform</p>
+        <p style={{ margin: '5px 0', fontSize: '15px' }}>© 2026 Smart Kids Quiz — Educational Learning Platform</p>
         <p style={{ margin: '5px 0' }}>
           Contact: <a href="mailto:smartkidsquiz@mail.com" style={{ color: '#FFD700', textDecoration: 'none' }}>smartkidsquiz@mail.com</a>
         </p>
-        <p style={{ margin: '5px 0', fontSize: '12px', opacity: 0.8 }}>
-          <Link to="/learn/math-for-kids" style={{ color: '#FFF', marginRight: '6px' }}>Learn Math</Link>
-          <span style={{ marginRight: '15px', opacity: 0.9 }}>(Updated: March 2026)</span>
-          <Link to="/learn/english-for-kids" style={{ color: '#FFF', marginRight: '6px' }}>Learn English</Link>
-          <span style={{ marginRight: '15px', opacity: 0.9 }}>(Updated: March 2026)</span>
-          <Link to="/learn/science-for-kids" style={{ color: '#FFF', marginRight: '6px' }}>Learn Science</Link>
-          <span style={{ marginRight: '15px', opacity: 0.9 }}>(Updated: March 2026)</span>
-          <Link to="/about" style={{ color: '#FFF', marginRight: '15px' }}>About</Link>
-          <Link to="/contact" style={{ color: '#FFF', marginRight: '15px' }}>Contact</Link>
-          <Link to="/privacy" style={{ color: '#FFF', marginRight: '15px' }}>Privacy Policy</Link>
-          <Link to="/terms" style={{ color: '#FFF' }}>Terms</Link>
+        <p style={{ margin: '10px 0 5px', fontWeight: 600, opacity: 0.85, textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.07em' }}>Learning Categories</p>
+        <p style={{ margin: '4px 0 10px', fontSize: '13px' }}>
+          <Link to="/quiz/math" style={{ color: '#FFF', marginRight: '14px' }}>Math Skills</Link>
+          <Link to="/quiz/english" style={{ color: '#FFF', marginRight: '14px' }}>Reading Skills</Link>
+          <Link to="/quiz/science" style={{ color: '#FFF', marginRight: '14px' }}>Animals &amp; Nature</Link>
+          <Link to="/quiz/geometry" style={{ color: '#FFF', marginRight: '14px' }}>Colors &amp; Shapes</Link>
+          <Link to="/quiz/geography" style={{ color: '#FFF' }}>General Knowledge</Link>
+        </p>
+        <p style={{ margin: '4px 0', fontSize: '13px' }}>
+          <Link to="/about" style={{ color: '#FFF', marginRight: '14px' }}>About</Link>
+          <Link to="/contact" style={{ color: '#FFF', marginRight: '14px' }}>Contact</Link>
+          <Link to="/privacy" style={{ color: '#FFF', marginRight: '14px' }}>Privacy Policy</Link>
+          <Link to="/terms" style={{ color: '#FFF', marginRight: '14px' }}>Terms</Link>
+          <Link to="/learn" style={{ color: '#FFF' }}>Learning Guides</Link>
         </p>
       </footer>
     </div>
